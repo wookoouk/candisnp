@@ -159,6 +159,8 @@ sub _is_snp{
 	return 0;
 }
 
+##A TEST CHANGE FOR GRAHAM
+
 ##returns csv file object
 sub _open_file{
 	my $file = shift;
