@@ -6,6 +6,7 @@ use warnings FATAL => 'all';
 use Statistics::R;
 use Tie::Handle::CSV;
 use Carp;
+use Data::Dumper;
 $ENV{PATH} = "/usr/bin/";
 
 =head1 NAME
@@ -102,20 +103,44 @@ EOF
 
 
 ##gets the ruby Bio::Synreport annotations for the positions provided
-sub annotate_positions{
+sub _annotate_positions{
+	my $data = shift;
+	my %opts = @_;
 	
 }
 
 
 ##from the uploaded text file, gets the positions that pass filters
+##adds on whether they are synonymous / non_synonymous ... 
 ##returns as hash structure
-## text file must have headers "Chr" "Pos" "Ref" "Alt" "Allele_Freq"
 sub get_positions_from_file{
 	my %opts = @_;
 	my $fh = _open_file($opts{-file}); 
 	croak "bad file headers" unless _header_ok($fh);
+	my $data = {};
+	while (my $l = $fileh->getline){
+		next unless _is_snp($l, %opts);
+		$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
+		$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
+		$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
+		$data{$l->{'chr'}}{$l->{'pos'}}{_mut} = undef;
+	}
+	$data = _annotate_positions($data, %opts);
+	return $data;
 }
 
+#returns the line if it passes the user supplied threshold
+sub _is_snp{
+	my $l = shift;
+	my %opts = @_;
+
+	if ($l->{'allele_freq'} >= $opts{-cutoff} ){
+		return 1;
+	}
+	return 0;
+}
+
+##returns csv file object
 sub _open_file{
 	my $file = shift;
 	my $fh = Tie::Handle::CSV->new($file, 
