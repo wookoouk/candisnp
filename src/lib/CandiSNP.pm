@@ -7,6 +7,7 @@ use Statistics::R;
 use Tie::Handle::CSV;
 use Carp;
 use Data::Dumper;
+use Sort::Key::Natural qw(natsort);
 $ENV{PATH} = "/usr/bin/";
 
 =head1 NAME
@@ -106,7 +107,24 @@ EOF
 sub _annotate_positions{
 	my $data = shift;
 	my %opts = @_;
+	return $data;
 	
+}
+
+sub _data_hash_to_file{
+	my %data = %{$_[0]};
+	foreach my $chr (natsort keys %data ){
+		foreach my $pos (natsort keys %{$data{$chr}}){
+			my @line = ($chr, $pos, $data{$chr}{$pos}{_alt}, $data{$chr}{$pos}{_ref}, $data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga});
+			print join(",", @line);
+		}
+	}
+}
+
+sub _is_ctga{
+	my ($ref,$alt) = @_;
+	return 1 if ( ($ref =~ /c/i and $alt =~ /g/i) or ($ref =~ /a/i and $alt =~ /t/i) );
+	return 0;
 }
 
 
@@ -118,12 +136,14 @@ sub get_positions_from_file{
 	my $fh = _open_file($opts{-file}); 
 	croak "bad file headers" unless _header_ok($fh);
 	my $data = {};
-	while (my $l = $fileh->getline){
-		next unless _is_snp($l, %opts);
-		$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
-		$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
-		$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
-		$data{$l->{'chr'}}{$l->{'pos'}}{_mut} = undef;
+	while (my $l = <$fh>){
+		next unless _is_snp($l, -cutoff => $opts{-cutoff});
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = undef;
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = _is_ctga($l->{'ref'}, $l->{'alt'});
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = undef;
 	}
 	$data = _annotate_positions($data, %opts);
 	return $data;
@@ -133,7 +153,6 @@ sub get_positions_from_file{
 sub _is_snp{
 	my $l = shift;
 	my %opts = @_;
-
 	if ($l->{'allele_freq'} >= $opts{-cutoff} ){
 		return 1;
 	}

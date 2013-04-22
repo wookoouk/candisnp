@@ -21,9 +21,25 @@ isa_ok $fh, "Tie::Handle::CSV", "can't create CSV file object";
 #check file header
 ok(CandiSNP::_header_ok($fh), "CSV file header could not be validated");
 
-#check positions retrieved properly
-ok(CandiSNP::_is_snp($fh, -file => "meh", -cutoff => 0.7 ), "");
+#check snp filter
+my $l = <$fh>;
+ok(CandiSNP::_is_snp($l, -cutoff => 0.7 ), "not a SNP");
 
+#check file hash made properly given cutoff
+my $hash = {
+          'Chr1' => {
+                      '1' => {
+                               '_in_cds' => undef,
+                               '_ctga' => 1,
+                               '_ref' => 'A',
+                               '_syn' => undef,
+                               '_allele_freq' => '0.89',
+                               '_alt' => 'T'
+                             }
+                    }
+        };
+
+is_deeply $hash, CandiSNP::get_positions_from_file(-file => "sample_data/header.csv", -cutoff => 0.7), "not expected data structure for file";
 
 diag( "Testing CandiSNP $CandiSNP::VERSION, Perl $], $^X" );
 
