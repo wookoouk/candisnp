@@ -3,6 +3,8 @@ package CandiSNP;
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
+use Statistics::R;
+$ENV{PATH} = "/usr/bin/";
 
 =head1 NAME
 
@@ -48,6 +50,26 @@ sub function1 {
 
 sub function2 {
 }
+
+
+=head2 new_r
+
+Returns a new R interface object
+
+=cut
+
+sub R{
+	my $R = Statistics::R->new();
+	my $cmd = <<EOF;
+	my_func = function(x){ x }
+EOF
+	$R->run($cmd);
+	$R->run(q'x=my_func(99)');
+	warn "from module ", $R->get('x');
+	return $R;
+}
+
+
 
 =head1 AUTHOR
 

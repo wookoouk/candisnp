@@ -5,7 +5,7 @@ use Module::Build;
 
 my $builder = Module::Build->new(
     module_name         => 'CandiSNP',
-    license             => 'GPL_3',
+    license             => 'gpl',
     dist_author         => q{Dan MacLean (TSL) <dan.maclean@tsl.ac.uk>},
     dist_version_from   => 'lib/CandiSNP.pm',
     release_status      => 'stable',
