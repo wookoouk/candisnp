@@ -14,10 +14,11 @@ require_ok( 'CandiSNP' );
 my $new_r = CandiSNP::R;
 isa_ok $new_r, "Statistics::R", "can't create R connection object";
 
+#check file opening
+my $fh = CandiSNP::_open_file("sample_data/header.csv");
+isa_ok $fh, "Tie::Handle::CSV", "can't create CSV file object";
 
-$new_r->run(qq'x=runif(1)');
-my $result = $new_r->get('x');
-warn "from test $result";
-
+#check file header
+ok(CandiSNP::_header_ok($fh), "CSV file header could not be validated");
 
 diag( "Testing CandiSNP $CandiSNP::VERSION, Perl $], $^X" );

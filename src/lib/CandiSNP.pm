@@ -4,6 +4,8 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 use Statistics::R;
+use Tie::Handle::CSV;
+use Carp;
 $ENV{PATH} = "/usr/bin/";
 
 =head1 NAME
@@ -60,16 +62,80 @@ Returns a new R interface object
 
 sub R{
 	my $R = Statistics::R->new();
-	my $cmd = <<EOF;
-	my_func = function(x){ x }
+	my $cmd = <<'EOF';
+	#get the R functions loaded
+	##these are not neccesarily the final R functions.
+	library("ggplot2")
+	my_plot2 = function(x,colours){
+	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=corrected_type))
+	p = ggplot(x, aes(position,chromosome) ) + facet_grid(mutant ~ ., scales="free") + colours + points +  theme(panel.grid.major.y = element_line(size=6, colour= "white")   ) + theme(panel.background=element_rect(colour="gray90")) + theme(panel.grid.major.x = element_line(size=1, colour="gray90") ) + scale_x_continuous(breaks=c(0,10000000,20000000,30000000),labels=c("0Mb", "10Mb", "20Mb", "30Mb" ))
+	return(p)
+	}
+	f = function(data,cutoff=0.7,nmutants=1){
+	x = data;
+	x = x[x$allele_frequency >= cutoff & x$in_X_mutants == nmutants, ]
+	x = x[x$chromosome != "mitochondria" & x$method == "PileUp", ]
+	x$chromosome = factor(x$chromosome, levels=rev(levels(x$chromosome)))
+	x = x[x$corrected_type != 'indel' & x$corrected_type != "unknown error (likely annotation errors in GFF)",]
+	x$chromosome = factor(x$chromosome)
+	x$corrected_type = factor(x$corrected_type)
+	x$method = factor(x$method)
+	return(x)
+	}
+	get_colour_assignments = function(name_list, colour_list){
+	names(colour_list) = levels(name_list)
+	colors = scale_colour_manual(name = "SNP Type",values = colour_list)
+	return(colors)
+	}
+	do_picture = function(data,cutoff,colours){
+	dat = f(data,cutoff)
+	filename = paste(cutoff, ".svg", sep="")
+	svg(filename, width=8.3,height=11.7)
+	p = my_plot2(dat,colours)
+	print(p)
+	dev.off()
+	}
 EOF
 	$R->run($cmd);
-	$R->run(q'x=my_func(99)');
-	warn "from module ", $R->get('x');
 	return $R;
 }
 
 
+##gets the ruby Bio::Synreport annotations for the positions provided
+sub annotate_positions{
+	
+}
+
+
+##from the uploaded text file, gets the positions that pass filters
+##returns as hash structure
+## text file must have headers "Chr" "Pos" "Ref" "Alt" "Allele_Freq"
+sub get_positions_from_file{
+	my %opts = @_;
+	my $fh = _open_file($opts{-file}); 
+	croak "bad file headers" unless _header_ok($fh);
+}
+
+sub _open_file{
+	my $file = shift;
+	my $fh = Tie::Handle::CSV->new($file, 
+		header => 1, 
+		key_case => 'any', 
+		open_mode => '<'
+		) || croak "couldn't open file $file\n\n";
+	return $fh;	
+}
+
+##checks the header
+## text file must have headers "Chr" "Pos" "Ref" "Alt" "Allele_Freq"
+sub _header_ok{
+	my $fh = shift;
+	my @headers = split(/,/,$fh->header);
+	foreach my $h (qw{Chr Pos Ref Alt Allele_Freq}){
+		return 0 unless grep /$h/i, @headers;
+	}
+	return 1;
+}
 
 =head1 AUTHOR
 
