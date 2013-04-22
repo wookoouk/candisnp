@@ -8,6 +8,9 @@ use Tie::Handle::CSV;
 use Carp;
 use Data::Dumper;
 use Sort::Key::Natural qw(natsort);
+use File::Basename;
+ use Digest::MD5 qw(md5_hex);
+
 $ENV{PATH} = "/usr/bin/";
 
 =head1 NAME
@@ -103,10 +106,15 @@ EOF
 }
 
 
-##gets the ruby Bio::Synreport annotations for the positions provided
+##gets the ruby Bio::Synreport annotations for the positions provided and adds them to the data hash
 sub _annotate_positions{
 	my $data = shift;
 	my %opts = @_;
+	my $public_folder = public_folder();
+	my $md5 = md5_hex(%{$data});
+	my $outfile = $public_folder . "/" . $md5;
+	_data_hash_to_file($data, $outfile);
+	
 	return $data;
 	
 }
@@ -125,14 +133,24 @@ sub _data_hash_to_file{
 	close OUT;
 }
 
+sub _base_folder{
+	my $dirname = dirname(__FILE__);
+	$dirname =~ s/\/src\/blib\/lib//; 
+	return $dirname;
+}
+
+sub public_folder{
+	return _base_folder() . "/public";
+}
+
 sub _header{
 	"Chr,Pos,Ref,Alt,Allele_Freq,in_cds,is_synonymous,is_ctga\n";
 }
 
 sub _is_ctga{
 	my ($ref,$alt) = @_;
-	return 1 if ( ($ref =~ /c/i and $alt =~ /t/i) or ($ref =~ /g/i and $alt =~ /a/i) );
-	return 0;
+	return "TRUE" if ( ($ref =~ /c/i and $alt =~ /t/i) or ($ref =~ /g/i and $alt =~ /a/i) );
+	return "FALSE";
 }
 
 
@@ -149,9 +167,9 @@ sub get_positions_from_file{
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = "undef";
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = "NA";
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = _is_ctga($l->{'ref'}, $l->{'alt'});
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "undef";
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "NA";
 	}
 	$data = _annotate_positions($data, %opts);
 	return $data;
