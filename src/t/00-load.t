@@ -39,7 +39,12 @@ my $hash = {
                     }
         };
 
-my $data_from_file = CandiSNP::get_positions_from_file(-file => "sample_data/header.csv", -cutoff => 0.7);
+my $data_from_file = CandiSNP::get_positions_from_file(
+	-file => "sample_data/header.csv", 
+	-cutoff => 0.7,
+	-genome => "athalianaTair10"
+	 );
+	
 is_deeply $hash, $data_from_file, "not expected data structure for file";
 
 ##check file written correctly...
@@ -47,6 +52,12 @@ unlink "sample_data/test_out.csv";
 CandiSNP::_data_hash_to_file($data_from_file, "sample_data/test_out.csv");
 ok -e "sample_data/test_out.csv";
 
+warn Dumper "Running external snpEff .. may take some time\n";
+CandiSNP::get_positions_from_file(
+	-file=> "sample_data/snps.csv", 
+	-cutoff=> 0.7,
+	-genome => "athalianaTair10"
+	);
 
 diag( "Testing CandiSNP $CandiSNP::VERSION, Perl $], $^X" );
 

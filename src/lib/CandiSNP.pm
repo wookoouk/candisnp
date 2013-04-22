@@ -9,7 +9,8 @@ use Carp;
 use Data::Dumper;
 use Sort::Key::Natural qw(natsort);
 use File::Basename;
- use Digest::MD5 qw(md5_hex);
+use Digest::MD5 qw(md5_hex);
+use IPC::Open2;
 
 $ENV{PATH} = "/usr/bin/";
 
@@ -106,28 +107,45 @@ EOF
 }
 
 
-##gets the ruby Bio::Synreport annotations for the positions provided and adds them to the data hash
+##gets the ruby Bio::Synreport annotations for the positions provided 
+##forks a child process and runs SNPeff, parses the result data back into the $data hash
 sub _annotate_positions{
 	my $data = shift;
 	my %opts = @_;
+	my $bin = bin_folder();
 	my $public_folder = public_folder();
 	my $md5 = md5_hex(%{$data});
-	my $outfile = $public_folder . "/" . $md5;
-	_data_hash_to_file($data, $outfile);
-	
+	my $tmpfile = $public_folder . "/" . $md5;
+	$opts{-format} = 'short';
+	_data_hash_to_file($data, $tmpfile, %opts);
+	my($chld_out, $chld_in);
+	my $pid = open2($chld_out, $chld_in, "java -Xmx2g -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
+	while (my $line = <$chld_out>){
+		chomp $line;
+		##
+	}
+	unlink $tmpfile;
 	return $data;
 	
 }
 
 sub _data_hash_to_file{
-	my %data = %{$_[0]};
-	my $file_name = $_[1];
+	my $d = shift;
+	my $file_name = shift;
+	my %data = %{$d};
+	my %opts = @_;
 	open OUT, ">$file_name";
-	print OUT _header();
+	print OUT _header() unless defined $opts{-format} and $opts{-format} eq 'short';
 	foreach my $chr (natsort keys %data ){
 		foreach my $pos (natsort keys %{$data{$chr}}){
-			my @line = ($chr, $pos, $data{$chr}{$pos}{_alt}, $data{$chr}{$pos}{_ref}, $data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga});
-			print OUT join(",", @line);
+			my @line = ($chr, $pos, $data{$chr}{$pos}{_ref},$data{$chr}{$pos}{_alt} ); 
+			if (defined $opts{-format} and $opts{-format} eq 'short') {
+				print OUT join("\t", @line), "\n";
+			}
+			else {
+				push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga});
+				print OUT join(",", @line);
+			}
 		}
 	}
 	close OUT;
@@ -139,12 +157,16 @@ sub _base_folder{
 	return $dirname;
 }
 
+sub bin_folder{
+	return _base_folder() . "/bin";
+}
+
 sub public_folder{
 	return _base_folder() . "/public";
 }
 
 sub _header{
-	"Chr,Pos,Ref,Alt,Allele_Freq,in_cds,is_synonymous,is_ctga\n";
+	return "Chr,Pos,Ref,Alt,Allele_Freq,in_cds,is_synonymous,is_ctga\n";
 }
 
 sub _is_ctga{
@@ -158,6 +180,7 @@ sub _is_ctga{
 ##adds on whether they are synonymous / non_synonymous ... 
 ##returns as hash structure
 sub get_positions_from_file{
+
 	my %opts = @_;
 	my $fh = _open_file($opts{-file}); 
 	croak "bad file headers" unless _header_ok($fh);
