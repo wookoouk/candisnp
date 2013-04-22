@@ -29,17 +29,23 @@ ok(CandiSNP::_is_snp($l, -cutoff => 0.7 ), "not a SNP");
 my $hash = {
           'Chr1' => {
                       '1' => {
-                               '_in_cds' => undef,
-                               '_ctga' => 1,
+                               '_in_cds' => "undef",
+                               '_ctga' => 0,
                                '_ref' => 'A',
-                               '_syn' => undef,
+                               '_syn' => "undef",
                                '_allele_freq' => '0.89',
                                '_alt' => 'T'
                              }
                     }
         };
 
-is_deeply $hash, CandiSNP::get_positions_from_file(-file => "sample_data/header.csv", -cutoff => 0.7), "not expected data structure for file";
+my $data_from_file = CandiSNP::get_positions_from_file(-file => "sample_data/header.csv", -cutoff => 0.7);
+is_deeply $hash, $data_from_file, "not expected data structure for file";
+
+##check file written correctly...
+unlink "sample_data/test_out.csv";
+CandiSNP::_data_hash_to_file($data_from_file, "sample_data/test_out.csv");
+ok -e "sample_data/test_out.csv";
 
 diag( "Testing CandiSNP $CandiSNP::VERSION, Perl $], $^X" );
 

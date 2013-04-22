@@ -113,17 +113,25 @@ sub _annotate_positions{
 
 sub _data_hash_to_file{
 	my %data = %{$_[0]};
+	my $file_name = $_[1];
+	open OUT, ">$file_name";
+	print OUT _header();
 	foreach my $chr (natsort keys %data ){
 		foreach my $pos (natsort keys %{$data{$chr}}){
 			my @line = ($chr, $pos, $data{$chr}{$pos}{_alt}, $data{$chr}{$pos}{_ref}, $data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga});
-			print join(",", @line);
+			print OUT join(",", @line);
 		}
 	}
+	close OUT;
+}
+
+sub _header{
+	"Chr,Pos,Ref,Alt,Allele_Freq,in_cds,is_synonymous,is_ctga\n";
 }
 
 sub _is_ctga{
 	my ($ref,$alt) = @_;
-	return 1 if ( ($ref =~ /c/i and $alt =~ /g/i) or ($ref =~ /a/i and $alt =~ /t/i) );
+	return 1 if ( ($ref =~ /c/i and $alt =~ /t/i) or ($ref =~ /g/i and $alt =~ /a/i) );
 	return 0;
 }
 
@@ -141,9 +149,9 @@ sub get_positions_from_file{
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = undef;
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = "undef";
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = _is_ctga($l->{'ref'}, $l->{'alt'});
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = undef;
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "undef";
 	}
 	$data = _annotate_positions($data, %opts);
 	return $data;
@@ -159,7 +167,6 @@ sub _is_snp{
 	return 0;
 }
 
-##A TEST CHANGE FOR GRAHAM
 
 ##returns csv file object
 sub _open_file{
