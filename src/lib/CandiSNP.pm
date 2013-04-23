@@ -109,7 +109,7 @@ EOF
 
 ##gets the ruby Bio::Synreport annotations for the positions provided 
 ##forks a child process and runs SNPeff, parses the result data back into the $data hash
-sub _annotate_positions{
+sub annotate_positions{
 	my $data = shift;
 	my %opts = @_;
 	my $bin = bin_folder();
@@ -121,12 +121,36 @@ sub _annotate_positions{
 	my($chld_out, $chld_in);
 	my $pid = open2($chld_out, $chld_in, "java -Xmx2g -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
 	while (my $line = <$chld_out>){
+		next if $line =~ m/^#/;
 		chomp $line;
-		##
+		$data = _parse_snpEff($data,$line);
 	}
 	unlink $tmpfile;
 	return $data;
 	
+}
+
+sub _parse_snpEff{
+	my ($data,$line) = @_;
+	my @data = split(/\t/, $line);
+	
+	
+	my ($chr,$pos,$ref,$alt,$gene,$effect,$nucs ) = ($data[0],$data[1],$data[2], $data[3], $data[10],$data[15],$data[16]);
+	#warn Dumper join(",",$chr,$pos,$ref,$alt,$gene,$effect,$nucs);
+	$chr = 'Chr' . $chr if (grep /Chr$chr/, keys %{$data});
+
+	return $data if defined $$data{$chr}{$pos}{_gene};
+
+	if ($effect ne 'INTERGENIC' || $effect ne 'INTRON'){
+		$$data{$chr}{$pos}{_in_cds} = "FALSE";
+		$$data{$chr}{$pos}{_syn} = "FALSE";
+	}
+	else{
+		$$data{$chr}{$pos}{_in_cds} = "TRUE";
+		$$data{$chr}{$pos}{_syn} = $effect;
+	}
+	$$data{$chr}{$pos}{_gene} = $gene;
+	return $data;
 }
 
 sub _data_hash_to_file{
@@ -194,7 +218,6 @@ sub get_positions_from_file{
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = _is_ctga($l->{'ref'}, $l->{'alt'});
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "NA";
 	}
-	$data = _annotate_positions($data, %opts);
 	return $data;
 }
 
