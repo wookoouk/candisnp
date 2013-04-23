@@ -6,16 +6,14 @@ use Test::More qw( no_plan );
 use Data::Dumper;
 
 
-diag( "Testing CandiSNP $CandiSNP::VERSION, Perl $], $^X" );
 BEGIN {
     use_ok( 'CandiSNP' ) || print "Bail out!\n";
 }
-
+diag( "Testing CandiSNP $CandiSNP::VERSION, Perl $], $^X" );
 
 require_ok( 'CandiSNP' );
 
-my $new_r = CandiSNP::R;
-isa_ok $new_r, "Statistics::R", "can't create R connection object";
+
 
 #check file opening
 my $fh = CandiSNP::_open_file("sample_data/header.csv");
@@ -43,8 +41,7 @@ my $hash = {
         };
 
 my $data_from_file = CandiSNP::get_positions_from_file(
-	-file => "sample_data/header.csv", 
-	-cutoff => 0.7
+	-file => "sample_data/header.csv"
 	 );
 	
 is_deeply $data_from_file, $hash, "not expected data structure for file";
@@ -62,7 +59,6 @@ ok -e CandiSNP::bin_folder() . "/genomes", "No bin/genomes/ folder";
 diag("Running external snpEff .. may take some time");
 my $large_data = CandiSNP::get_positions_from_file(
 	-file=> "sample_data/snps.csv", 
-	-cutoff=> 0.7
 	);
 $large_data = CandiSNP::annotate_positions($large_data, -genome => "athalianaTair10");
 
@@ -79,10 +75,21 @@ my $annot_snp = {
 
 ##pick a snp to check its annotations .. 
 my $snp_selected = $$large_data{'Chr1'}{10417334};
-
-
 is_deeply $snp_selected, $annot_snp, "not expected data structure for parsed SNP";
 
+##check filtering removes SNPs
+my $filtered_data = CandiSNP::apply_filter($large_data, "0.99");
+ok( scalar keys %{$$large_data{"Chr1"}} > scalar keys %{$$filtered_data{"Chr1"}}, "filtering didn't remove any SNPs");
 
+#get information on genome length
+my $genome_lengths = CandiSNP::genome_lengths('athalianaTair10');
+ok 34964571 eq $genome_lengths->{Chr1}, "genome length not retrieved";
 
+#returns list of six positions into 
+my $scale_marks = CandiSNP::scale_marks($genome_lengths);
+warn Dumper $scale_marks;
+my @scale_labels = CandiSNP::scale_labels($genome_lengths);
 
+#start R session ..
+my $new_r = CandiSNP::R;
+isa_ok $new_r, "Statistics::R", "can't create R connection object";

@@ -1,6 +1,7 @@
 package CandiSNP;
 
-use 5.006;
+use Modern::Perl 2011;
+use autodie;
 use strict;
 use warnings FATAL => 'all';
 use Statistics::R;
@@ -11,6 +12,7 @@ use Sort::Key::Natural qw(natsort);
 use File::Basename;
 use Digest::MD5 qw(md5_hex);
 use IPC::Open2;
+use Storable 'dclone';
 
 $ENV{PATH} = "/usr/bin/";
 
@@ -158,21 +160,21 @@ sub _data_hash_to_file{
 	my $file_name = shift;
 	my %data = %{$d};
 	my %opts = @_;
-	open OUT, ">$file_name";
-	print OUT _header() unless defined $opts{-format} and $opts{-format} eq 'short';
+	open my $OUT, ">", $file_name;
+	print $OUT _header() unless defined $opts{-format} and $opts{-format} eq 'short';
 	foreach my $chr (natsort keys %data ){
 		foreach my $pos (natsort keys %{$data{$chr}}){
 			my @line = ($chr, $pos, $data{$chr}{$pos}{_ref},$data{$chr}{$pos}{_alt} ); 
 			if (defined $opts{-format} and $opts{-format} eq 'short') {
-				print OUT join("\t", @line), "\n";
+				print $OUT join("\t", @line), "\n";
 			}
 			else {
 				push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga});
-				print OUT join(",", @line);
+				print $OUT join(",", @line);
 			}
 		}
 	}
-	close OUT;
+	close $OUT;
 }
 
 sub _base_folder{
@@ -210,7 +212,6 @@ sub get_positions_from_file{
 	croak "bad file headers" unless _header_ok($fh);
 	my $data = {};
 	while (my $l = <$fh>){
-		next unless _is_snp($l, -cutoff => $opts{-cutoff});
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
@@ -220,6 +221,22 @@ sub get_positions_from_file{
 	}
 	return $data;
 }
+
+#filter out SNPs with allele freq less than that specified, returns a new hash
+sub apply_filter{
+	my $data = shift;
+	my $cutoff = shift;
+	my $new = dclone($data);
+	foreach my $chr (keys %{$data} ){
+		foreach my $pos (keys %{$$data{$chr}}){
+			if ( $$new{$chr}{$pos}{_allele_freq} < $cutoff ){
+				 delete $$new{$chr}{$pos};
+			}
+		}
+	}
+	return $new;
+}
+
 
 #returns the line if it passes the user supplied threshold
 sub _is_snp{
@@ -254,6 +271,31 @@ sub _header_ok{
 	return 1;
 }
 
+#returns list of contig/chromosome lengths for a given genome file
+sub genome_lengths{
+	my $genome = shift;
+	my $lengths = {
+		'athalianaTair10' => {
+			"Chr1" => 34964571,
+			"Chr2" => 22037565,
+			"Chr3" => 25499034,
+			"Chr4" => 20862711,
+			"Chr5" => 31270811
+		}
+	};
+	return $$lengths{$genome};
+}
+
+
+sub scale_marks{
+	my $lengths = shift;
+	my @sorted = reverse natsort values %{$lengths} ;
+	return \@sorted;
+}
+
+sub scale_labels{
+	
+}
 =head1 AUTHOR
 
 Dan MacLean (TSL), C<< <dan.maclean at tsl.ac.uk> >>
