@@ -1,21 +1,36 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>index</title>
-	<link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<meta name="generator" content="TextMate http://macromates.com/">
-	<meta name="author" content="Dan MacLean (TSL)">
-	<!-- Date: 2013-04-16 -->
+<meta charset="utf-8">
+<title>CandiSNP</title>
+
 </head>
 <body>
 	<div>
+		<link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<h1>Welcome to CandiSNP</h1>
-		
-		<P>ooh this is going to be fun, isn't it?</p>
 	</div>
-
-</body>
+<link href="fineuploader/fineuploader-3.4.1.css" rel="stylesheet">
+<div id="fine-uploader"></div>
+<script src="fineuploader/jquery-2.0.0.js"></script>
+<script src="fineuploader/fineuploader-3.4.1.js"></script>
+<script>
+  $(document).ready(function() {
+    var restricteduploader = new qq.FineUploader({
+      // Since we're using jQuery, use the jQuery way to select the HTML element
+      element: $('#fine-uploader')[0],
+      request: {
+        endpoint: 'src/lib/upload.cgi'
+      },
+      multiple: false,
+      text: {
+        uploadButton: 'Click or Drop'
+      },
+      showMessage: function(message) {
+        // Using Twitter Bootstrap's classes and jQuery selector and method
+        $('#restricted-fine-uploader').append('<div class="alert alert-error">' + message + '</div>');
+      }
+    });
+  });
+</script>
 </html>
