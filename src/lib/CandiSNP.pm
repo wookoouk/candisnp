@@ -73,15 +73,20 @@ Returns a new R interface object
 sub R{
 	my $R = Statistics::R->new();
 	my $cmd = <<'EOF';
-	options(warn=-1)
-	suppressPackageStartupMessages(library("ggplot2"))
-	suppressMessages ( library(ggplot2) )
-	candi_plot = function(x,colours,marks,labels){
+	
+	#options(warn=-1)
+	#suppressPackageStartupMessages(library("ggplot2"))
+	#suppressMessages ( library(ggplot2) )
+	library(ggplot2)
+	candi_plot = function(x,colours,marks,labels,genome_lengths){
 	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type))
-	facets = facet_grid(chromosome ~ .,scales="free", space="free_x")
+	facets = facet_grid(chromosome ~ ., scales="free", space="free")
 	x_axis = theme(axis.title.x = element_blank())
 	y_axis = theme(axis.title.y = element_blank())
-	p = ggplot(x, aes(position,chromosome) ) + colours + points + scale_x_continuous(breaks=marks,labels=labels) + x_axis + y_axis + facets
+	opts =  opts(strip.background = theme_blank() ,strip.text.x = theme_blank(), strip.text.y = theme_blank())
+	max_l = max(genome_lengths$length)
+	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=max_l, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='grey80', alpha=0.5 )
+	p = ggplot(x, aes(position,chromosome) ) + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
 	return(p)
 	}
 	
@@ -95,7 +100,7 @@ sub R{
 	}
 		
 	save_picture = function(p,filename, height){
-	svg(filename, height=height, width=8)
+	svg(filename, height=height, width=16)
 	print(p)
 	dev.off()
 	}
@@ -112,7 +117,7 @@ EOF
 #chromosome position type
 #creates the plot and returns its filename.
 sub plot_data{
-	my ($R, $data, $scale_marks, $scale_labels) = @_;
+	my ($R, $data, $scale_marks, $scale_labels,$genome_lengths) = @_;
 	my $md5 = md5_hex(%{$data});
 	my $public_folder = public_folder();
 	my $tmpfile = $public_folder . "/" . $md5 . ".svg";
@@ -138,11 +143,24 @@ sub plot_data{
 	$R->set('posns', \@posns);
 	$R->set('types', \@types);
 	#warn Dumper @types;
+	my @conts;
+	my @lengths;
+	foreach my $chr (keys %{$genome_lengths}){
+		push @conts, $chr;
+		warn Dumper $$genome_lengths{$chr};
+		push @lengths, $$genome_lengths{$chr};
+	}
+	$R->set('conts', \@conts);
+	$R->set('lengths', \@lengths);
 	my $cmd = <<'EOF';
+
 	data = data.frame(chromosome=chrs,position=posns,type=types)
+
+	genome_lengths = data.frame(chromosome=conts,length=lengths)
+
 	colours = get_colours()
 	height = get_height(data$chromosome)
-	plot = candi_plot(data,colours,marks,labels)
+	plot = candi_plot(data,colours,marks,labels,genome_lengths)
 	save_picture(plot,filename,height)
 	
 EOF
@@ -203,7 +221,7 @@ sub _parse_snpEff{
 	
 	my ($chr,$pos,$ref,$alt,$gene,$effect,$nucs ) = ($data[0],$data[1],$data[2], $data[3], $data[10],$data[15],$data[16]);
 	#warn Dumper join(",",$chr,$pos,$ref,$alt,$gene,$effect,$nucs);
-	warn Dumper $effect;
+	#warn Dumper $effect;
 	$chr = 'Chr' . $chr if (grep /Chr$chr/, keys %{$data});
 	
 	my $syn = "TRUE";
