@@ -13,6 +13,8 @@ use File::Basename;
 use Digest::MD5 qw(md5_hex);
 use IPC::Open2;
 use Storable 'dclone';
+use Number::Bytes::Human qw(format_bytes parse_bytes);
+use feature qw/switch/; 
 
 $ENV{PATH} = "/usr/bin/";
 
@@ -71,43 +73,104 @@ Returns a new R interface object
 sub R{
 	my $R = Statistics::R->new();
 	my $cmd = <<'EOF';
-	#get the R functions loaded
-	##these are not neccesarily the final R functions.
-	library("ggplot2")
-	my_plot2 = function(x,colours){
-	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=corrected_type))
-	p = ggplot(x, aes(position,chromosome) ) + facet_grid(mutant ~ ., scales="free") + colours + points +  theme(panel.grid.major.y = element_line(size=6, colour= "white")   ) + theme(panel.background=element_rect(colour="gray90")) + theme(panel.grid.major.x = element_line(size=1, colour="gray90") ) + scale_x_continuous(breaks=c(0,10000000,20000000,30000000),labels=c("0Mb", "10Mb", "20Mb", "30Mb" ))
+	options(warn=-1)
+	suppressPackageStartupMessages(library("ggplot2"))
+	suppressMessages ( library(ggplot2) )
+	candi_plot = function(x,colours,marks,labels){
+	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type))
+	facets = facet_grid(chromosome ~ .,scales="free", space="free_x")
+	x_axis = theme(axis.title.x = element_blank())
+	y_axis = theme(axis.title.y = element_blank())
+	p = ggplot(x, aes(position,chromosome) ) + colours + points + scale_x_continuous(breaks=marks,labels=labels) + x_axis + y_axis + facets
 	return(p)
 	}
-	f = function(data,cutoff=0.7,nmutants=1){
-	x = data;
-	x = x[x$allele_frequency >= cutoff & x$in_X_mutants == nmutants, ]
-	x = x[x$chromosome != "mitochondria" & x$method == "PileUp", ]
-	x$chromosome = factor(x$chromosome, levels=rev(levels(x$chromosome)))
-	x = x[x$corrected_type != 'indel' & x$corrected_type != "unknown error (likely annotation errors in GFF)",]
-	x$chromosome = factor(x$chromosome)
-	x$corrected_type = factor(x$corrected_type)
-	x$method = factor(x$method)
-	return(x)
+	
+	get_colours = function(){
+		colour_list = structure(c("gray50", "gray50", "red", "gray50"), .Names = c("Synonymous in Coding Region", "Non-Synonymous in Coding Region", "Non-Synonymous in Coding Region C-T or G-A", "Non Coding Region"))
+		scale_colour_manual(name = "SNP Type",values = colour_list)
 	}
-	get_colour_assignments = function(name_list, colour_list){
-	names(colour_list) = levels(name_list)
-	colors = scale_colour_manual(name = "SNP Type",values = colour_list)
-	return(colors)
+	
+	get_height = function(list){
+		return(length(levels(list)) * 1.2 )
 	}
-	do_picture = function(data,cutoff,colours){
-	dat = f(data,cutoff)
-	filename = paste(cutoff, ".svg", sep="")
-	svg(filename, width=8.3,height=11.7)
-	p = my_plot2(dat,colours)
+		
+	save_picture = function(p,filename, height){
+	svg(filename, height=height, width=8)
 	print(p)
 	dev.off()
 	}
 EOF
+
 	$R->run($cmd);
 	return $R;
 }
 
+
+
+
+#takes the filtered annotated data and writes it into an R data frame with headings:
+#chromosome position type
+#creates the plot and returns its filename.
+sub plot_data{
+	my ($R, $data, $scale_marks, $scale_labels) = @_;
+	my $md5 = md5_hex(%{$data});
+	my $public_folder = public_folder();
+	my $tmpfile = $public_folder . "/" . $md5 . ".svg";
+	$R->set("marks", $scale_marks);
+	$R->set("labels",$scale_labels);
+	$R->set("filename",$tmpfile);
+	my @chrs;
+	my @posns;
+	my @types;
+	foreach my $chr (natsort keys %{$data}){
+		foreach my $pos (keys %{$$data{$chr}}){
+			my $type = _get_type($$data{$chr}{$pos});
+			if (defined $type){
+				push @chrs, $chr;
+				push @posns,$pos;
+				push @types,$type;
+			}
+		}
+	}
+	
+	#bung the data into R lists
+	$R->set('chrs', \@chrs);
+	$R->set('posns', \@posns);
+	$R->set('types', \@types);
+	#warn Dumper @types;
+	my $cmd = <<'EOF';
+	data = data.frame(chromosome=chrs,position=posns,type=types)
+	colours = get_colours()
+	height = get_height(data$chromosome)
+	plot = candi_plot(data,colours,marks,labels)
+	save_picture(plot,filename,height)
+	
+EOF
+	$R->run($cmd);
+	return $tmpfile;
+}
+
+sub _get_type{
+	my %data = %{$_[0]};
+	my $result = undef;
+	#warn Dumper %data;
+	if ($data{_syn} eq "FALSE" and $data{_ctga} eq "TRUE" and $data{_in_cds} eq "TRUE"){
+		$result = "Non-Synonymous in Coding Region C-T or G-A";
+	}
+	elsif($data{_syn} eq 'FALSE' and $data{_ctga} eq "FALSE" and $data{_in_cds} eq "TRUE" ){
+		$result = "Non-Synonymous in Coding Region";
+	}
+	elsif($data{_syn} eq 'TRUE' and $data{_ctga} eq "FALSE" and $data{_in_cds} eq "TRUE" ){
+		$result = "Synonymous in Coding Region";
+	}
+	elsif( $data{_in_cds} eq "FALSE" ){
+		$result = "Non Coding Region";
+	}
+	else{
+		$result = undef; #unclassified SNP
+	}
+	return $result;
+}
 
 ##gets the ruby Bio::Synreport annotations for the positions provided 
 ##forks a child process and runs SNPeff, parses the result data back into the $data hash
@@ -124,6 +187,7 @@ sub annotate_positions{
 	my $pid = open2($chld_out, $chld_in, "java -Xmx2g -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
 	while (my $line = <$chld_out>){
 		next if $line =~ m/^#/;
+		next if $line =~ m/^\n$/;
 		chomp $line;
 		$data = _parse_snpEff($data,$line);
 	}
@@ -139,17 +203,22 @@ sub _parse_snpEff{
 	
 	my ($chr,$pos,$ref,$alt,$gene,$effect,$nucs ) = ($data[0],$data[1],$data[2], $data[3], $data[10],$data[15],$data[16]);
 	#warn Dumper join(",",$chr,$pos,$ref,$alt,$gene,$effect,$nucs);
+	warn Dumper $effect;
 	$chr = 'Chr' . $chr if (grep /Chr$chr/, keys %{$data});
-
+	
+	my $syn = "TRUE";
+	if ($effect eq "NON_SYNONYMOUS_CODING"){
+		$syn = "FALSE";
+	}
 	return $data if defined $$data{$chr}{$pos}{_gene};
 
-	if ($effect ne 'INTERGENIC' || $effect ne 'INTRON'){
+	if ($effect eq 'INTERGENIC' || $effect eq 'INTRON'){
 		$$data{$chr}{$pos}{_in_cds} = "FALSE";
 		$$data{$chr}{$pos}{_syn} = "FALSE";
 	}
 	else{
 		$$data{$chr}{$pos}{_in_cds} = "TRUE";
-		$$data{$chr}{$pos}{_syn} = $effect;
+		$$data{$chr}{$pos}{_syn} = $syn;
 	}
 	$$data{$chr}{$pos}{_gene} = $gene;
 	return $data;
@@ -202,22 +271,28 @@ sub _is_ctga{
 }
 
 
-##from the uploaded text file, gets the positions that pass filters
-##adds on whether they are synonymous / non_synonymous ... 
+##from the uploaded text file, gets the positions that are on chromosomes we can use...
 ##returns as hash structure
 sub get_positions_from_file{
 
 	my %opts = @_;
 	my $fh = _open_file($opts{-file}); 
 	croak "bad file headers" unless _header_ok($fh);
+	my %genome = %{genome_lengths($opts{-genome})};
 	my $data = {};
 	while (my $l = <$fh>){
+		next unless defined $genome{$l->{'chr'}}; #skip any positions on chromosomes not in our genome definition...
+		warn Dumper "skipping $l->{'chr'} : $l->{'pos'}" unless defined $genome{$l->{'chr'}};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = "NA";
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = _is_ctga($l->{'ref'}, $l->{'alt'});
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "NA";
+	}
+	if (scalar (keys %{$data}) == 0){
+		carp "Couldnt find any chromosomes with those names in this genome";
+		return 0;
 	}
 	return $data;
 }
@@ -290,12 +365,34 @@ sub genome_lengths{
 sub scale_marks{
 	my $lengths = shift;
 	my @sorted = reverse natsort values %{$lengths} ;
-	return \@sorted;
+	my $longest = shift @sorted;
+	my $interval = scale_units($longest);
+	my @marks = ($interval);
+	foreach my $gap (@marks){
+		my $next = $interval * (scalar @marks + 1);
+		last if $next >= $longest;
+		push @marks, $next;
+	}
+	my @labels = ();
+	foreach my $mark (@marks){
+		push @labels, format_bytes($mark, bs => 1000) . 'b';
+	}
+	return \@marks, \@labels;
 }
 
-sub scale_labels{
-	
+
+sub scale_units{
+	my $result = 1000000;
+		if (length $_[0] == 3){$result = 100;}
+		elsif (length $_[0] == 4){$result = 1000;}
+		elsif (length $_[0] == 5){$result = 10000;}
+		elsif (length $_[0] == 6){$result = 100000;}
+		elsif (length $_[0] == 7){$result = 1000000;}
+		elsif (length $_[0] == 8){$result = 10000000;}
+	return $result;
 }
+
+
 =head1 AUTHOR
 
 Dan MacLean (TSL), C<< <dan.maclean at tsl.ac.uk> >>
