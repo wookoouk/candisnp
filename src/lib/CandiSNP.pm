@@ -79,19 +79,19 @@ sub R{
 	#suppressMessages ( library(ggplot2) )
 	library(ggplot2)
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
-	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type))
+	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type,alpha = 1/5), )
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
 	x_axis = theme(axis.title.x = element_blank())
 	y_axis = theme(axis.title.y = element_blank())
 	opts =  opts(strip.background = theme_blank() ,strip.text.x = theme_blank(), strip.text.y = theme_blank())
 	max_l = max(genome_lengths$length)
-	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=max_l, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='grey80', alpha=0.5 )
+	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=Inf, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='white' )
 	p = ggplot(x, aes(position,chromosome) ) + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
 	return(p)
 	}
 	
-	get_colours = function(){
-		colour_list = structure(c("gray50", "gray50", "red", "gray50"), .Names = c("Synonymous in Coding Region", "Non-Synonymous in Coding Region", "Non-Synonymous in Coding Region C-T or G-A", "Non Coding Region"))
+	get_colours = function(palette){
+		colour_list = structure(palette, .Names = c("Synonymous in Coding Region", "Non-Synonymous in Coding Region", "Non-Synonymous in Coding Region C-T or G-A", "Non Coding Region"))
 		scale_colour_manual(name = "SNP Type",values = colour_list)
 	}
 	
@@ -117,10 +117,9 @@ EOF
 #chromosome position type
 #creates the plot and returns its filename.
 sub plot_data{
-	my ($R, $data, $scale_marks, $scale_labels,$genome_lengths) = @_;
-	my $md5 = md5_hex(%{$data});
+	my ($R, $data,$filetag, $scale_marks, $scale_labels,$genome_lengths, $palette) = @_;
 	my $public_folder = public_folder();
-	my $tmpfile = $public_folder . "/" . $md5 . ".svg";
+	my $tmpfile = $public_folder . "/" . $filetag . ".svg";
 	$R->set("marks", $scale_marks);
 	$R->set("labels",$scale_labels);
 	$R->set("filename",$tmpfile);
@@ -152,13 +151,15 @@ sub plot_data{
 	}
 	$R->set('conts', \@conts);
 	$R->set('lengths', \@lengths);
+	
+	$R->set('palette', $palette);
 	my $cmd = <<'EOF';
 
 	data = data.frame(chromosome=chrs,position=posns,type=types)
 
 	genome_lengths = data.frame(chromosome=conts,length=lengths)
 
-	colours = get_colours()
+	colours = get_colours(palette)
 	height = get_height(data$chromosome)
 	plot = candi_plot(data,colours,marks,labels,genome_lengths)
 	save_picture(plot,filename,height)
@@ -166,6 +167,16 @@ sub plot_data{
 EOF
 	$R->run($cmd);
 	return $tmpfile;
+}
+
+sub get_palette{
+	my $type = shift;
+	my @pal = ("gray50", "gray50", "red", "gray50");
+	if ($type eq 'gradient'){
+		 @pal = ("#A1DAB4", "#41B6C4", "#225EA8", "#FFFFCC");
+		return \@pal;
+	}
+	return \@pal;
 }
 
 sub _get_type{
@@ -190,6 +201,11 @@ sub _get_type{
 	return $result;
 }
 
+#send it a hashref, returns a big number
+sub get_filetag{
+	return md5_hex(%{$_[0]});
+}
+
 ##gets the ruby Bio::Synreport annotations for the positions provided 
 ##forks a child process and runs SNPeff, parses the result data back into the $data hash
 sub annotate_positions{
@@ -197,10 +213,10 @@ sub annotate_positions{
 	my %opts = @_;
 	my $bin = bin_folder();
 	my $public_folder = public_folder();
-	my $md5 = md5_hex(%{$data});
-	my $tmpfile = $public_folder . "/" . $md5;
+	my $filetag = $opts{-filetag};
+	my $tmpfile = $public_folder . "/" . $filetag;
 	$opts{-format} = 'short';
-	_data_hash_to_file($data, $tmpfile, %opts);
+	data_hash_to_file($data, $tmpfile, %opts);
 	my($chld_out, $chld_in);
 	my $pid = open2($chld_out, $chld_in, "java -Xmx2g -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
 	while (my $line = <$chld_out>){
@@ -238,15 +254,22 @@ sub _parse_snpEff{
 		$$data{$chr}{$pos}{_in_cds} = "TRUE";
 		$$data{$chr}{$pos}{_syn} = $syn;
 	}
-	$$data{$chr}{$pos}{_gene} = $gene;
+
+	$gene = "" unless defined $gene;
+	$nucs = "" unless defined $nucs;
+	$effect = "" unless defined $effect;
+	$$data{$chr}{$pos}{_gene} = $gene =~ m/\w+/ ? $gene : "-";
+	$$data{$chr}{$pos}{_nucs} = $nucs =~ m/\w+/ ? $nucs : "-";
+	$$data{$chr}{$pos}{_effect} = $effect =~ m/\w+/ ? $effect : "-";
 	return $data;
 }
 
-sub _data_hash_to_file{
+sub data_hash_to_file{
 	my $d = shift;
 	my $file_name = shift;
 	my %data = %{$d};
 	my %opts = @_;
+	$file_name = public_folder() . "/" . $file_name . '.csv' if ($opts{-format} eq 'long');
 	open my $OUT, ">", $file_name;
 	print $OUT _header() unless defined $opts{-format} and $opts{-format} eq 'short';
 	foreach my $chr (natsort keys %data ){
@@ -256,8 +279,8 @@ sub _data_hash_to_file{
 				print $OUT join("\t", @line), "\n";
 			}
 			else {
-				push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga});
-				print $OUT join(",", @line);
+				push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga},$data{$chr}{$pos}{_nucs},$data{$chr}{$pos}{_gene},$data{$chr}{$pos}{_effect});
+				print $OUT join(",", @line), "\n";
 			}
 		}
 	}
@@ -279,7 +302,7 @@ sub public_folder{
 }
 
 sub _header{
-	return "Chr,Pos,Ref,Alt,Allele_Freq,in_cds,is_synonymous,is_ctga\n";
+	return "Chr,Pos,Ref,Alt,Allele_Freq,in_cds,is_synonymous,is_ctga,change,gene,summary\n";
 }
 
 sub _is_ctga{

@@ -119,18 +119,29 @@ my $big_data = CandiSNP::get_positions_from_file(
 	-file => "sample_data/large_snp.csv",
 	-genome => "athalianaTair10"
 	 );
-$big_data = CandiSNP::annotate_positions($big_data, -genome => "athalianaTair10");	
+	
+##once data is loaded, you can get a unique id for it ...
+my $filetag = CandiSNP::get_filetag($big_data);
+	
+	
+$big_data = CandiSNP::annotate_positions($big_data, -genome => "athalianaTair10", -filetag => $filetag);	
 
-my $snp_selected = $$big_data{'Chr1'}{10417334};
+#my $snp_selected = $$big_data{'Chr1'}{10417334};
 
-warn Dumper $snp_selected;
+#warn Dumper $snp_selected;
 
 my $filtered_big_data = CandiSNP::apply_filter($big_data, "0.9");
 my $all_genome_lengths = CandiSNP::genome_lengths('athalianaTair10');
 my ($big_scale_marks, $big_scale_labels) = CandiSNP::scale_marks($all_genome_lengths);
-warn Dumper $big_scale_marks;
-warn Dumper $big_scale_labels;
+#warn Dumper $big_scale_marks;
+#warn Dumper $big_scale_labels;
 my $R = CandiSNP::R;
-my $big_image = CandiSNP::plot_data($R, $filtered_big_data, $big_scale_marks, $big_scale_labels,$all_genome_lengths);
+
+
+my $palette = CandiSNP::get_palette('gradient');
+warn Dumper $palette;
+my $big_image = CandiSNP::plot_data($R, $filtered_big_data, $filetag, $big_scale_marks, $big_scale_labels,$all_genome_lengths,$palette);
 warn Dumper "$big_image printed";
+##dump file of used snps to a csv
+CandiSNP::data_hash_to_file($filtered_big_data,$filetag,-format=>'long');
 $R->stop;
