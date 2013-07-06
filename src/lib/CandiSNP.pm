@@ -99,10 +99,8 @@ sub R{
 		return(length(levels(list)) * 1.2 )
 	}
 		
-	save_picture = function(p,filename, height){
-	svg(filename, height=height, width=16)
-	print(p)
-	dev.off()
+	save_picture = function(p,fname, h){
+		ggsave(filename=fname,plot=p, height=h, width=16)
 	}
 EOF
 
@@ -174,6 +172,10 @@ sub get_palette{
 	my @pal = ("gray50", "gray50", "red", "gray50");
 	if ($type eq 'gradient'){
 		 @pal = ("#A1DAB4", "#41B6C4", "#225EA8", "#FFFFCC");
+		return \@pal;
+	}
+	elsif($type eq 'contrast'){
+		@pal = ("#FDAE61", "#ABD9E9", "#D7191C", "#2C7BB6");
 		return \@pal;
 	}
 	return \@pal;

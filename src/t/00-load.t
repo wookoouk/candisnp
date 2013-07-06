@@ -138,7 +138,7 @@ my ($big_scale_marks, $big_scale_labels) = CandiSNP::scale_marks($all_genome_len
 my $R = CandiSNP::R;
 
 
-my $palette = CandiSNP::get_palette('gradient');
+my $palette = CandiSNP::get_palette('contrast');
 warn Dumper $palette;
 my $big_image = CandiSNP::plot_data($R, $filtered_big_data, $filetag, $big_scale_marks, $big_scale_labels,$all_genome_lengths,$palette);
 warn Dumper "$big_image printed";
