@@ -291,8 +291,8 @@ sub data_hash_to_file{
 
 sub _base_folder{
 	my $dirname = dirname(__FILE__);
-	#$dirname =~ s/\/src\/blib\/lib//; 
-	return "/Users/ethering/Sites/candisnp";
+	$dirname =~ s/\/src\/lib//; 
+	return $dirname;
 }
 
 sub bin_folder{
