@@ -37,35 +37,46 @@
 			}
 			
 		})
+		//each time a file is opened insert a text box next to it for the allele frequency
+		//and give it a default value of 0.9
 		.on('submitted', function(event, id, name) {
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
 			$(fileItemContainer).append('<input type="text" name="allele_freq'+subcounter+'" value="0.9" >');
 			subcounter++;
+			//when the upload button is clicked, upload the files
 			$('#triggerUpload').click(function() {
 				manualuploader.fineUploader('uploadStoredFiles');
 				
 			})
 		})
+		//once the files have uploaded
 		.on('upload', function(event, id, name) {
+			//get the identify the current file container
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id),
+			//get the entered allele frequency
 			enteredAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+counter+'"]').val();
+			//and set the parameters for the file
 			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq}, id);
 			
-			
+			//created a Resubmit button for each file
 			var button = $('<button/>', {
 				text: 'Resubmit '+counter, //set text 
 				id: counter, //set id
 				
+				//when the resubmit button is pressed, get the new allele frequency
 				click: function () {
 					var current_allele_freq = $(fileItemContainer).find('input[name="allele_freq'+this.id+'"]').val();
-					
 					$('#processor'+id).append("<img src='fineuploader/processing.gif' >");
+					
+					//and post the new allele freq, along with the filename (which will already be on the server, so
+					//no need to re-upload the file) and run the resubmit.cgi script
 					$.ajax({
 						type: 'POST',
 						url: 'cgi/resubmit.cgi',
 						async: true,
 						data: {allele_freq: current_allele_freq, file_name : name}, 
 						dataType: 'json',
+						//if everything runs OK and 'success' is returned, then display the new plot
 						success: function(data) {
 							$('#imageLoc'+id).empty().append('<img src="public/'+data.file+'" />');
 							$('#processor'+id).remove();
@@ -73,11 +84,13 @@
 					});
 				}
 			})
+			//add the Resubmit button and divs for the image and the spinning proccessing gif
 			$(fileItemContainer).append(button);
 			$(fileItemContainer).append('<div id="processor'+id+'"></div>')
 			$(fileItemContainer).append('<div id="imageLoc'+id+'"></div>');
 			counter++;
 		})
+		//when the initial upload has finished load the plot
 		.on('complete', function(event, id, fileName, responseJSON) {
 			if (responseJSON.success) {
 				//$('#imageLoc'+id).append('<p>'+fileName+' '+responseJSON.allele_frequency+'</p>');
