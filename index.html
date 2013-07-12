@@ -2,35 +2,95 @@
 <html>
 <head>
 <meta charset="utf-8">
+
 <title>CandiSNP</title>
 
 </head>
 <body>
 	<div>
 		<link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-		<h1>Welcome to CandiSNP</h1>
+		<h1><img src="img/photo.PNG" alt="CandiSNP"width="200" height="200">
+		<span>Welcome to CandiSNP</span></h1>
 	</div>
-<link href="fineuploader/fineuploader-3.4.1.css" rel="stylesheet">
-<div id="fine-uploader"></div>
-<script src="fineuploader/jquery-2.0.0.js"></script>
-<script src="fineuploader/fineuploader-3.4.1.js"></script>
-<script>
-  $(document).ready(function() {
-    var restricteduploader = new qq.FineUploader({
-      // Since we're using jQuery, use the jQuery way to select the HTML element
-      element: $('#fine-uploader')[0],
-      request: {
-        endpoint: 'src/lib/upload.cgi'
-      },
-      multiple: false,
-      text: {
-        uploadButton: 'Click or Drop'
-      },
-      showMessage: function(message) {
-        // Using Twitter Bootstrap's classes and jQuery selector and method
-        $('#restricted-fine-uploader').append('<div class="alert alert-error">' + message + '</div>');
-      }
-    });
-  });
-</script>
+
+	<link href="fineuploader/fineuploader-3.6.4.css" rel="stylesheet">
+	<div id="manual-fine-uploader"></div>
+	
+	<div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+		<i class="icon-upload icon-white"></i> Upload now
+	</div>
+	<script src="fineuploader/jquery-2.0.1.js"></script>
+	<script src="fineuploader/jquery.fineuploader-3.6.4.js"></script>
+	<!--script> type='text/javascript' src='src/lib/script.js'</script-->
+	
+	<script>
+	$(document).ready(function() {
+		var subcounter = 1;
+		var counter = 1;
+		var manualuploader = $('#manual-fine-uploader').fineUploader({
+			request: {
+				endpoint: 'cgi/upload.cgi'
+			},
+			autoUpload: false,
+			text: {
+			uploadButton: '<i class="icon-plus icon-white"></i> Select Files'
+			}
+			
+		})
+		.on('submitted', function(event, id, name) {
+			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
+			$(fileItemContainer).append('<input type="text" name="allele_freq'+subcounter+'" value="0.9" >');
+			subcounter++;
+			$('#triggerUpload').click(function() {
+				manualuploader.fineUploader('uploadStoredFiles');
+				
+			})
+		})
+		.on('upload', function(event, id, name) {
+			var fileItemContainer = $(this).fineUploader('getItemByFileId', id),
+			enteredAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+counter+'"]').val();
+			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq}, id);
+			
+			
+			var button = $('<button/>', {
+				text: 'Resubmit '+counter, //set text 
+				id: counter, //set id
+				
+				click: function () {
+					var current_allele_freq = $(fileItemContainer).find('input[name="allele_freq'+this.id+'"]').val();
+					
+					$('#processor'+id).append("<img src='fineuploader/processing.gif' >");
+					$.ajax({
+						type: 'POST',
+						url: 'cgi/resubmit.cgi',
+						async: true,
+						data: {allele_freq: current_allele_freq, file_name : name}, 
+						dataType: 'json',
+						success: function(data) {
+							$('#imageLoc'+id).empty().append('<img src="public/'+data.file+'" />');
+							$('#processor'+id).remove();
+						}
+					});
+				}
+			})
+			$(fileItemContainer).append(button);
+			$(fileItemContainer).append('<div id="processor'+id+'"></div>')
+			$(fileItemContainer).append('<div id="imageLoc'+id+'"></div>');
+			counter++;
+		})
+		.on('complete', function(event, id, fileName, responseJSON) {
+			if (responseJSON.success) {
+				//$('#imageLoc'+id).append('<p>'+fileName+' '+responseJSON.allele_frequency+'</p>');
+				$('#imageLoc'+id).append('<img src="public/'+responseJSON.file+'" alt="' + id + '">');
+			}
+		});
+	});
+
+	</script>
+
+
+</body>
+
 </html>
+
+

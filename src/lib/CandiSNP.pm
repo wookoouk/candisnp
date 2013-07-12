@@ -16,7 +16,7 @@ use Storable 'dclone';
 use Number::Bytes::Human qw(format_bytes parse_bytes);
 use feature qw/switch/; 
 
-$ENV{PATH} = "/usr/bin/";
+$ENV{PATH} = "/usr/bin/:/usr/local/bin/";
 
 =head1 NAME
 
@@ -144,7 +144,7 @@ sub plot_data{
 	my @lengths;
 	foreach my $chr (keys %{$genome_lengths}){
 		push @conts, $chr;
-		warn Dumper $$genome_lengths{$chr};
+		#warn Dumper $$genome_lengths{$chr};
 		push @lengths, $$genome_lengths{$chr};
 	}
 	$R->set('conts', \@conts);
@@ -291,8 +291,8 @@ sub data_hash_to_file{
 
 sub _base_folder{
 	my $dirname = dirname(__FILE__);
-	$dirname =~ s/\/src\/blib\/lib//; 
-	return $dirname;
+	#$dirname =~ s/\/src\/blib\/lib//; 
+	return "/Users/ethering/Sites/candisnp";
 }
 
 sub bin_folder{
