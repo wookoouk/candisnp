@@ -134,7 +134,7 @@ sub plot_data{
 			}
 		}
 	}
-	
+
 	#bung the data into R lists
 	$R->set('chrs', \@chrs);
 	$R->set('posns', \@posns);
