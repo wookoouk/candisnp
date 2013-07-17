@@ -109,8 +109,6 @@ EOF
 }
 
 
-
-
 #takes the filtered annotated data and writes it into an R data frame with headings:
 #chromosome position type
 #creates the plot and returns its filename.
@@ -285,6 +283,19 @@ sub data_hash_to_file{
 				#warn Dumper @line;
 			}
 			else {
+				if (not defined ($data{$chr}{$pos}{_gene}) )
+				{
+					$data{$chr}{$pos}{_gene}= "NA";
+				}
+				if (not defined ($data{$chr}{$pos}{_nucs}) )
+				{
+					$data{$chr}{$pos}{_nucs}= "NA";
+				}
+				if (not defined ($data{$chr}{$pos}{_effect}) )
+				{
+					$data{$chr}{$pos}{_effect}= "NA";
+				}
+								
 				push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga},$data{$chr}{$pos}{_nucs},$data{$chr}{$pos}{_gene},$data{$chr}{$pos}{_effect});
 				#warn Dumper @line;
 				print $OUT join(",", @line), "\n";

@@ -146,4 +146,4 @@ my $big_image = CandiSNP::plot_data($R, $filtered_big_data, $filetag, $big_scale
 warn Dumper "$big_image printed";
 ##dump file of used snps to a csv
 CandiSNP::data_hash_to_file($filtered_big_data,$filetag,-format=>'long');
-#$R->stop;
+$R->stop;

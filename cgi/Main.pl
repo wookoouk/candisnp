@@ -34,7 +34,7 @@ sub doWork()
 	my $big_image = CandiSNP::plot_data($R, $filtered_big_data, $filetag, $big_scale_marks, $big_scale_labels,$all_genome_lengths,$palette);
 
 	##dump file of used snps to a csv
-	#CandiSNP::data_hash_to_file($filtered_big_data,$filetag,-format=>'long');
+	CandiSNP::data_hash_to_file($filtered_big_data,$filetag,-format=>'long');
 	#$R->stop;
 	return $filetag;
 }
