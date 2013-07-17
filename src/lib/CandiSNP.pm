@@ -142,7 +142,8 @@ sub plot_data{
 	#warn Dumper @types;
 	my @conts;
 	my @lengths;
-	foreach my $chr (keys %{$genome_lengths}){
+	
+	foreach my $chr (keys %{$data}){
 		push @conts, $chr;
 		#warn Dumper $$genome_lengths{$chr};
 		push @lengths, $$genome_lengths{$chr};
