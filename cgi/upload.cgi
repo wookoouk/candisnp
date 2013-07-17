@@ -8,7 +8,6 @@ use File::Basename;
 require "Main.pl";
 
 my $uploaddir = '../public';
-open(PARAMS, ">>$uploaddir/PARAMS.txt");
 
 #my $maxFileSize = 0.5 * 1024 * 1024; # 1/2mb max file size...
 
@@ -24,12 +23,6 @@ if ($IN->param('POSTDATA')) {
 
 #my $temp_id = $IN->param('temp_id');
 my $allele_freq = $IN->param('allele_freq');
-
-
-# make a random filename, and we guess the file type later on...
-#my $name = Digest::MD5::md5_base64( rand );
-#$name =~ s/\+/_/g;
-#$name =~ s/\//_/g;
 
 
 #mkdir("$uploaddir/$file");
@@ -53,8 +46,7 @@ my $dir = dirname( File::Spec->rel2abs("$uploaddir/$file") );
 
 
 my $filename = doWork("$dir/$file", $allele_freq);
-print PARAMS "$dir/$file\t$allele_freq\t$filename.svg\n";
-close(PARAMS);
+
 print $IN->header();
 if ($check_size < 1) {
     print STDERR "ooops, its empty - gonna get rid of it!\n";

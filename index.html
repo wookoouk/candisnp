@@ -43,10 +43,20 @@
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
 			$(fileItemContainer).append('<input type="text" name="allele_freq'+subcounter+'" value="0.9" >');
 			subcounter++;
+			
 			//when the upload button is clicked, upload the files
 			$('#triggerUpload').click(function() {
-				manualuploader.fineUploader('uploadStoredFiles');
-				
+				var initialAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+counter+'"]').val();
+				if ($.isNumeric(initialAlleleFreq) && initialAlleleFreq >= 0 && initialAlleleFreq <=1)
+				{
+					manualuploader.fineUploader('uploadStoredFiles');
+				}
+				else
+				{
+					console.debug('Allele freq:' + initialAlleleFreq);
+					//$('#processor'+id).remove();
+					$(fileItemContainer).append('<p style="font-family:arial;color:yellow;background-color:blue;font-size:20px;"> Insert a number between 0 and 1</p>');
+				}
 			})
 		})
 		//once the files have uploaded
@@ -55,9 +65,11 @@
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id),
 			//get the entered allele frequency
 			enteredAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+counter+'"]').val();
+			//check that the entered allele freq is numberic and between 0 and 1.
+			
 			//and set the parameters for the file
 			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq}, id);
-			
+		
 			//created a Resubmit button for each file
 			var button = $('<button/>', {
 				text: 'Resubmit '+counter, //set text 
@@ -66,24 +78,34 @@
 				//when the resubmit button is pressed, get the new allele frequency
 				click: function () {
 					var current_allele_freq = $(fileItemContainer).find('input[name="allele_freq'+this.id+'"]').val();
-					$('#processor'+id).append("<img src='fineuploader/processing.gif' >");
-					
-					//and post the new allele freq, along with the filename (which will already be on the server, so
-					//no need to re-upload the file) and run the resubmit.cgi script
-					$.ajax({
-						type: 'POST',
-						url: 'cgi/resubmit.cgi',
-						async: true,
-						data: {allele_freq: current_allele_freq, file_name : name}, 
-						dataType: 'json',
-						//if everything runs OK and 'success' is returned, then display the new plot
-						success: function(data) {
-							$('#imageLoc'+id).empty().append('<img src="public/'+data.file+'" />');
-							$('#processor'+id).remove();
-						}
-					});
+					if ($.isNumeric(current_allele_freq) && current_allele_freq >= 0 && current_allele_freq <=1)
+					{
+						$('#processor'+id).append("<img src='fineuploader/processing.gif' >");
+						
+						//and post the new allele freq, along with the filename (which will already be on the server, so
+						//no need to re-upload the file) and run the resubmit.cgi script
+						$.ajax({
+							type: 'POST',
+							url: 'cgi/resubmit.cgi',
+							async: true,
+							data: {allele_freq: current_allele_freq, file_name : name}, 
+							dataType: 'json',
+							//if everything runs OK and 'success' is returned, then display the new plot
+							success: function(data) {
+								$('#imageLoc'+id).empty().append('<img src="public/'+data.file+'" />');
+								$('#processor'+id).remove();
+							}
+						});
+					}
+					else
+					{
+						console.debug('Allele freq:' + enteredAlleleFreq);
+						//$('#processor'+id).remove();
+						$('#processor'+id).append('<p style="font-family:arial;color:yellow;background-color:blue;font-size:20px;"> Insert a number between 0 and 1</p>');
+					}
 				}
 			})
+			
 			//add the Resubmit button and divs for the image and the spinning proccessing gif
 			$(fileItemContainer).append(button);
 			$(fileItemContainer).append('<div id="processor'+id+'"></div>')

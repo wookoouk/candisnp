@@ -222,9 +222,11 @@ sub annotate_positions{
 	my($chld_out, $chld_in);
 	my $pid = open2($chld_out, $chld_in, "java -Xmx2g -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
 	while (my $line = <$chld_out>){
+		
 		next if $line =~ m/^#/;
 		next if $line =~ m/^\n$/;
 		chomp $line;
+		#warn Dumper $line;
 		$data = _parse_snpEff($data,$line);
 	}
 	unlink $tmpfile;
@@ -279,10 +281,13 @@ sub data_hash_to_file{
 			my @line = ($chr, $pos, $data{$chr}{$pos}{_ref},$data{$chr}{$pos}{_alt} ); 
 			if (defined $opts{-format} and $opts{-format} eq 'short') {
 				print $OUT join("\t", @line), "\n";
+				#warn Dumper @line;
 			}
 			else {
 				push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga},$data{$chr}{$pos}{_nucs},$data{$chr}{$pos}{_gene},$data{$chr}{$pos}{_effect});
+				#warn Dumper @line;
 				print $OUT join(",", @line), "\n";
+				
 			}
 		}
 	}
