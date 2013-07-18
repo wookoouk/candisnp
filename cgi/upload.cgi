@@ -55,5 +55,5 @@ if ($check_size < 1) {
 }
 else
 {
-  print qq|{ "success": true, "file": "$filename.svg", "allele_frequency" :  $allele_freq}|;
+  print qq|{ "success": true, "file": "$filename", "allele_frequency" :  $allele_freq}|;
 }
