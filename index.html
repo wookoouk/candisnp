@@ -56,8 +56,7 @@
 				else
 				{
 					console.debug('Allele freq:' + initialAlleleFreq);
-					//$('#processor'+id).remove();
-					$(fileItemContainer).append('<p style="font-family:arial;color:yellow;background-color:blue;font-size:20px;"> Insert a number between 0 and 1</p>');
+					alert('Use a number between 0 and 1');
 				}
 			})
 		})
@@ -103,8 +102,7 @@
 					else
 					{
 						console.debug('Allele freq:' + enteredAlleleFreq);
-						$('#processor'+id).empty();
-						$('#processor'+id).append('<p style="font-family:arial;color:yellow;background-color:blue;font-size:20px;"> Insert a number between 0 and 1</p>');
+						alert('Use a number between 0 and 1');
 					}
 				}
 			})
