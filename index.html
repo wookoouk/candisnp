@@ -14,7 +14,7 @@
 	</div>
 
 	<link href="fineuploader/fineuploader-3.6.4.css" rel="stylesheet">
-	<div id="manual-fine-uploader"></div>
+	<div id="manual-fine-uploader" ></div>
 	
 	<div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
 		<i class="icon-upload icon-white"></i> Upload now
@@ -26,8 +26,41 @@
 	
 	<script>
 	$(document).ready(function() {
+		
+		//when the upload button is clicked, upload the files
+		$('#triggerUpload').click(function() {
+			//get the number of stored files waiting to be uploaded
+			var storedFiles = $('#manual-fine-uploader').fineUploader('getUploads', { status: qq.status.SUBMITTED }).length
+			//we'll presume for now they're all good
+			var allGood = true;
+			//loop through each file
+			for ( var i = 0; i < storedFiles; i = i + 1 ){
+				//clear any previous warnings
+				$('#processor'+i).empty();
+				//get each allele frequency in turn
+				var current_allele_freq = $('#manual-fine-uploader').find('input[name="allele_freq'+i+'"]').val();
+				//if it's not a valid allele frequency, set allGood to false and show a warning
+				if (!$.isNumeric(current_allele_freq) || current_allele_freq > 1)
+				{
+					allGood = false;
+					$('#processor'+i).append('<p style="font-family:arial;color:yellow;background-color:blue;font-size:20px;"> Insert a number between 0 and 1</p>');
 
-		var counter = 1;
+				}
+			}
+			
+			//we've finished checking the allele frequencies
+			//if they're all good upload all files
+			if (allGood == true)
+			{
+				$('#manual-fine-uploader').fineUploader('uploadStoredFiles');
+			}
+			else{
+				console.log( "invalid allele freqs");
+			}
+			
+			
+		});
+		
 		var manualuploader = $('#manual-fine-uploader').fineUploader({
 			request: {
 				endpoint: 'cgi/upload.cgi'
@@ -38,50 +71,50 @@
 			}
 			
 		})
+		
+		//called when the file or Blob has been successfully submitted to the uploader. 
 		//each time a file is opened insert a text box next to it for the allele frequency
 		//and give it a default value of 0.9
 		.on('submitted', function(event, id, name) {
 			console.debug('Event: ' + event + ' id: ' + id +' name: ' + name);
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
 			$(fileItemContainer).append('<input type="text" name="allele_freq'+id+'" value="0.9" >');
-			
-			//when the upload button is clicked, upload the files
-			$('#triggerUpload').click(function() {
-				var initialAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
-				console.debug('initialAlleleFreq: ' + initialAlleleFreq );
-				if ($.isNumeric(initialAlleleFreq) && initialAlleleFreq >= 0 && initialAlleleFreq <=1)
-				{
-					manualuploader.fineUploader('uploadStoredFiles');
-				}
-				else
-				{
-					console.debug('Allele freq:' + initialAlleleFreq);
-					alert('Use a number between 0 and 1 for file '+name);
-				}
-			})
+			$(fileItemContainer).append('<div id="processor'+id+'"></div>')
 		})
-		//once the files have uploaded
+		
+		//called just before a file or Blob upload begins.
 		.on('upload', function(event, id, name) {
 			//get the identify the current file container
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id),
 			//get the entered allele frequency
 			enteredAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
-			//check that the entered allele freq is numberic and between 0 and 1.
-			
-			//and set the parameters for the file
 			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq}, id);
+			console.debug('enteredAlleleFreq:' + enteredAlleleFreq + " id: " + id);
+		})
 		
+		//called when the file or Blob upload has finished
+		//when the initial upload has finished create and show a resubmit and 'save data' button and load the plot
+		.on('complete', function(event, id, fileName, responseJSON) {
+			
 			//create a Resubmit button for each file
 			var button = $('<button/>', {
 				text: 'Resubmit ', //set text 
-				id: counter, //set id
+				id: id, //set id
 				
 				//when the resubmit button is pressed, get the new allele frequency
 				click: function () {
 					var current_allele_freq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
-					console.debug('Current Allele freq:' + current_allele_freq + " id: " + id);
-					if ($.isNumeric(current_allele_freq) && current_allele_freq >= 0 && current_allele_freq <=1)
+					//check that it's numeric and less of equal to one
+					//if it's not, alert the user
+					if (!$.isNumeric(current_allele_freq) || current_allele_freq >1)
 					{
+						console.debug('Allele freq:' + current_allele_freq);
+						alert('Use a number between 0 and 1 for file '+fileName);
+					}
+					//otherwise, process the file
+					else
+					{
+						//show the 'processing' icon whilst it's working
 						$('#processor'+id).append("<img src='fineuploader/processing.gif' >");
 						
 						//and post the new allele freq, along with the filename (which will already be on the server, so
@@ -90,26 +123,23 @@
 							type: 'POST',
 							url: 'cgi/resubmit.cgi',
 							async: true,
-							data: {allele_freq: current_allele_freq, file_name : name}, 
+							data: {allele_freq: current_allele_freq, file_name : fileName}, 
 							dataType: 'json',
-							//if everything runs OK and 'success' is returned, then display the new plot
+							//if everything runs OK and 'success' is returned... 
 							success: function(data) {
+								//display the new plot
 								$('#imageLoc'+id).empty().append('<img src="public/'+data.file+'.svg" />');
+								//remove the 'processing' icon
 								$('#processor'+id).remove();
 							}
 						});
-					}
-					else
-					{
-						console.debug('Allele freq:' + enteredAlleleFreq);
-						alert('Use a number between 0 and 1 for file '+name);
 					}
 				}
 			})
 			//a button to save the .csv data used to create the svg plot
 			var saveDataButton = $('<button/>', {
 				text: 'Save Dataset ', //set text 
-				id: counter, //set id
+				id: id, //set id
 				
 				click: function () {
 					//get the name of the svg image currently on view
@@ -118,6 +148,7 @@
 					var basename = currentFileName.substring(0, currentFileName.lastIndexOf('.') );
 					//download the equivalent csv file
 					$.fileDownload(basename+'.csv', {
+					//handle failures
 					successCallback: function (url) {
 						alert('You just got a file download dialog or ribbon for this URL :' + url);
 					},
@@ -129,22 +160,20 @@
 				}
 				
 			})
-			
-			//add the Resubmit button and divs for the image and the spinning proccessing gif
+			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
+			//add the Resubmit and save data buttons and div for the image 
 			$(fileItemContainer).append(button);
 			$(fileItemContainer).append(saveDataButton);
-			$(fileItemContainer).append('<div id="processor'+id+'"></div>')
 			$(fileItemContainer).append('<div id="imageLoc'+id+'"></div>');
-			counter++;
-		})
-		//when the initial upload has finished load the plot
-		.on('complete', function(event, id, fileName, responseJSON) {
+			//if everything runs OK
 			if (responseJSON.success) {
-				//$('#imageLoc'+id).append('<p>'+fileName+' '+responseJSON.allele_frequency+'</p>');
+				//append the image to the div
 				$('#imageLoc'+id).append('<img src="public/'+responseJSON.file+'.svg" alt="' + id + '">');
 			}
 		});
+		
 	});
+	
 
 	</script>
 

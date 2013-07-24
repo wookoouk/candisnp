@@ -10,7 +10,7 @@ sub doWork()
 	
 	
 	my $snp_file = shift or die "Can't access snp file\n";
-	my $allele_freq = shift or die "Can't access allele frequence\n";
+	my $allele_freq = shift or die "Can't access allele frequency\n";
 
 	##how to run the thing...
 	my $big_data = CandiSNP::get_positions_from_file(

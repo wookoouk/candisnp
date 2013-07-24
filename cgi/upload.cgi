@@ -53,6 +53,7 @@ if ($check_size < 1) {
     print qq|{ "success": false, "error": "File is empty..." }|;
     print STDERR "file has been NOT been uploaded... \n";
 }
+
 else
 {
   print qq|{ "success": true, "file": "$filename", "allele_frequency" :  $allele_freq}|;
