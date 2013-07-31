@@ -177,6 +177,16 @@ sub get_palette{
 		@pal = ("#FDAE61", "#ABD9E9", "#D7191C", "#2C7BB6");
 		return \@pal;
 	}
+	elsif ($type eq 'diverging')
+	{
+		@pal = ("#D01C8B", "#4DAC26", "#F1B6DA", "#B8E186");
+		return \@pal;
+	}
+	elsif ($type eq 'sequential')
+	{
+		@pal = ("#E31A1C", "#FECC5C", "#FD8D3C",  "#FFFFB2");
+		return \@pal;
+	}
 	return \@pal;
 }
 
@@ -228,7 +238,7 @@ sub annotate_positions{
 		#warn Dumper $line;
 		$data = _parse_snpEff($data,$line);
 	}
-	unlink $tmpfile;
+	#unlink $tmpfile;
 	return $data;
 	
 }
