@@ -20,6 +20,19 @@
 	<link href="css/bootstrap/css/bootstrap-select.css" rel="stylesheet" media="screen">
 
 	<script type="text/javascript" src="css/bootstrap/js/bootstrap-select.js"></script>
+	
+	<h4>Select genome</h4>
+
+	<select  id="genome_selection" >
+		<option value="athalianaTair10">TAIR10</option>
+		<option value="athalianaTair9">TAIR9</option>
+		<option value="rice7">Rice genome v7</option>
+		<option value="SL2.40">Tomoto genome v2.40</option>
+		<option value="gmax1.09v8">Glycine max genome 1.09v8</option>
+		<option value="grape">Grape genome</option>
+		<option value="maizeZmB73">Maize B73</option>
+	</select>
+	
 	<h4>Select palette</h4>
 
 	<select  id="palette_selection" >
@@ -105,10 +118,10 @@
 			//get the entered allele frequency
 			enteredAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
 			var palette_selected = $("#palette_selection option:selected").val();
-			//var palette_selected = $("#palette_section option:selected").val();
+			var genome_selected = $("#genome_selection option:selected").val();
 
-			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq, palette: palette_selected}, id);
-			console.debug('enteredAlleleFreq:' + enteredAlleleFreq + " palette: " + palette_selected + " id: " + id);
+			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq, genome: genome_selected, palette: palette_selected}, id);
+			console.debug('enteredAlleleFreq:' + enteredAlleleFreq + " genome: " + genome_selected + " palette: " + palette_selected + " id: " + id);
 		})
 		
 		//called when the file or Blob upload has finished
@@ -124,6 +137,7 @@
 				click: function () {
 					var current_allele_freq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
 					var palette_selected = $("#palette_selection option:selected").val();
+					var genome_selected = $("#genome_selection option:selected").val();
 					//check that it's numeric and less of equal to one
 					//if it's not, alert the user
 					if (!$.isNumeric(current_allele_freq) || current_allele_freq >1)
@@ -143,7 +157,7 @@
 							type: 'POST',
 							url: 'cgi/resubmit.cgi',
 							async: true,
-							data: {allele_freq: current_allele_freq, file_name : fileName, palette: palette_selected}, 
+							data: {allele_freq: current_allele_freq, file_name : fileName, genome: genome_selected, palette: palette_selected}, 
 							dataType: 'json',
 							//if everything runs OK and 'success' is returned... 
 							success: function(data) {
@@ -166,6 +180,7 @@
 					var currentFileName = $('#imageLoc'+id).children('img').attr('src');
 					//get everything before the file extention
 					var basename = currentFileName.substring(0, currentFileName.lastIndexOf('.') );
+					console.debug("Base name : "+basename);
 					//download the equivalent csv file
 					$.fileDownload(basename+'.csv', {
 					//handle failures
@@ -180,13 +195,25 @@
 				}
 				
 			})
+			//a button to save the .csv data used to create the svg plot
+			//var currentFileName = $('#imageLoc'+id).children('img').attr('src');
+			console.debug ("current file name "+responseJSON.file);
+			
+			//var saveImageButton = $('<a href="public/97068bbbd9e7374b5b47da16d436f3b3.svg"download>Download this image</a> <a href="public/97068bbbd9e7374b5b47da16d436f3b3.svg" download="alternate-filename.png"><img src="public/97068bbbd9e7374b5b47da16d436f3b3.svg"></a>');
+	
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
 			//add the Resubmit and save data buttons and div for the image 
 			$(fileItemContainer).append(button);
 			$(fileItemContainer).append(saveDataButton);
+			
 			$(fileItemContainer).append('<div id="imageLoc'+id+'"></div>');
 			//if everything runs OK
 			if (responseJSON.success) {
+				var baseFileName = fileName.substring(0, fileName.lastIndexOf('.') );
+				//use the html5 'download' attribute to download the svg
+				//(which would just be rendered to screen by browser using the filedowload method above)
+				var saveImageButton = $('<a href="public/'+responseJSON.file+'.svg" download="'+baseFileName+'.svg">Download Image</a>');
+				$(fileItemContainer).append(saveImageButton);
 				//append the image to the div
 				$('#imageLoc'+id).append('<img src="public/'+responseJSON.file+'.svg" alt="' + id + '">');
 			}
