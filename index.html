@@ -7,22 +7,38 @@
 
 </head>
 <body>
+
 	<div>
-		<link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		
 		<h1><img src="img/photo.PNG" alt="CandiSNP"width="200" height="200">
 		<span>Welcome to CandiSNP</span></h1>
 	</div>
+	
 
+	<script src="fineuploader/jquery-2.0.1.js"></script>
+	<link href="css/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="css/bootstrap/css/bootstrap-select.css" rel="stylesheet" media="screen">
+
+	<script type="text/javascript" src="css/bootstrap/js/bootstrap-select.js"></script>
+	<h4>Select palette</h4>
+
+	<select  id="palette_selection" >
+		<option>gradient</option>
+		<option>contrast</option>
+		<option>diverging</option>
+		<option>sequential</option>
+	
+	</select>
+		<script src="fineuploader/jquery.fineuploader-3.6.4.js"></script>
+	<script src="fineuploader/jquery.fileDownload.js"></script>
 	<link href="fineuploader/fineuploader-3.6.4.css" rel="stylesheet">
 	<div id="manual-fine-uploader" ></div>
 	
 	<div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
 		<i class="icon-upload icon-white"></i> Upload now
 	</div>
-	<script src="fineuploader/jquery-2.0.1.js"></script>
-	<script src="fineuploader/jquery.fineuploader-3.6.4.js"></script>
-	<script src="fineuploader/jquery.fileDownload.js"></script>
-	<!--script> type='text/javascript' src='src/lib/script.js'</script-->
+	
+	
 	
 	<script>
 	$(document).ready(function() {
@@ -88,8 +104,11 @@
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id),
 			//get the entered allele frequency
 			enteredAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
-			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq}, id);
-			console.debug('enteredAlleleFreq:' + enteredAlleleFreq + " id: " + id);
+			var palette_selected = $("#palette_selection option:selected").val();
+			//var palette_selected = $("#palette_section option:selected").val();
+
+			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq, palette: palette_selected}, id);
+			console.debug('enteredAlleleFreq:' + enteredAlleleFreq + " palette: " + palette_selected + " id: " + id);
 		})
 		
 		//called when the file or Blob upload has finished
@@ -104,11 +123,12 @@
 				//when the resubmit button is pressed, get the new allele frequency
 				click: function () {
 					var current_allele_freq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
+					var palette_selected = $("#palette_selection option:selected").val();
 					//check that it's numeric and less of equal to one
 					//if it's not, alert the user
 					if (!$.isNumeric(current_allele_freq) || current_allele_freq >1)
 					{
-						console.debug('Allele freq:' + current_allele_freq);
+						console.debug('Allele freq:' + current_allele_freq );
 						alert('Use a number between 0 and 1 for file '+fileName);
 					}
 					//otherwise, process the file
@@ -123,7 +143,7 @@
 							type: 'POST',
 							url: 'cgi/resubmit.cgi',
 							async: true,
-							data: {allele_freq: current_allele_freq, file_name : fileName}, 
+							data: {allele_freq: current_allele_freq, file_name : fileName, palette: palette_selected}, 
 							dataType: 'json',
 							//if everything runs OK and 'success' is returned... 
 							success: function(data) {

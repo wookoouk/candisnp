@@ -23,7 +23,8 @@ if ($IN->param('POSTDATA')) {
 
 #my $temp_id = $IN->param('temp_id');
 my $allele_freq = $IN->param('allele_freq');
-
+my $genome = $IN->param('genome');
+my $palette = $IN->param('palette');
 
 #mkdir("$uploaddir/$file");
 #my ($ext) = $file =~ /(\.[^.]+)$/;
@@ -45,7 +46,7 @@ my $check_size = -s "$uploaddir/$file";
 my $dir = dirname( File::Spec->rel2abs("$uploaddir/$file") );
 
 
-my $filename = doWork("$dir/$file", $allele_freq);
+my $filename = doWork("$dir/$file", $allele_freq, $genome, $palette);
 
 print $IN->header();
 if ($check_size < 1) {

@@ -18,8 +18,10 @@ my $IN = new CGI;
 
 my $file_name = $IN->param('file_name');
 my $allele_freq = $IN->param('allele_freq');
+my $genome = $IN->param('genome');
+my $palette = $IN->param('palette');
 my $dir = dirname( File::Spec->rel2abs("$uploaddir/$file_name") );
 
-my $filename = doWork("$dir/$file_name", $allele_freq);
+my $filename = doWork("$dir/$file_name", $allele_freq, $genome, $palette);
 print $IN->header();
 print qq|{ "success": true, "file": "$filename" }|;
