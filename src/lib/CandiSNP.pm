@@ -152,7 +152,8 @@ sub plot_data{
 	$R->set('palette', $palette);
 	my $cmd = <<'EOF';
 
-	data = data.frame(chromosome=chrs,position=posns,type=types)
+	chrsf = as.factor(chrs)
+	data = data.frame(chromosome=chrsf,position=posns,type=types)
 
 	genome_lengths = data.frame(chromosome=conts,length=lengths)
 
@@ -251,7 +252,7 @@ sub _parse_snpEff{
 	my ($chr,$pos,$ref,$alt,$gene,$effect,$nucs ) = ($data[0],$data[1],$data[2], $data[3], $data[10],$data[15],$data[16]);
 	#warn Dumper join(",",$chr,$pos,$ref,$alt,$gene,$effect,$nucs);
 	#warn Dumper $effect;
-	$chr = 'Chr' . $chr if (grep /Chr$chr/, keys %{$data});
+	#$chr = 'Chr' . $chr if (grep /Chr$chr/, keys %{$data});
 	
 	my $syn = "TRUE";
 	if ($effect eq "NON_SYNONYMOUS_CODING"){
@@ -421,11 +422,11 @@ sub genome_lengths{
 	my $genome = shift;
 	my $lengths = {
 		'athalianaTair10' => {
-			"Chr1" => 34964571,
-			"Chr2" => 22037565,
-			"Chr3" => 25499034,
-			"Chr4" => 20862711,
-			"Chr5" => 31270811
+			"1" => 34964571,
+			"2" => 22037565,
+			"3" => 25499034,
+			"4" => 20862711,
+			"5" => 31270811
 		},
 		
 		'athalianaTair9' => {
@@ -437,18 +438,18 @@ sub genome_lengths{
 		},
 		
 		'rice7' => {
-			"Chr1" => 43270923,
-			"Chr2" => 35937250,
-			"Chr3" => 36413819,
-			"Chr4" => 35502694,
-			"Chr5" => 29958434,
-			"Chr6" => 31248787,
-			"Chr7" => 29697621,
-			"Chr8" => 28443022,
-			"Chr9" => 23012720,
-			"Chr10" => 23207287,
-			"Chr11" => 29021106,
-			"Chr12" => 27531856
+			"1" => 43270923,
+			"2" => 35937250,
+			"3" => 36413819,
+			"4" => 35502694,
+			"5" => 29958434,
+			"6" => 31248787,
+			"7" => 29697621,
+			"8" => 28443022,
+			"9" => 23012720,
+			"10" => 23207287,
+			"11" => 29021106,
+			"12" => 27531856
 		},
 		
 		'SL2.40' =>  {

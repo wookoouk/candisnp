@@ -116,7 +116,7 @@ require_ok( 'CandiSNP' );
 
 ##how to run the thing...
 my $big_data = CandiSNP::get_positions_from_file(
--file => "sample_data/large_snp.csv",
+-file => "sample_data/large_snp_no_chr.csv",
 -genome => "athalianaTair10"
 );
 
@@ -141,9 +141,14 @@ my $R = CandiSNP::R;
 
 
 my $palette = CandiSNP::get_palette('contrast');
-warn Dumper $palette;
+#warn Dumper $palette;
+#warn Dumper $filtered_big_data;
+#warn Dumper $filetag;
+#warn Dumper $big_scale_marks;
+#warn Dumper $big_scale_labels;
+#warn Dumper $all_genome_lengths;
 my $big_image = CandiSNP::plot_data($R, $filtered_big_data, $filetag, $big_scale_marks, $big_scale_labels,$all_genome_lengths,$palette);
 warn Dumper "$big_image printed";
 ##dump file of used snps to a csv
 CandiSNP::data_hash_to_file($filtered_big_data,$filetag,-format=>'long');
-$R->stop;
+#$R->stop;
