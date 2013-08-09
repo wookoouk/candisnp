@@ -1,0 +1,29 @@
+button
+{
+	color: #ffffff;
+	background-color: #1abc9c;
+	border-color: #3498DB;
+	border: medium none;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: none;
+    color: #FFFFFF;
+    line-height: 22px;
+    padding: 9px 12px 10px;
+    text-decoration: none;
+    text-shadow: none;
+    transition: all 0.25s ease 0s;
+	 font-size: 14.994px;
+    font-weight: 500;
+	  cursor: pointer;
+    display: inline-block;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+button:hover,
+button:focus,
+button:active,
+button.active {
+  background-color: #48c9b0;
+  border-color: #31b0d5;
+}
