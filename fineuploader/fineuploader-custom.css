@@ -35,24 +35,36 @@ padding: 9px 12px 10px;
 }
 
 .div-custom{
-border:6px ridge blue;
+border:1px  solid blue;
 max-width: 960px;
 min-height: 120px;
 margin:10px;
 padding: 10px;
 background-color: #E4F3F7;
+border-radius:10px
+}
+
+.div-text{
+border:1px  solid;
+max-width: 960px;
+margin:10px;
+padding: 10px;
+border-radius:10px
 }
 
 .header-custom {
 	height: 140px;
-    margin: 0 auto;
+    margin: 10px;
     padding: 10;
     position: relative;
     width: 1000px;
     background:url(../img/photo.PNG) no-repeat bottom right;
     background-size:25%;
 }
-.tab { text-indent:20px; }
+.tab {
+text-indent:20px;
+display: inline;
+}
 
 .btn-small
 {
