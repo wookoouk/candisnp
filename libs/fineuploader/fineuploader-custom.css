@@ -1,0 +1,80 @@
+.qq-upload-list li.qq-upload-success {
+    background-color: #E9E9E9;
+    color: #000000;
+}
+.qq-upload-button {
+  border: none;
+  background: #bdc3c7;
+  color: #ffffff;
+  padding: 9px 12px 10px;
+  line-height: 22px;
+  text-decoration: none;
+  text-shadow: none;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition: 0.25s;
+  -moz-transition: 0.25s;
+  -o-transition: 0.25s;
+  transition: 0.25s;
+  -webkit-backface-visibility: hidden;
+  background-color: #1abc9c;
+  
+}
+.qq-upload-button:hover,
+.qq-upload-button:focus,
+.btn-group:focus .qq-upload-button.dropdown-toggle {
+  background-color: #48c9b0;
+}
+
+.btn-primary {
+padding: 9px 12px 10px;
+}
+
+.div-custom{
+border:1px  solid blue;
+max-width: 960px;
+min-height: 120px;
+margin:10px;
+padding: 10px;
+background-color: #E4F3F7;
+border-radius:10px
+}
+
+.div-text{
+border:1px  solid;
+max-width: 960px;
+margin:10px;
+padding: 10px;
+border-radius:10px
+}
+
+.header-custom {
+	height: 140px;
+    margin: 10px;
+    padding: 10;
+    position: relative;
+    width: 1000px;
+    background:url(../../img/photo.PNG) no-repeat bottom right;
+    background-size:25%;
+}
+.tab {
+text-indent:20px;
+display: inline;
+}
+
+.btn-small
+{
+	margin-right: 10px;
+}
+
+div.inline {
+	float:left;
+}
+
+.qq-upload-size{
+	font-size: 16px;
+}

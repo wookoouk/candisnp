@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 	
-	<script src="fineuploader/jquery-2.0.1.js"></script>
-	<script type="text/javascript" src="css/bootstrap/js/bootstrap.js"></script>
-	<script src="fineuploader/jquery.fineuploader-3.6.4.js"></script>
+	<script src="libs/fineuploader/jquery-2.0.1.js"></script>
+	<script type="text/javascript" src="libs/bootstrap/js/bootstrap.js"></script>
+	<script src="libs/fineuploader/jquery.fineuploader-3.6.4.js"></script>
 	
-	<link rel="stylesheet" type="text/css" href="fineuploader/fineuploader-3.6.4.css" >
-	<link rel="stylesheet" type="text/css" href="fineuploader/fineuploader-custom.css" >
-	<link rel="stylesheet" type="text/css" href="flatui/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="flatui/css/flat-ui.css">
-	<!--link rel="stylesheet" type="text/css" href="flatui/css/flatui-custom.css"-->
+	<link rel="stylesheet" type="text/css" href="libs/fineuploader/fineuploader-3.6.4.css" >
+	<link rel="stylesheet" type="text/css" href="libs/fineuploader/fineuploader-custom.css" >
+	<link rel="stylesheet" type="text/css" href="libs/flatui/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="libs/flatui/css/flat-ui.css">
+
 	
 <title>CandiSNP</title>
 	
@@ -172,7 +172,7 @@
 				else
 				{
 					//show the 'processing' icon whilst it's working
-					$('#processor'+id).append("<img src='fineuploader/processing.gif' >");
+					$('#processor'+id).append("<img src='libs/fineuploader/processing.gif' >");
 					
 					//and post the new allele freq, along with the filename (which will already be on the server, so
 					//no need to re-upload the file) and run the resubmit.cgi script
