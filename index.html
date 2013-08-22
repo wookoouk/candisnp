@@ -26,9 +26,7 @@
 	<hr style="height:3px;width:1000px;border:solid 3px" />
 
 	<div class="div-text">
-	<h4><span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> predicts and visualises the effect that SNPs, above a given allele frequency, will have on the genome.
-	The tool predicts whether the SNPs are predicted in gene-coding regions and if they are synonymous or non-synonymous.
-	<span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> visualises the SNPs and their effect in a per-chromosome plot.</h4>
+	<h4><span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> analyses and provides per-chromosome plots of SNPs across genomes. It shows the location of the SNPs and uses color-coded palettes to identify if the SNPs are in coding or non-coding regions and if they are synonymous or non-synonymous..</h4>
 	</div>
 	<hr width=1000>
 	
@@ -52,14 +50,15 @@
 		
 		<div class="div-custom">
 			<h3>2. Select your SNP data <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover"
-			data-content="<h4>You may use drag and drop. Example data can be found in the CandiSNP src directory. It must contain a header line with information on 'Chr', 'Pos', 'Ref', 'Alt', 'Allele_Freq', 'Extra'</h4>" data-original-title="CandiSNP SNP Data"></h3>
+			data-content="<h4>You may use drag and drop. Example data can be found in the CandiSNP src directory. It must contain a header line with colums for 'Chr', 'Pos', 'Ref', 'Alt', 'Allele_Freq', and 'Extra'.
+			Generally, chromosome names should contain only the chromosome number such as '5' and not 'Chr5'.</h4>" data-original-title="CandiSNP SNP Data"></h3>
 			<div id="manual-fine-uploader" >
 		</div>
 		
 	</div>
 	
 	<div class="div-custom">
-	<h3>3. Select palette to view SNPs <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Change the pallete to suite your data visualisation preferences</h4>" data-original-title="Palette selection"></h3>
+	<h3>3. Select palette to view SNPs <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Change the palette to suite your data visualisation preferences</h4>" data-original-title="Palette selection"></h3>
 	<select  id="palette_selection" class="tip" title="The colour scheme for representing your data">
 		<option>gradient</option>
 		<option>contrast</option>
