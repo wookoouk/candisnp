@@ -3,17 +3,15 @@
 use strict;
 use warnings;
 use CGI::Carp qw(fatalsToBrowser);
-use Digest::MD5;
 use File::Spec;
 use File::Basename;
+use CGI;
 require "Main.pl";
 
 my $uploaddir = '../public';
 
 
-#my $maxFileSize = 0.5 * 1024 * 1024; # 1/2mb max file size...
 
-use CGI;
 my $IN = new CGI;
 
 my $file_name = $IN->param('file_name');

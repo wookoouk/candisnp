@@ -37,7 +37,6 @@ sub doWork()
 
 	##dump file of used snps to a csv
 	CandiSNP::data_hash_to_file($filtered_big_data,$filetag,-format=>'long');
-	#$R->stop;
 	return $filetag;
 }
 1;
