@@ -1,6 +1,5 @@
 package CandiSNP;
 
-use Modern::Perl 2011;
 use autodie;
 use strict;
 use warnings FATAL => 'all';
