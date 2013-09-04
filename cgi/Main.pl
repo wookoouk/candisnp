@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use lib "../src/lib/";
-use CandiSnp;
+use CandiSNP;
 
 sub doWork()
 {
