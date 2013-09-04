@@ -116,7 +116,8 @@
 		
 		var manualuploader = $('#manual-fine-uploader').fineUploader({
 			request: {
-				endpoint: 'cgi/upload.cgi'
+				endpoint: 'cgi/upload.cgi',
+				timeout: 5000
 			},
 			autoUpload: false,
 			

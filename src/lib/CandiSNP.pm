@@ -229,7 +229,7 @@ sub annotate_positions{
 	$opts{-format} = 'short';
 	data_hash_to_file($data, $tmpfile, %opts);
 	my($chld_out, $chld_in);
-	my $pid = open2($chld_out, $chld_in, "java -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
+	my $pid = open2($chld_out, $chld_in, "java -Xmx1g -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
 	while (my $line = <$chld_out>){
 		
 		next if $line =~ m/^#/;
