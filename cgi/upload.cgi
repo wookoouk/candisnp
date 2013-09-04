@@ -22,9 +22,10 @@ my $allele_freq = $IN->param('allele_freq');
 my $genome = $IN->param('genome');
 my $palette = $IN->param('palette');
 
-binmode(WRITEIT);
+
 
 open(WRITEIT, ">$uploaddir/$file") or die "Cant write to $uploaddir/$file Reason: $!";
+binmode(WRITEIT);
 if ($IN->param('POSTDATA')) {
     print WRITEIT $file;
 } else {

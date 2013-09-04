@@ -44,6 +44,11 @@ background-color: #E4F3F7;
 border-radius:10px
 }
 
+.qq-upload-drop-area, .qq-upload-extra-drop-area
+{
+	border-radius:10px
+}
+
 .div-text{
 border:1px  solid;
 max-width: 960px;

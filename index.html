@@ -33,7 +33,7 @@
 	<div class="div-custom">
 
 
-		<h3>1. Select your genome <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>These genomes are databases which are used with the snpEff tool which is utilised within candiSNP</h4>" data-original-title="Genome selection"></h3>
+		<h3>1. Select your genome <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Candisnp needs a genome database to use during the analysis. These are all pre-built. Please select your genome and the database for that genome will used in the analysis.</h4>" data-original-title="Genome selection"></h3>
 
 
 	
@@ -50,7 +50,7 @@
 		
 		<div class="div-custom">
 			<h3>2. Select your SNP data <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover"
-			data-content="<h4>You may use drag and drop. Example data can be found in the CandiSNP src directory. It must contain a header line with colums for 'Chr', 'Pos', 'Ref', 'Alt', 'Allele_Freq', and 'Extra'.
+			data-content="<h4>Your data must contain a header line with colums for 'Chr', 'Pos', 'Ref', 'Alt', 'Allele_Freq', and 'Extra'.
 			Generally, chromosome names should contain only the chromosome number such as '5' and not 'Chr5'.</h4>" data-original-title="CandiSNP SNP Data"></h3>
 			<div id="manual-fine-uploader" >
 		</div>
@@ -58,7 +58,7 @@
 	</div>
 	
 	<div class="div-custom">
-	<h3>3. Select palette to view SNPs <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Change the palette to suite your data visualisation preferences</h4>" data-original-title="Palette selection"></h3>
+	<h3>3. Select palette to view SNPs <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Choose the palette to pick the colour of the dots on the plots</h4>" data-original-title="Palette selection"></h3>
 	<select  id="palette_selection" class="tip" title="The colour scheme for representing your data">
 		<option>gradient</option>
 		<option>contrast</option>
@@ -68,10 +68,10 @@
 	
 	</div>
 	<div class="div-custom">
-	<h3>4. Upload and analyse <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Your data will be uploaded to the server and analysed. Any further analysis on your data will not require a fresh upload</h4>" data-original-title="Data analysis"></h3>
+	<h3>4. Upload and analyse </h3>
 	<div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
 		<a class="tip" style="color: #ffffff;" title="Your files will be uploaded to the server and analysed">
-		<i class="icon-upload icon-white" ></i> Upload now</a>
+		<i class="icon-upload icon-white" ></i>Analyse</a>
 		
 		
 	</div>
@@ -121,7 +121,7 @@
 			autoUpload: false,
 			
 			text: {
-			uploadButton: '<i class="icon-plus icon-white"></i> Select Files'
+			uploadButton: '<i class="icon-plus icon-white"></i> Select or drop Files'
 		  }
 			
 		})
