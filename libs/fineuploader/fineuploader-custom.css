@@ -35,7 +35,7 @@ padding: 9px 12px 10px;
 }
 
 .div-custom{
-border:1px  solid blue;
+border:1px ;
 max-width: 960px;
 min-height: 120px;
 margin:10px;
@@ -43,6 +43,20 @@ padding: 10px;
 background-color: #E4F3F7;
 border-radius:10px
 }
+
+.div-help{
+max-width: 960px;
+min-height: 120px;
+margin:10px;
+padding: 10px;
+background-color: #FFFFFF;
+border-radius:10px;
+border-width:3px;
+border-style:solid;
+border-color: #E4F3F7;
+}
+
+
 
 .qq-upload-drop-area, .qq-upload-extra-drop-area
 {
@@ -82,4 +96,14 @@ div.inline {
 
 .qq-upload-size{
 	font-size: 16px;
+}
+
+.table_circle
+{ 
+	width:1%;
+	padding:10px 11px;
+	margin:0 auto;
+	border:2px solid #a1a1a1;
+	border-radius:100%;
+
 }

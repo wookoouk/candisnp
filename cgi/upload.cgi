@@ -22,8 +22,6 @@ my $allele_freq = $IN->param('allele_freq');
 my $genome = $IN->param('genome');
 my $palette = $IN->param('palette');
 
-
-
 open(WRITEIT, ">$uploaddir/$file") or die "Cant write to $uploaddir/$file Reason: $!";
 binmode(WRITEIT);
 if ($IN->param('POSTDATA')) {
@@ -34,7 +32,6 @@ if ($IN->param('POSTDATA')) {
     }
 }
 close(WRITEIT);
-
 
 my $check_size = -s "$uploaddir/$file";
 

@@ -10,8 +10,6 @@ require "Main.pl";
 
 my $uploaddir = '../public';
 
-
-
 my $IN = new CGI;
 
 my $file_name = $IN->param('file_name');

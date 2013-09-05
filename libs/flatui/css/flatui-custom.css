@@ -27,3 +27,8 @@ button.active {
   background-color: #48c9b0;
   border-color: #31b0d5;
 }
+
+.btn.btn-info
+{
+	margin:10px;
+}
