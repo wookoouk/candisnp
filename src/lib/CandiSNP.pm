@@ -82,7 +82,8 @@ sub R{
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
 	x_axis = theme(axis.title.x = element_blank())
 	y_axis = theme(axis.title.y = element_blank())
-	opts =  opts(strip.background = theme_blank() ,strip.text.x = theme_blank(), strip.text.y = theme_blank())
+	opts =  opts(strip.background = theme_blank() ,strip.text.x = theme_blank(), strip.text.y = theme_blank()) +
+	opts(legend.position="top")
 	max_l = max(genome_lengths$length)
 	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=Inf, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='white' )
 	p = ggplot(x, aes(position,chromosome) ) + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
@@ -159,7 +160,7 @@ sub plot_data{
 	colours = get_colours(palette)
 	height = get_height(data$chromosome)
 	plot = candi_plot(data,colours,marks,labels,genome_lengths)
-	save_picture(plot,filename,height)
+	save_picture(plot,filename,(height*2))
 	
 EOF
 	$R->run($cmd);
@@ -229,7 +230,7 @@ sub annotate_positions{
 	$opts{-format} = 'short';
 	data_hash_to_file($data, $tmpfile, %opts);
 	my($chld_out, $chld_in);
-	my $pid = open2($chld_out, $chld_in, "java -jar $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
+	my $pid = open2($chld_out, $chld_in, "java -jar -Xmx2g $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
 	while (my $line = <$chld_out>){
 		
 		next if $line =~ m/^#/;

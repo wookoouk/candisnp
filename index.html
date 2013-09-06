@@ -24,7 +24,11 @@
 	<header class="header-custom"</header>
 		 <h1 class="tab" ><span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP:</span><span style="color:#34BEDA"> identifying candidate SNPs in genomes</span></h1>
 	</div>
+	
 	<hr width=1000>
+	<div id="banner" style="max-width: 960px">
+	<h4 align="right">version:0.1.0 - <i>"l'antilope actif"</i></h4>
+	</div>
 	<div class="div-text">
 	<h4><span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> analyses and provides per-chromosome plots of SNPs across genomes. It provides the location of the SNPs and uses colour-coded palettes to show if the SNPs are in coding or non-coding regions and if they are synonymous or non-synonymous.</h4>
 	</div>
@@ -83,40 +87,43 @@
 	</div>
 	</div>
 	<hr>
-		<div class="div-help">
+	
+	
+	<div class="div-help">
 	<h3>Help </h3>
 	<div>
 	<h4>1. Selecting a genome</h4>
-	There are a number of built-in genomes included in <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span>, which are necessary for analysing the snp data. New genomes can be added as required.
+	There are a number of built-in genomes included in <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span>, which are necessary for analysing the snp data.
+	The genome databases for TAIR10, TAIR9, Rice genome v7, Tomoto genome v2.40, Glycine max genome 1.09v8, Grape genome and Maize are currently available.
+	New genomes can be added as required.
 	</div>
 	<hr>
 	
 	<div>
 	<h4>2. Selecting SNP data</h4>
 	<span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> is designed to be as flexible as possible
-	with input data. It requires comma-delimited data with the following column headers:<p>
-	'Chr', 'Pos', 'Ref', 'Alt' and 'Allele_Freq'<p>
-	Other column names may be present in the data - they will just be ignored.<p>
+	with input data. It requires data in a file saved in the comma-delimited (or '.csv') format, which can be done in Excel. The data must have the following column headers:<p>
+	'Chr', 'Pos', 'Ref', 'Alt' and 'Allele_Freq'. Other column names may be present in the data - they will just be ignored.<p>
 	It's essential that the chromosome names in column 'Chr' match that in the database. Here are examples of chromosome names for each build:<p>
-	
+	Once you have selected the data to upload, an Allele Frequency box will appear next to each file (with a default value of 0.9). This value can be changed before you submit your data for analysis. It can also be changed later on in the analys too.
 	<table border="1">
 	<tr><th>Genome</th><th>Chr value</th></tr>
 	<tr><td>TAIR10</td><td>1</td></tr>
 	<tr><td>TAIR9</td><td>1</td></tr>
-	<tr><td>Rice genome v7</td><td>Chr1</td></tr>
+	<tr><td>Rice genome v7</td><td>C1</td></tr>
 	<tr><td>Tomoto genome v2.40</td><td>SL2.40ch00</td></tr>
 	<tr><td>Glycine max genome 1.09v8</td><td>Gm01</td></tr>
-	<tr><td>Grape genome</td><td>Chr1</td></tr>
-	<tr><td>Maize B73</td><td>Chr1</td></tr>
+	<tr><td>Grape genome</td><td>1</td></tr>
+	<tr><td>Maize B73</td><td>1</td></tr>
 	</table>
 	</div>
 	<hr>
 	<div>
 	<h4>3. The Palette</h4>
-	Each palette provides a range of four colours that appear as dots on the <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> plots.
+	<span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> offers the user a choice of four different palletes. Each palette provides a range of four colours that appear as dots on the <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> plots.
 	The colours for each palette, along with their meanings, are provided in the table below.<p>
 	
-	<table border="1">
+	<table border="1" cellpadding="5">
 	<tr ><th>Palette name</th><th>Synonymous<br>in Coding Region</th><th>Non-Synonymous<br>in Coding Region</th><th>Non-Synonymous<br>in Coding Region C-T or G-A</th><th>Non Coding Region</th></tr>
 	<tr height="15"><td>gradient</td><td bgcolor="#A1DAB4"</td><td bgcolor="#41B6C4"</td><td bgcolor="#225EA8"</td><td bgcolor="#FFFFCC"</td></tr>
 	<tr height="15"><td>contrast</td><td bgcolor="#FDAE61"</td><td bgcolor="#ABD9E9"</td><td bgcolor="#D7191C"</td><td bgcolor="#2C7BB6"</td></tr>
@@ -124,7 +131,16 @@
 	<tr height="15"><td>sequential</td><td bgcolor="#E31A1C"</td><td bgcolor="#FECC5C"</td><td bgcolor="#FD8D3C"</td><td bgcolor="#FFFFB2"</td></tr>
 	</table>
 	</div>
-	 
+	
+	<hr>
+	<div>
+	<h4>3. Analysis</h4>
+	Once you click the 'Analyse' button, your data is uploaded to the <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> server
+	where it is analysed. The result of the analysis will be a plot, which will be displayed on the screen and a data file providing more in-depth information on the analysis.
+	The image and the data file can be saved by clicking on the 'Save image' or 'Save data' buttons.<p>
+	A new analysis using a different allele frequency can be carried out by changing the 'Allele frequency' value and clicking 'Resubmit'. This can be done any number of times for a range of any different allele frequencies.
+	After each resubmission the data and image can be saved.	
+	</div>
 	
 	<script>
 	$(document).ready(function() {
