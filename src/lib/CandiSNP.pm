@@ -91,7 +91,7 @@ sub R{
 	}
 	
 	get_colours = function(palette){
-		colour_list = structure(palette, .Names = c("Synonymous in Coding Region", "Non-Synonymous in Coding Region", "Non-Synonymous in Coding Region C-T or G-A", "Non Coding Region"))
+		colour_list = structure(palette, .Names = c("Non-Synonymous in Coding Region C-T or G-A", "Non-Synonymous in Coding Region", "Synonymous in Coding Region", "Non Coding Region"))
 		scale_colour_manual(name = "SNP Type",values = colour_list)
 	}
 	
@@ -171,21 +171,21 @@ sub get_palette{
 	my $type = shift;
 	my @pal = ("gray50", "gray50", "red", "gray50");
 	if ($type eq 'gradient'){
-		 @pal = ("#A1DAB4", "#41B6C4", "#225EA8", "#FFFFCC");
+		 @pal = ("#225EA8", "#41B6C4", "#A1DAB4", "#FFFFCC");
 		return \@pal;
 	}
 	elsif($type eq 'contrast'){
-		@pal = ("#FDAE61", "#ABD9E9", "#D7191C", "#2C7BB6");
+		@pal = ("#D7191C", "#FDAE61", "#2C7BB6", "#ABD9E9");
 		return \@pal;
 	}
 	elsif ($type eq 'diverging')
 	{
-		@pal = ("#D01C8B", "#4DAC26", "#F1B6DA", "#B8E186");
+		@pal = ("#D01C8B", "#F1B6DA", "#B8E186", "#4DAC26");
 		return \@pal;
 	}
 	elsif ($type eq 'sequential')
 	{
-		@pal = ("#E31A1C", "#FECC5C", "#FD8D3C",  "#FFFFB2");
+		@pal = ("#E31A1C", "#FD8D3C", "#FECC5C", "#FFFFB2");
 		return \@pal;
 	}
 	return \@pal;
