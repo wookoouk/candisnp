@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -21,18 +21,19 @@
 
 
 	<div id="banner" style="max-width: 960px">
-	<header class="header-custom"</header>
+	<header class="header-custom">
 		 <h1 class="tab" ><span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP:</span><span style="color:#34BEDA"> identifying candidate SNPs in genomes</span></h1>
+	</header>
 	</div>
 	
-	<hr width=1000>
+	<hr width=1000 align=left>
 	<div id="banner" style="max-width: 960px">
 	<h4 align="right">version:0.1.0 - <i>"l'antilope actif"</i></h4>
 	</div>
 	<div class="div-text">
 	<h4><span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> analyses and provides per-chromosome plots of SNPs across genomes. It provides the location of the SNPs and uses colour-coded palettes to show if the SNPs are in coding or non-coding regions and if they are synonymous or non-synonymous.</h4>
 	</div>
-	<hr width=1000>
+	<hr width=1000 align=left>
 	
 	<a class="btn btn-info margin-left=10" id="PageRefresh">
       Reset data fields
@@ -47,7 +48,7 @@
 </script>
 	<div class="div-custom">
 
-		<h3>1. Select a genome <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Please select the database for the genome to be analysed.</h4>" data-original-title="Genome selection"></h3>
+		<h3>1. Select a genome <img href="#" class="pop" src="img/info.png" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Please select the database for the genome to be analysed.</h4>" data-original-title="Genome selection"></h3>
 
 		<select  id="genome_selection" class="tip" title="Select your genome from which your SNPs originated">
 			<option value="athalianaTair10">TAIR10</option>
@@ -61,7 +62,7 @@
 		</div>
 		
 		<div class="div-custom">
-			<h3>2. Select SNP data <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover"
+			<h3>2. Select SNP data <img href="#" class="pop" src="img/info.png" width="20" height="20" alt="Info" rel="popover"
 			data-content="<h4>Your data must contain a header line with columns for 'Chr', 'Pos', 'Ref', 'Alt' and 'Allele_Freq'. They can be in any order. 
 			Generally, chromosome names should contain only the chromosome number such as '5' and not 'Chr5'. Read the 'Help' section for exact details.</h4>" data-original-title="CandiSNP SNP Data"></h3>
 			<div id="manual-fine-uploader" >
@@ -70,7 +71,7 @@
 	</div>
 	
 	<div class="div-custom">
-	<h3>3. Select palette to view SNPs <img href="#" class="pop" src="img/info.svg" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Choose the palette to pick the colour of the dots on the plots</h4>" data-original-title="Palette selection"></h3>
+	<h3>3. Select palette to view SNPs <img href="#" class="pop" src="img/info.png" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Choose the palette to pick the colour of the dots on the plots</h4>" data-original-title="Palette selection"></h3>
 	<select  id="palette_selection" class="tip" title="The colour scheme for representing your data">
 		<option>gradient</option>
 		<option>contrast</option>
