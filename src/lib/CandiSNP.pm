@@ -78,7 +78,7 @@ sub R{
 	#suppressMessages ( library(ggplot2) )
 	library(ggplot2)
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
-	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type,alpha = 1/5), )
+	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type),alpha = 1/5 )
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
 	x_axis = theme(axis.title.x = element_blank())
 	y_axis = theme(axis.title.y = element_blank())
