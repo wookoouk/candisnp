@@ -25,7 +25,11 @@
 <div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
   <i class="icon-upload icon-white"></i> Upload now
 </div>
+<div class="div-custom">
+<h3>1. Select a genome <img  class="pop" src="img/info.png" width="20" height="20" alt="Info" rel="popover" data-content="<h4>Please select the database for the genome to be analysed.</h4>" data-original-title="Genome selection"></h3>
 
+<img class="pop" style=" border: 4px white solid; margin: 5px" width="20px" alt="" src="img/info.png" alt=""rel="popover" data-content="<h4>Please select the database for the genome to be analysed.</h4>" data-original-title="Genome selection" />
+</div>
 <script>
   $(document).ready(function() {
     var manualuploader = $('#manual-fine-uploader').fineUploader({
@@ -44,6 +48,17 @@
   });
 </script>
 
+<script>
+$(function () {
+	$(".pop").popover(
+	{
+		trigger: 'hover',
+		html: 'true',
+		delay: 500,
+		content: '<div style="font-size:14px;">'
+	});
+});
+</script>
 </body>
 
 </html>
