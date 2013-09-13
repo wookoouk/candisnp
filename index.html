@@ -259,7 +259,7 @@
 							var baseFileName = fileName.substring(0, fileName.lastIndexOf('.') );
 							
 							$('#saveData'+id).empty().append('<a href="public/'+data.file+'.csv" download="'+baseFileName+'.csv" class="btn btn-small btn-info" title="Save your data to file">Save data</a>');
-							$('#saveData'+id).append('<a href="public/'+data.file+'.svg" download="'+baseFileName+'.svg" margin="10px" class="btn btn-small btn-info" title="Save the plot to file" target="_blank">Save image</a>');
+							$('#saveData'+id).append('<a href="public/'+data.file+'.svg" download="'+baseFileName+'.svg" margin="10px" class="btn btn-small btn-info" title="Save the plot to file">Save image</a>');
 						}
 					});
 				}
@@ -281,8 +281,8 @@
 				//use the html5 'download' attribute to download the svg
 				//(which would just be rendered to screen by browser using the filedowload method above)
 				$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.csv" download="'+baseFileName+'.csv" class="btn btn-small btn-info" title="Save your data to file">Save data</a>');
-				$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.svg" download="'+baseFileName+'.svg" margin="10px" class="btn btn-small btn-info" title="Save the plot to file">Save image</a>');
-
+				//$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.svg" download="'+baseFileName+'.svg" margin="10px" class="btn btn-small btn-info" title="Save the plot to file">Save image</a>');
+				$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.svg" download="'+baseFileName+'.svg" ><margin="10px" class="btn btn-small btn-info" img src="public/'+responseJSON.file+'.svg">Save image</a>');
 				//append the image to the div
 				$('#imageLoc'+id).append('<img src="public/'+responseJSON.file+'.svg" alt="' + id + '">');
 			}
