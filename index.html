@@ -265,7 +265,7 @@
 				}
 			})
 			
-			//console.log ("current file name "+responseJSON.file);
+			console.log ("current file name "+responseJSON.file);
 			
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
 			//add the Resubmit and save data buttons and div for the image 
@@ -277,6 +277,7 @@
 			//if everything runs OK
 			if (responseJSON.success) {
 				var baseFileName = fileName.substring(0, fileName.lastIndexOf('.') );
+				console.log ("base file name "+baseFileName);
 				//use the html5 'download' attribute to download the svg
 				//(which would just be rendered to screen by browser using the filedowload method above)
 				$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.csv" download="'+baseFileName+'.csv" class="btn btn-small btn-info" title="Save your data to file">Save data</a>');
