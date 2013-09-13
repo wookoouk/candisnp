@@ -175,9 +175,9 @@
 			{
 				$('#manual-fine-uploader').fineUploader('uploadStoredFiles');
 			}
-			else{
-				console.log( "invalid allele freqs");
-			}
+			//else{
+			//	console.log( "invalid allele freqs");
+			//}
 		});
 		
 		var manualuploader = $('#manual-fine-uploader').fineUploader({
@@ -197,7 +197,7 @@
 		//each time a file is opened insert a text box next to it for the allele frequency
 		//and give it a default value of 0.9
 		.on('submitted', function(event, id, name) {
-			console.debug('Event: ' + event + ' id: ' + id +' name: ' + name);
+			//console.log('Event: ' + event + ' id: ' + id +' name: ' + name);
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
 			$(fileItemContainer).append('Allele frequency: <input class="span1" title="Enter an allele frequency between 0-1" type="text" name="allele_freq'+id+'" value="0.9" >');
 			$(fileItemContainer).append('<div id="resubmit'+id+'"></div>')
@@ -214,7 +214,7 @@
 			var genome_selected = $("#genome_selection option:selected").val();
 
 			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq, genome: genome_selected, palette: palette_selected}, id);
-			console.debug('enteredAlleleFreq:' + enteredAlleleFreq + " genome: " + genome_selected + " palette: " + palette_selected + " id: " + id);
+			//console.log('enteredAlleleFreq:' + enteredAlleleFreq + " genome: " + genome_selected + " palette: " + palette_selected + " id: " + id);
 		})
 		
 		//called when the file or Blob upload has finished
@@ -231,7 +231,7 @@
 				//if it's not, alert the user
 				if (!$.isNumeric(current_allele_freq) || current_allele_freq >1)
 				{
-					console.debug('Allele freq:' + current_allele_freq );
+					//console.log('Allele freq:' + current_allele_freq );
 					alert('Use a number between 0 and 1 for file '+fileName);
 				}
 				//otherwise, process the file
@@ -263,7 +263,7 @@
 				}
 			})
 			
-			console.debug ("current file name "+responseJSON.file);
+			//console.log ("current file name "+responseJSON.file);
 			
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
 			//add the Resubmit and save data buttons and div for the image 
