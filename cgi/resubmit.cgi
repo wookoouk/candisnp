@@ -16,8 +16,9 @@ my $file_name = $IN->param('file_name');
 my $allele_freq = $IN->param('allele_freq');
 my $genome = $IN->param('genome');
 my $palette = $IN->param('palette');
+my $filter_cen_snps = $IN->param('filter_snps');
 my $dir = dirname( File::Spec->rel2abs("$uploaddir/$file_name") );
 
-my $filename = doWork("$dir/$file_name", $allele_freq, $genome, $palette);
+my $filename = doWork("$dir/$file_name", $allele_freq, $genome, $palette, $filter_cen_snps);
 print $IN->header();
 print qq|{ "success": true, "file": "$filename" }|;

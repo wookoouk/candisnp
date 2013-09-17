@@ -350,9 +350,27 @@ sub get_positions_from_file{
 	my $fh = _open_file($opts{-file}); 
 	croak "bad file headers" unless _header_ok($fh);
 	my %genome = %{genome_lengths($opts{-genome})};
+	my %centromeres;
+	my $filter = $opts{-filter};
+	my $windowSize = 1000000;#the number of nucleotides up and down stream of the centromere to ignore
+	if ($filter eq "yes") {
+		%centromeres = %{centromere_positions()};
+		print STDERR Dumper %centromeres;
+	}
+	
 	my $data = {};
 	while (my $l = <$fh>){
 		next unless defined $genome{$l->{'chr'}}; #skip any positions on chromosomes not in our genome definition...
+		#skip any positions on chromosomes that's within a centromere...
+
+		next if ($filter eq "yes" and ($l->{'pos'} < ($centromeres{$l->{'chr'}}+$windowSize) and $l->{'pos'} > ($centromeres{$l->{'chr'}}-$windowSize) ));
+		#{
+		#	print STDERR "****SKIPPING****\n";
+		#	print STDERR "chr  = $l->{'chr'}\n";
+		#	print STDERR "position  = $l->{'pos'}\n";
+		#	next;
+		#}
+		#next if ($filter eq "yes" and ($l->{'pos'} < ($centromeres{$l->{'chr'}}+50) and $l->{'pos'} > ($centromeres{$l->{'chr'}}-50) ));
 		warn Dumper "skipping $l->{'chr'} : $l->{'pos'}" unless defined $genome{$l->{'chr'}};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
@@ -415,6 +433,18 @@ sub _header_ok{
 		return 0 unless grep /$h/i, @headers;
 	}
 	return 1;
+}
+
+#these are the centromere centres, from which full centromere may be found +/- 500nt up/down stream
+sub centromere_positions{
+	my $centromere_centres = {
+			"1" => 15086545,
+			"2" => 3608429,
+			"3" => 14209452,
+			"4" => 3956521,
+			"5" => 11725524
+	};
+	return $centromere_centres;
 }
 
 #returns list of contig/chromosome lengths for a given genome file

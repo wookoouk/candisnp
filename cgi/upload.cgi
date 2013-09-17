@@ -21,9 +21,13 @@ if ($IN->param('POSTDATA')) {
 my $allele_freq = $IN->param('allele_freq');
 my $genome = $IN->param('genome');
 my $palette = $IN->param('palette');
+my $filter_cen_snps = $IN->param('filter_snps');
 
+print STDERR "filter snp val = $filter_cen_snps\n";
 open(WRITEIT, ">$uploaddir/$file") or die "Cant write to $uploaddir/$file Reason: $!";
+
 binmode(WRITEIT);
+
 if ($IN->param('POSTDATA')) {
     print WRITEIT $file;
 } else {
@@ -37,7 +41,7 @@ my $check_size = -s "$uploaddir/$file";
 
 my $dir = dirname( File::Spec->rel2abs("$uploaddir/$file") );
 
-my $filename = doWork("$dir/$file", $allele_freq, $genome, $palette);
+my $filename = doWork("$dir/$file", $allele_freq, $genome, $palette, $filter_cen_snps);
 
 print $IN->header();
 if ($check_size < 1) {

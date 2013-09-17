@@ -13,11 +13,13 @@ sub doWork()
 	my $allele_freq = shift or die "Can't access allele frequency\n";
 	my $genome = shift or die "Can't fine genome name\n";
 	my $palette_selected = shift or die "Can't access palette\n";
+	my $filter_snps = shift or die "Can't access centromere snp filter value\n";
 
 	##how to run the thing...
 	my $big_data = CandiSNP::get_positions_from_file(
 		-file => $snp_file,
-		-genome => $genome
+		-genome => $genome,
+		-filter=>$filter_snps
 		 );
 		
 	##once data is loaded, you can get a unique id for it ...

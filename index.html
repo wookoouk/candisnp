@@ -60,7 +60,28 @@
 			<option value="grape">Grape genome V1</option>
 			<option value="maizeZmB73">Maize B73</option>
 		</select>
+		
+		<br>
+		<h4 id="filter_cen_txt">Filter out centromere snps?</h4>
+		<select  id="filter_cen" class="tip" title="Filter out snps 1Mb either side of centromeres">
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</select>
 		</div>
+		
+		<script>
+		$('#genome_selection').change(function(){    
+			if($(this).val() == "athalianaTair9" || $(this).val() == "athalianaTair10"){
+				$('#filter_cen_txt').fadeIn();
+				$('#filter_cen').fadeIn();
+			}
+			else{
+				$('#filter_cen_txt').hide();
+				$('#filter_cen').hide();
+			}
+		});
+		</script>
+		
 		
 		<div class="div-custom">
 			<h3>2. Select SNP data <img style="width:20px;" class="pop" src="img/info.png" alt="Info" rel="popover"
@@ -97,7 +118,9 @@
 	<h4>1. Selecting a genome</h4>
 	There are a number of built-in genomes included in <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span>, which are necessary for analysing the snp data.
 	The genome databases for TAIR10, TAIR9, Rice genome v7, Tomoto genome v2.40, Glycine max genome 1.09v8, Grape genome V1 and Maize B73 are currently available.
-	New genomes can be added as required.
+	New genomes can be added as required. <p>
+	It is often helpfull to filter out SNPs around the centromere. If you select either of the Arabidopsis geneomes, you will have the option to filter out SNPs 1Mb either side of the centromere
+	</p>
 	</div>
 	
 	<hr>
@@ -214,8 +237,13 @@
 			enteredAlleleFreq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
 			var palette_selected = $("#palette_selection option:selected").val();
 			var genome_selected = $("#genome_selection option:selected").val();
+			var filter_cent_snps = "no";
+			if (genome_selected == "athalianaTair9" || genome_selected == "athalianaTair10") {
+				filter_cent_snps = $("#filter_cen option:selected").val();
 
-			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq, genome: genome_selected, palette: palette_selected}, id);
+			}
+			console.log("filter - "+filter_cent_snps);
+			$(this).fineUploader('setParams', {allele_freq: enteredAlleleFreq, genome: genome_selected, palette: palette_selected, filter_snps: filter_cent_snps}, id);
 			//console.log('enteredAlleleFreq:' + enteredAlleleFreq + " genome: " + genome_selected + " palette: " + palette_selected + " id: " + id);
 		})
 		
@@ -229,6 +257,10 @@
 				var current_allele_freq = $(fileItemContainer).find('input[name="allele_freq'+id+'"]').val();
 				var palette_selected = $("#palette_selection option:selected").val();
 				var genome_selected = $("#genome_selection option:selected").val();
+				var filter_cent_snps = "no";
+				if (genome_selected == "athalianaTair9" || genome_selected == "athalianaTair10") {
+					filter_cent_snps = $("#filter_cen option:selected").val();
+				}
 				//check that it's numeric and less of equal to one
 				//if it's not, alert the user
 				if (!$.isNumeric(current_allele_freq) || current_allele_freq >1)
@@ -248,7 +280,7 @@
 						type: 'POST',
 						url: 'cgi/resubmit.cgi',
 						async: true,
-						data: {allele_freq: current_allele_freq, file_name : fileName, genome: genome_selected, palette: palette_selected}, 
+						data: {allele_freq: current_allele_freq, file_name : fileName, genome: genome_selected, palette: palette_selected, filter_snps: filter_cent_snps}, 
 						dataType: 'json',
 						//if everything runs OK and 'success' is returned... 
 						success: function(data) {
