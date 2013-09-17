@@ -58,6 +58,29 @@ border-color: #E4F3F7;
 
 
 
+ 
+
+.div-contact a:link, 
+.div-contact a:visited
+{ 
+ color:#8E8F98;
+}
+
+.div-contact a:hover { 
+ color:#225EA8;
+}
+
+.div-contact{
+max-width: 960px;
+margin:10px;
+padding: 10px;
+border-radius:10px;
+border-width:3px;
+border-style:solid;
+border-color: #8E8F98;
+}
+
+
 .qq-upload-drop-area, .qq-upload-extra-drop-area
 {
 	border-radius:10px
