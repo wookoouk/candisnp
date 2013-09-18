@@ -1,4 +1,0 @@
-#force svg files to be downloaded and not displayed in new browser window
-<FilesMatch "\.(svg)$">
-  Header set Content-Disposition attachment
-</FilesMatch>
