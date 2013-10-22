@@ -78,14 +78,17 @@ sub R{
 	#suppressMessages ( library(ggplot2) )
 	library(ggplot2)
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
-	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type),alpha = 1/5 )
+	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type),alpha = 1 )
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
-	x_axis = theme(axis.title.x = element_blank())
-	y_axis = theme(axis.title.y = element_blank())
-	opts =  opts(strip.background = theme_blank() ,strip.text.x = theme_blank(), strip.text.y = theme_blank()) +
-	opts(legend.position="top")
+	x_axis = theme(axis.text.x = theme_text(face = "bold", size = 30))
+	x_axis = theme(axis.title.x = theme_text(size = 20))
+	y_axis = theme(axis.text.y =theme_text(face = "bold", size = 30))
+	x_axis = theme(axis.title.y = theme_text(size = 20))
+	opts =  opts(strip.background = theme_blank(), strip.text.x = theme_blank(), strip.text.y = theme_blank()) +
+	opts(legend.position="top", panel.background = theme_rect(fill='grey95', colour='grey'))
 	max_l = max(genome_lengths$length)
 	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=Inf, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='white' )
+	
 	p = ggplot(x, aes(position,chromosome) ) + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
 	return(p)
 	}
@@ -186,6 +189,11 @@ sub get_palette{
 	elsif ($type eq 'sequential')
 	{
 		@pal = ("#E31A1C", "#FD8D3C", "#FECC5C", "#FFFFB2");
+		return \@pal;
+	}
+	elsif ($type eq 'diverse')
+	{
+		@pal = ("#CB181D", "#FB6A4A", "#FCAE91", "#FEE5D9");
 		return \@pal;
 	}
 	return \@pal;
