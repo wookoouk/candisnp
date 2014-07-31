@@ -286,7 +286,7 @@
 						//if everything runs OK and 'success' is returned... 
 						success: function(data) {
 							//display the new plot
-							$('#imageLoc'+id).empty().append('<img src="public/'+data.file+'.svg" />');
+							$('#imageLoc'+id).empty().append('<object id="svg" data="public/'+data.file+'.svg" type="image/svg+xml">Your browser does not support SVG</object>');
 							//remove the 'processing' icon
 							$('#processor'+id).empty();
 							var baseFileName = fileName.substring(0, fileName.lastIndexOf('.') );
