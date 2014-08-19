@@ -80,16 +80,19 @@ sub R{
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
 	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type),alpha = 1 )
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
-	x_axis = theme(axis.text.x = theme_text(face = "bold", size = 30))
-	x_axis = theme(axis.title.x = theme_text(size = 20))
-	y_axis = theme(axis.text.y =theme_text(face = "bold", size = 30))
-	x_axis = theme(axis.title.y = theme_text(size = 20))
-	opts =  opts(strip.background = theme_blank(), strip.text.x = theme_blank(), strip.text.y = theme_blank()) +
+	x_axis = theme(axis.text.x = element_text(face = "bold", size = 30))
+	x_axis = theme(axis.title.x = element_text(size = 20))
+	y_axis = theme(axis.text.y =element_text(face = "bold", size = 30))
+	x_axis = theme(axis.title.y = element_text(size = 20))
+	opts =  opts(strip.background = element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank()) +
 	opts(legend.position="top", panel.background = theme_rect(fill='grey99', colour='grey'))
 	max_l = max(genome_lengths$length)
 	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=Inf, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='grey95' )
+	#dat <- data.frame(x[,c(x$Pos,x$Chr)])
+	#den = ggplot(dat, aes(dat$Pos)) + geom_density(alpha = 0.2)
+	#den = geom_line(dat, aes(dat$Pos)) + geom_density(alpha = 0.2)
+	p = ggplot(x, aes(position,chromosome) )  + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
 	
-	p = ggplot(x, aes(position,chromosome) ) + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
 	return(p)
 	}
 	
