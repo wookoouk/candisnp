@@ -72,11 +72,15 @@ Returns a new R interface object
 sub R{
 	my $R = Statistics::R->new();
 	my $cmd = <<'EOF';
-	
-	#options(warn=-1)
+	#options(verbose=TRUE)
+	#options(warn=1)
 	#suppressPackageStartupMessages(library("ggplot2"))
 	#suppressMessages ( library(ggplot2) )
 	library(ggplot2)
+	library(gridExtra)
+	library(plyr)
+	require(grid)
+	
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
 	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type),alpha = 1 )
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
@@ -88,12 +92,98 @@ sub R{
 	opts(legend.position="top", panel.background = theme_rect(fill='grey99', colour='grey'))
 	max_l = max(genome_lengths$length)
 	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=Inf, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='grey95' )
-	#dat <- data.frame(x[,c(x$Pos,x$Chr)])
-	#den = ggplot(dat, aes(dat$Pos)) + geom_density(alpha = 0.2)
-	#den = geom_line(dat, aes(dat$Pos)) + geom_density(alpha = 0.2)
-	p = ggplot(x, aes(position,chromosome) )  + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
 	
-	return(p)
+	peakfind <- function(x) 
+	{
+	  d <- density(x$position, adjust = 1, kernel = "gaussian")
+	  peaks <- which(diff(sign(diff(d$y)))==-2)
+	  data.frame(x=d$x[peaks],y=d$y[peaks])
+	}
+	
+	
+	chrs <- unique(unlist(x$chromosome, use.names = FALSE))
+	num_chrs <- length(chrs)
+	
+	dat <- subset(x, type=='Non-Synonymous in Coding Region C-T or G-A' | type=='Non-Synonymous in Coding Region', select=c(position,chromosome, type))
+	#zz <- file("/Users/ethering/Desktop/output.txt", "w")  # open an output file connection
+	
+	noRows <- 0
+	for (i in 1:length(chrs))
+	{
+	  #subset the data we're going to use and see if it contains any data
+	  
+	  sub <- subset(dat, chromosome == chrs[i])
+	  snpsub <- subset(x, chromosome == chrs[i])
+	  
+	  #if it does, increment the number of rows by one
+	  if (nrow(sub) > 1)
+	  {
+		noRows <- noRows + 1 
+	  }
+	  if (nrow(snpsub) > 1)
+	  {
+		noRows <- noRows + 1 
+	  }
+	}
+
+	
+	index <- 0
+	plotlist <- list()
+	for (i in 1:length(chrs))
+	{
+
+	  #all the snps for the current chromosome
+	  snpsub <- subset(x, chromosome == chrs[i])
+	  #all the non-syn coding snps for the current chromosome
+	  sub <- subset(dat, chromosome == chrs[i])
+	  
+	  if (nrow(snpsub) > 1)
+	  {
+		index <- index + 1 
+		#draw the scatter plot and then add it to the layout
+		scatter <- ggplot(snpsub, aes(position, chromosome) ) + points + facets +opts
+		plotlist[[index]]=scatter
+		#print(scatter, vp = viewport(layout.pos.row = index, layout.pos.col = 1))
+	  }
+	  if (nrow(sub) > 1)
+	  {
+		#move to the next row
+		index <- index + 1 
+		#find the peaks to plot
+		mypeaks <- ddply(sub,.(chromosome),peakfind)
+		
+		#draw the peaks
+		#seg <- geom_segment(data = mypeaks, aes(x=x, xend=x, y=y, yend=0))
+		denplot <- ggplot(sub, aes(position)) +
+		  geom_density(alpha = 0.2) + facet_wrap(~ chromosome, ncol=1) + #draw the density plot line
+		  opts + facets
+		  plotlist[[index]]=denplot
+		#add it to the layout
+		#print(denplot, vp = viewport(layout.pos.row = index, layout.pos.col = 1))
+		#get the peak values on the x axis
+		#xpeaks <- mypeaks$x
+		#find the corresponding bins in the 'sub' dataset
+		#d <- density(sub$position)
+		#for (p in xpeaks)
+		#{
+		#  best <- which.min(abs(d$x - p))
+		#  #the peakfind fuction seems to struggle with small data and hence gently sloping curves..
+		#  #..get the ten flanking bins to make sure we capture the correct area
+		#  range <- d$x[(best-10):(best+10)]
+		#  #get the highest and lowest values
+		#  min <- min(range)
+		#  max <- max(range)
+		#
+		#  #get any snps found within the three bins
+		#  bestdat <- subset(x, chromosome == chrs[i] & position >= min & position <= max & (type=='Non-Synonymous in Coding Region C-T or G-A' | type=='Non-Synonymous in Coding Region'))
+		#  #print(bestdat)
+		#}
+	  }
+	}
+	
+	#p = ggplot(x, aes(position,chromosome) )  + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
+	 
+	return(plotlist)
 	}
 	
 	get_colours = function(palette){
@@ -107,6 +197,53 @@ sub R{
 		
 	save_picture = function(p,fname, h){
 		ggsave(filename=fname,plot=p, height=h, width=16)
+	}
+	
+	# Multiple plot function
+	#
+	# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+	# - cols:   Number of columns in layout
+	# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+	#
+	# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+	# then plot 1 will go in the upper left, 2 will go in the upper right, and
+	# 3 will go all the way across the bottom.
+	#
+	multiplot <- function(..., plotlist=NULL, file, cols=1, rows, layout=NULL) {
+	  require(grid)
+	  svg(filename = file,height=16)
+	  # Make a list from the ... arguments and plotlist
+	  plots <- c(list(...), plotlist)
+	  
+	  numPlots = length(plots)
+	  
+	  # If layout is NULL, then use 'cols' to determine layout
+	  if (is.null(layout)) {
+		# Make the panel
+		# ncol: Number of columns of plots
+		# nrow: Number of rows needed, calculated from # of cols
+		layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+						 ncol = cols, nrow = ceiling(numPlots/cols))
+	  }
+	  
+	  if (numPlots==1) {
+		print(plots[[1]])
+		
+	  } else {
+		# Set up the page
+		grid.newpage()
+		pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+		
+		# Make each plot, in the correct location
+		for (i in 1:numPlots) {
+		  # Get the i,j matrix positions of the regions that contain this subplot
+		  matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+		  
+		  print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+										  layout.pos.col = matchidx$col))
+		}
+	  }
+	  dev.off()
 	}
 EOF
 
@@ -166,7 +303,8 @@ sub plot_data{
 	colours = get_colours(palette)
 	height = get_height(data$chromosome)
 	plot = candi_plot(data,colours,marks,labels,genome_lengths)
-	save_picture(plot,filename,(height*2))
+	#save_picture(plot,filename,(height*2))
+	multiplot(plotlist=plot, cols=1, file=filename)
 	
 EOF
 	$R->run($cmd);

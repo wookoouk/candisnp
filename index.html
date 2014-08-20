@@ -234,7 +234,7 @@
 		.on('submitted', function(event, id, name) {
 			//console.log('Event: ' + event + ' id: ' + id +' name: ' + name);
 			var fileItemContainer = $(this).fineUploader('getItemByFileId', id);
-			$(fileItemContainer).append('Allele frequency: <input class="span1" title="Enter an allele frequency between 0-1" type="text" name="allele_freq'+id+'" value="0.9" >');
+			$(fileItemContainer).append('Allele frequency: <input class="span1" title="Enter an allele frequency between 0-1" type="text" name="allele_freq'+id+'" value="0.5" >');
 			$(fileItemContainer).append('<div id="resubmit'+id+'"></div>')
 			$(fileItemContainer).append('<div id="processor'+id+'"></div>')
 		})
