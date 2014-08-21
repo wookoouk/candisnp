@@ -95,12 +95,18 @@
 			<h3>2. Select SNP data <img style="width:20px;" class="pop" src="img/info.png" alt="Info" rel="popover"
 			data-content="<h4>Your data file must contain a header line with columns for 'Chr', 'Pos', 'Ref', 'Alt' and 'Allele_Freq'. They can be in any order. 
 			Chromosome names are important. Read the 'Help' section at the bottom of the page for exact details of the format you must use.</h4>" data-original-title="CandiSNP SNP Data"/></h3>
-			<div id="slider"></div>
+			
 			<div id="manual-fine-uploader">
+			
 		</div>
-		
+		<div id="sliderHelperTxt"></div>
+		<div id="slider"></div>
+			
 	</div>
+
 	
+	
+
 	<div class="div-custom">
 	<h3>3. Select palette to view SNPs <img  style="width:20px;" class="pop" src="img/info.png" alt="Info" rel="popover" data-content="<h4>Choose the palette to pick the colour of the dots on the plots</h4>" data-original-title="Palette selection"/></h3>
 	<select  id="palette_selection" class="tip" title="The colour scheme for representing your data">
@@ -372,6 +378,11 @@ $(function () {
             'max': 5
           }
         });
+		
+		var helperText = '<h4>Move slider to change scale of dots on plot</h4>';
+		
+		$('#sliderHelperTxt').empty().append(helperText);
+		
 
         $('#slider').change(function(){
 			console.log('Change');
