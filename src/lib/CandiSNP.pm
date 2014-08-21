@@ -36,10 +36,10 @@ Quick summary of what the module does.
 
 Perhaps a little code snippet.
 
-    use CandiSNP;
+	use CandiSNP;
 
-    my $foo = CandiSNP->new();
-    ...
+	my $foo = CandiSNP->new();
+	...
 
 =head1 EXPORT
 
@@ -82,12 +82,12 @@ sub R{
 	require(grid)
 	
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
-	points = geom_point(position=position_jitter(height=.25,width=2), aes(colour=type),alpha = 1 )
+	points = geom_point(position=position_jitter(height=.4,width=2), aes(colour=type),alpha = 1 )
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
-	x_axis = theme(axis.text.x = element_text(face = "bold", size = 30))
+	x_axis = theme(axis.text.x = element_text(face = "bold", size = 50))
 	x_axis = theme(axis.title.x = element_text(size = 20))
 	y_axis = theme(axis.text.y =element_text(face = "bold", size = 30))
-	x_axis = theme(axis.title.y = element_text(size = 20))
+	y_axis = theme(axis.title.y = element_text(size = 20))
 	opts =  opts(strip.background = element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank()) +
 	opts(legend.position="top", panel.background = theme_rect(fill='grey99', colour='grey'))
 	max_l = max(genome_lengths$length)
@@ -100,64 +100,49 @@ sub R{
 	  data.frame(x=d$x[peaks],y=d$y[peaks])
 	}
 	
-	
-	chrs <- unique(unlist(x$chromosome, use.names = FALSE))
+	#debug_file <- file("/Users/ethering/Desktop/r_output/debug.txt", "w")
+	chrs <- unique(unlist(x$chromosome, use.names = TRUE))
 	num_chrs <- length(chrs)
+	#x_file <- file("/Users/ethering/Desktop/r_output/x_table.txt", "w")
+	#write.table(x, file=x_file, sep = "\t", col.names = NA)
 	
 	dat <- subset(x, type=='Non-Synonymous in Coding Region C-T or G-A' | type=='Non-Synonymous in Coding Region', select=c(position,chromosome, type))
-	#zz <- file("/Users/ethering/Desktop/output.txt", "w")  # open an output file connection
-	
-	noRows <- 0
-	for (i in 1:length(chrs))
-	{
-	  #subset the data we're going to use and see if it contains any data
-	  
-	  sub <- subset(dat, chromosome == chrs[i])
-	  snpsub <- subset(x, chromosome == chrs[i])
-	  
-	  #if it does, increment the number of rows by one
-	  if (nrow(sub) > 1)
-	  {
-		noRows <- noRows + 1 
-	  }
-	  if (nrow(snpsub) > 1)
-	  {
-		noRows <- noRows + 1 
-	  }
-	}
-
-	
+	#dat_file <- file("/Users/ethering/Desktop/r_output/dat_table.txt", "w") 
+	#write.table(dat, file=dat_file, sep = "\t", col.names = NA)
+	plot_types <- list()
 	index <- 0
 	plotlist <- list()
 	for (i in 1:length(chrs))
 	{
-
+		#write(chrs[i], file=debug_file)
 	  #all the snps for the current chromosome
 	  snpsub <- subset(x, chromosome == chrs[i])
 	  #all the non-syn coding snps for the current chromosome
 	  sub <- subset(dat, chromosome == chrs[i])
 	  
-	  if (nrow(snpsub) > 1)
+	  if (nrow(snpsub) > 2)
 	  {
 		index <- index + 1 
 		#draw the scatter plot and then add it to the layout
-		scatter <- ggplot(snpsub, aes(position, chromosome) ) + points + facets +opts
+		scatter <- ggplot(snpsub, aes(position, chromosome) ) + points + facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		plotlist[[index]]=scatter
+		plot_types[[index]]="scatter"
 		#print(scatter, vp = viewport(layout.pos.row = index, layout.pos.col = 1))
 	  }
-	  if (nrow(sub) > 1)
+	  if (nrow(sub) > 2)
 	  {
 		#move to the next row
 		index <- index + 1 
 		#find the peaks to plot
 		mypeaks <- ddply(sub,.(chromosome),peakfind)
-		
+		#write(nrow(sub), file=debug_file)
 		#draw the peaks
 		#seg <- geom_segment(data = mypeaks, aes(x=x, xend=x, y=y, yend=0))
 		denplot <- ggplot(sub, aes(position)) +
 		  geom_density(alpha = 0.2) + facet_wrap(~ chromosome, ncol=1) + #draw the density plot line
-		  opts + facets
+		  opts + facets + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		  plotlist[[index]]=denplot
+			plot_types[[index]]="denplot"
 		#add it to the layout
 		#print(denplot, vp = viewport(layout.pos.row = index, layout.pos.col = 1))
 		#get the peak values on the x axis
@@ -182,8 +167,8 @@ sub R{
 	}
 	
 	#p = ggplot(x, aes(position,chromosome) )  + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
-	 
-	return(plotlist)
+	return_list <- list("plotlist" = plotlist, "plot_types" = plot_types)
+	return(return_list)
 	}
 	
 	get_colours = function(palette){
@@ -209,42 +194,58 @@ sub R{
 	# then plot 1 will go in the upper left, 2 will go in the upper right, and
 	# 3 will go all the way across the bottom.
 	#
-	multiplot <- function(..., plotlist=NULL, file, cols=1, rows, layout=NULL) {
-	  require(grid)
-	  svg(filename = file,height=16)
-	  # Make a list from the ... arguments and plotlist
-	  plots <- c(list(...), plotlist)
-	  
-	  numPlots = length(plots)
-	  
-	  # If layout is NULL, then use 'cols' to determine layout
-	  if (is.null(layout)) {
-		# Make the panel
-		# ncol: Number of columns of plots
-		# nrow: Number of rows needed, calculated from # of cols
-		layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-						 ncol = cols, nrow = ceiling(numPlots/cols))
-	  }
-	  
-	  if (numPlots==1) {
-		print(plots[[1]])
+	multiplot <- function(..., plotlist=NULL, plot_types = NULL, file, cols=1, rows, layout=NULL) {
+		require(grid)
+		svg(filename = file,height=length(plotlist)*3, width=15)
+		# Make a list from the ... arguments and plotlist
+		plots <- c(list(...), plotlist)
 		
-	  } else {
-		# Set up the page
-		grid.newpage()
-		pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+		numPlots = length(plots)
+	    
+		scatters <- length(grep("scatter", plot_types))
+		dens <- length(grep("denplot", plot_types))
+		numRows = (scatters*2) + dens
 		
-		# Make each plot, in the correct location
-		for (i in 1:numPlots) {
-		  # Get the i,j matrix positions of the regions that contain this subplot
-		  matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-		  
-		  print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-										  layout.pos.col = matchidx$col))
+
+		# If layout is NULL, then use 'cols' to determine layout
+		if (is.null(layout)) {
+		  # Make the panel
+		  # ncol: Number of columns of plots
+		  # nrow: Number of rows needed, calculated from # of cols
+		  layout <- matrix(seq(1, cols * ceiling(numRows/cols)),
+                     ncol = cols, nrow = ceiling(numRows/cols))
 		}
+		
+		if (numPlots==1) {
+		  print(plots[[1]])
+		  
+		} else {
+		  # Set up the page
+		  grid.newpage()
+		  pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+		   rowIndex <- 1
+		  # Make each plot, in the correct location
+		  for (i in 1:numPlots) {
+			# Get the i,j matrix positions of the regions that contain this subplot
+			matchidx <- as.data.frame(which(layout == rowIndex, arr.ind = TRUE))
+			
+			if (plot_types[i] == "scatter")
+			{
+			  to <- matchidx$row +1
+			  print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row:to,
+											  layout.pos.col = matchidx$col))
+			  rowIndex <- rowIndex +2
+			}
+			else
+			{
+			  print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+											  layout.pos.col = matchidx$col))
+			  rowIndex <- rowIndex +1
+			}
+		  }
+		}
+		dev.off()
 	  }
-	  dev.off()
-	}
 EOF
 
 	$R->run($cmd);
@@ -302,9 +303,12 @@ sub plot_data{
 
 	colours = get_colours(palette)
 	height = get_height(data$chromosome)
-	plot = candi_plot(data,colours,marks,labels,genome_lengths)
+	#plot = candi_plot(data,colours,marks,labels,genome_lengths)
+	return_plots = candi_plot(data,colours,marks,labels,genome_lengths)
+	plot <- return_plots$plotlist
+	plot_types <- return_plots$plot_types
 	#save_picture(plot,filename,(height*2))
-	multiplot(plotlist=plot, cols=1, file=filename)
+	multiplot(plotlist=plot, plot_types=plot_types, cols=1, file=filename)
 	
 EOF
 	$R->run($cmd);
@@ -758,7 +762,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc CandiSNP
+	perldoc CandiSNP
 
 
 You can also look for information at:
