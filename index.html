@@ -338,6 +338,7 @@
 	});
 	</script>
 
+<<<<<<< HEAD
 <script>
 $(function () {
 	$(".pop").popover(
@@ -412,6 +413,56 @@ $(function () {
 <!--      }-->
 <!--	  -->
 <!--      </script>-->
+=======
+<!--<script>-->
+<!-- refreshSlider=function() {-->
+<!-- setTimeout(function() {-->
+<!-- console.log('refreshed');-->
+<!-- -->
+<!-- var a = document.getElementsByClassName("slide-svg");-->
+<!-- // Get the SVG document inside the Object tag-->
+<!-- $("#slider").noUiSlider({-->
+<!-- start: 1,-->
+<!-- range: {-->
+<!-- 'min': 0.4,-->
+<!-- 'max': 5-->
+<!-- }-->
+<!-- });-->
+<!-- -->
+<!-- var helperText = '<h4>Move slider to change scale of dots on plot</h4>';-->
+<!-- -->
+<!-- $('#sliderHelperTxt').empty().append(helperText);-->
+<!-- -->
+<!---->
+<!-- $('#slider').change(function(){-->
+<!-- console.log('Change');-->
+<!-- -->
+<!-- -->
+<!-- $.each(a, function(itt,aa){-->
+<!-- var doc = aa.contentDocument;-->
+<!-- var surface = doc.getElementById("surface1"); -->
+<!-- var points = surface.getElementsByTagName("path");-->
+<!-- var scale = $("#slider").val();-->
+<!-- -->
+<!-- -->
+<!-- $.each(points,function(i, point){-->
+<!-- if(!point.style.strokeMiterlimit && point.style.fill != "rgb(255, 255, 255)"){-->
+<!-- var s = Snap(point);-->
+<!-- var t = new Snap.Matrix();-->
+<!-- point.getBBox();-->
+<!-- var x = point.getBBox().x + (point.getBBox().width/2);-->
+<!-- var y = point.getBBox().y + (point.getBBox().height/2);-->
+<!-- t.scale(scale, scale, x, y); -->
+<!-- s.transform(t);-->
+<!-- }-->
+<!-- });-->
+<!-- });-->
+<!-- });-->
+<!-- }, 1000);-->
+<!-- }-->
+<!-- -->
+<!-- </script>-->
+>>>>>>> origin/0.2.0
 <br>
 <div class="div-contact">
 	Questions or comments? Contact: <a href="mailto:Graham.Etherington@sainsbury-laboratory.ac.uk?subject=CandiSNP">
