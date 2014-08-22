@@ -15,5 +15,20 @@ CandiSNP requires the following Perl modules to be installed:
 * Number::Bytes::Human
 
 CandiSNP also requires 'R' to be installed and we recommend installation of Java 1.8.
+It also needs some R libraries to be installed:
+
+* library(ggplot2)
+* library(gridExtra)
+* library(plyr)
+
 When installing on a Linux-type environment, it might be necessary to edit /usr/bin/R to adjust the value of 'run_arch' to read as follows:
 `run_arch=x86_64`
+
+Also, it may be necessary to include a .htaccess file in both the candisnp base directory and the /public directory:
+We suggest this file has the following text.
+
+```
+ AddType text/x-component htc
+ AddType application/x-shockwave-flash swf
+ AddType image/svg+xml svg
+```
