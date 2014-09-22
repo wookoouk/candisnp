@@ -118,7 +118,8 @@ sub R{
 	  #all the snps for the current chromosome
 	  snpsub <- subset(x, chromosome == chrs[i])
 	  #all the non-syn coding snps for the current chromosome
-	  sub <- subset(dat, chromosome == chrs[i])
+	  #sub <- subset(dat, chromosome == chrs[i])
+	  sub <- subset(x, chromosome == chrs[i])
 	  
 	  if (nrow(snpsub) > 2)
 	  {
