@@ -341,6 +341,11 @@ sub get_palette{
 		@pal = ("#CB181D", "#FB6A4A", "#FCAE91", "#FEE5D9");
 		return \@pal;
 	}
+	elsif ($type eq 'CandiSNP')
+	{
+		my @pal = ("gray50", "gray50", "red", "gray50");
+		return \@pal;
+	}
 	return \@pal;
 }
 
