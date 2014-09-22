@@ -511,7 +511,7 @@ sub get_positions_from_file{
 	my %centromeres;
 	my $filter = $opts{-filter};
 	my $windowSize = 500000;#the number of nucleotides up and down stream of the centromere to ignore
-	if ($filter eq "yes") {
+	if ($filter eq "yes" ) {
 		%centromeres = %{centromere_positions()};
 		print STDERR Dumper %centromeres;
 	}
@@ -521,7 +521,7 @@ sub get_positions_from_file{
 		next unless defined $genome{$l->{'chr'}}; #skip any positions on chromosomes not in our genome definition...
 		#skip any positions on chromosomes that's within a centromere...
 
-		next if ($filter eq "yes" and ($l->{'pos'} < ($centromeres{$l->{'chr'}}+$windowSize) and $l->{'pos'} > ($centromeres{$l->{'chr'}}-$windowSize) ));
+		next if ($opts{-genome} =~ m/athaliana/ and $filter eq "yes" and ($l->{'pos'} < ($centromeres{$l->{'chr'}}+$windowSize) and $l->{'pos'} > ($centromeres{$l->{'chr'}}-$windowSize) ));
 		#{
 		#	print STDERR "****SKIPPING****\n";
 		#	print STDERR "chr  = $l->{'chr'}\n";
@@ -594,6 +594,7 @@ sub _header_ok{
 }
 
 #these are the centromere centres, from which full centromere may be found +/- 500nt up/down stream
+#this is only for Arabidopsis. Not known for other species... 
 sub centromere_positions{
 	my $centromere_centres = {
 			"1" => 15086545,
