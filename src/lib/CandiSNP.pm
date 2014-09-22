@@ -79,17 +79,18 @@ sub R{
 	#suppressPackageStartupMessages(library("ggplot2"))
 	#suppressMessages ( library(ggplot2) )
 	library(ggplot2)
+	library(ggthemes)
 	library(gridExtra)
 	library(plyr)
 	require(grid)
 	
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
-	points = geom_point(position=position_jitter(height=.4,width=2), aes(colour=type),alpha = 1 )
+	points = geom_point(position=position_jitter(height=.2,width=2), aes(colour=type),alpha = 0.9,size=3)
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
 	x_axis = theme(axis.text.x = element_text(face = "bold", size = 50))
-	x_axis = theme(axis.title.x = element_text(size = 20))
+	x_axis = theme(axis.title.x = element_blank() , text = element_text(size=18))
 	y_axis = theme(axis.text.y =element_text(face = "bold", size = 30))
-	y_axis = theme(axis.title.y = element_text(size = 20))
+	y_axis = theme(axis.title.y = element_blank() )#element_text(size = 25))
 	opts =  opts(strip.background = element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank()) +
 	opts(legend.position="top", panel.background = theme_rect(fill='grey99', colour='grey'))
 	max_l = max(genome_lengths$length)
@@ -127,7 +128,7 @@ sub R{
 	  {
 		index <- index + 1 
 		#draw the scatter plot and then add it to the layout
-		scatter <- ggplot(snpsub, aes(position, chromosome) ) + colours + points + facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
+		scatter <- ggplot(snpsub, aes(position, chromosome) ) + colours  + theme_few() + points + facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		#scatter <- ggplot(snpsub, aes(position, chromosome) )  + points + colours #+ #scale_x_discrete(drop=FALSE)#+ facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		plotlist[[index]]=scatter
 		plot_types[[index]]="scatter"
@@ -143,7 +144,7 @@ sub R{
 		#draw the peaks
 		#seg <- geom_segment(data = mypeaks, aes(x=x, xend=x, y=y, yend=0))
 		denplot <- ggplot(sub, aes(position)) +
-		  geom_density(alpha = 0.2) + facet_wrap(~ chromosome, ncol=1) + #draw the density plot line
+		  geom_density(alpha = 0.2) + theme_few() + theme(axis.text.y = element_blank() ) +  facet_wrap(~ chromosome, ncol=1) + #draw the density plot line
 		  opts + facets + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		  plotlist[[index]]=denplot
 			plot_types[[index]]="denplot"
