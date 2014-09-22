@@ -510,7 +510,7 @@ sub get_positions_from_file{
 	my %genome = %{genome_lengths($opts{-genome})};
 	my %centromeres;
 	my $filter = $opts{-filter};
-	my $windowSize = 1000000;#the number of nucleotides up and down stream of the centromere to ignore
+	my $windowSize = 500000;#the number of nucleotides up and down stream of the centromere to ignore
 	if ($filter eq "yes") {
 		%centromeres = %{centromere_positions()};
 		print STDERR Dumper %centromeres;
