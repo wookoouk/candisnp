@@ -128,6 +128,7 @@ sub R{
 		index <- index + 1 
 		#draw the scatter plot and then add it to the layout
 		scatter <- ggplot(snpsub, aes(position, chromosome) ) + colours + points + facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
+		#scatter <- ggplot(snpsub, aes(position, chromosome) )  + points + colours #+ #scale_x_discrete(drop=FALSE)#+ facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		plotlist[[index]]=scatter
 		plot_types[[index]]="scatter"
 		#print(scatter, vp = viewport(layout.pos.row = index, layout.pos.col = 1))
@@ -322,7 +323,7 @@ EOF
 
 sub get_palette{
 	my $type = shift;
-	my @pal = ("gray50", "gray50", "red", "gray50");
+	my @pal = ("red", "gray50", "gray50", "gray50");
 	if ($type eq 'gradient'){
 		 @pal = ("#225EA8", "#41B6C4", "#A1DAB4", "#FFFFCC");
 		return \@pal;
@@ -348,7 +349,7 @@ sub get_palette{
 	}
 	elsif ($type eq 'CandiSNP')
 	{
-		my @pal = ("gray50", "gray50", "red", "gray50");
+		my @pal = ("red", "gray50", "gray50", "gray50");
 		return \@pal;
 	}
 	return \@pal;
