@@ -15,6 +15,8 @@ use Storable 'dclone';
 use Number::Bytes::Human qw(format_bytes parse_bytes);
 use feature qw/switch/; 
 
+
+my $logging = 1;
 $ENV{PATH} = "/usr/bin/:/usr/local/bin/";
 
 =head1 NAME
@@ -125,7 +127,7 @@ sub R{
 	  {
 		index <- index + 1 
 		#draw the scatter plot and then add it to the layout
-		scatter <- ggplot(snpsub, aes(position, chromosome) ) + points + facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
+		scatter <- ggplot(snpsub, aes(position, chromosome) ) + colours + points + facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		plotlist[[index]]=scatter
 		plot_types[[index]]="scatter"
 		#print(scatter, vp = viewport(layout.pos.row = index, layout.pos.col = 1))
@@ -294,6 +296,8 @@ sub plot_data{
 	$R->set('conts', \@conts);
 	$R->set('lengths', \@lengths);
 	
+	#$palette is an arrayref with color names/codes from get_palette()
+	print STDERR "\n\n%%%%%%%%%% new Pallet is, ", join(" ", @{$palette}), "\n\n" if $logging;
 	$R->set('palette', $palette);
 	my $cmd = <<'EOF';
 

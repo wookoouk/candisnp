@@ -21,6 +21,7 @@ if ($IN->param('POSTDATA')) {
 my $allele_freq = $IN->param('allele_freq');
 my $genome = $IN->param('genome');
 my $palette = $IN->param('palette');
+print STDERR "_____PALETTE____ $palette";
 my $filter_cen_snps = $IN->param('filter_snps');
 
 print STDERR "filter snp val = $filter_cen_snps\n";
