@@ -90,7 +90,7 @@ sub R{
 	x_axis = theme(axis.text.x = element_text(face = "bold", size = 50))
 	x_axis = theme(axis.title.x = element_blank() , text = element_text(size=18))
 	y_axis = theme(axis.text.y =element_text(face = "bold", size = 30))
-	y_axis = theme(axis.title.y = element_blank() )#element_text(size = 25))
+	y_axis = theme(axis.title.y = element_text(size = 15))
 	opts =  opts(strip.background = element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank()) +
 	opts(legend.position="top", panel.background = theme_rect(fill='grey99', colour='grey'))
 	max_l = max(genome_lengths$length)
