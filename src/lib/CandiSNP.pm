@@ -324,7 +324,7 @@ EOF
 
 sub get_palette{
 	my $type = shift;
-	my @pal = ("red", "gray50", "gray50", "gray50");
+	my @pal = ("red", "red", "gray50", "gray50");
 	if ($type eq 'gradient'){
 		 @pal = ("#225EA8", "#41B6C4", "#A1DAB4", "#FFFFCC");
 		return \@pal;
