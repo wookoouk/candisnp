@@ -367,10 +367,12 @@ sub _get_type{
 		$result = "Non-Synonymous in Coding Region";
 	}
 	elsif($data{_syn} eq 'TRUE' and $data{_ctga} eq "FALSE" and $data{_in_cds} eq "TRUE" ){
-		$result = "Synonymous in Coding Region";
+		#$result = "Synonymous in Coding Region";
+		$result = "Annotated region";
 	}
 	elsif( $data{_in_cds} eq "FALSE" ){
-		$result = "Non Coding Region";
+		$result = "Non-annotated regions"
+		#$result = "Non Coding Region";
 	}
 	else{
 		$result = undef; #unclassified SNP
