@@ -13,7 +13,7 @@ use Digest::MD5 qw(md5_hex);
 use IPC::Open2;
 use Storable 'dclone';
 use Number::Bytes::Human qw(format_bytes parse_bytes);
-use feature qw/switch/; 
+use feature qw/switch/;
 
 
 my $logging = 1;
@@ -74,43 +74,44 @@ Returns a new R interface object
 sub R{
 	my $R = Statistics::R->new();
 	my $cmd = <<'EOF';
-	#options(verbose=TRUE)
-	#options(warn=1)
-	#suppressPackageStartupMessages(library("ggplot2"))
-	#suppressMessages ( library(ggplot2) )
+	options(verbose=TRUE)
+	options(warn=1)
+	suppressPackageStartupMessages(library("ggplot2"))
+	suppressMessages ( library(ggplot2) )
 	library(ggplot2)
 	library(ggthemes)
 	library(gridExtra)
 	library(plyr)
 	require(grid)
-	
+
 	candi_plot = function(x,colours,marks,labels,genome_lengths){
 	points = geom_point(position=position_jitter(height=.2,width=2), aes(colour=type),alpha = 0.9,size=3)
 	facets = facet_grid(chromosome ~ ., scales="free", space="free")
 	x_axis = theme(axis.text.x = element_text(face = "bold", size = 50))
 	x_axis = theme(axis.title.x = element_blank() , text = element_text(size=18))
-	y_axis = theme(axis.text.y =element_text(face = "bold", size = 30))
-	y_axis = theme(axis.title.y = element_text(size = 15))
+	y_axis = theme(axis.text.y = element_text(size = 130))
+	y_axis = theme(axis.title.y = element_text(size = 20))
+	#	y_axis = theme(axis.title.y = element_blank(), text = element_text(size = 23))
 	opts =  opts(strip.background = element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank()) +
 	opts(legend.position="top", panel.background = theme_rect(fill='grey99', colour='grey'))
 	max_l = max(genome_lengths$length)
 	rect = geom_rect(data=genome_lengths, aes(xmin=length, xmax=Inf, ymin=-Inf, ymax=Inf,x=NULL, y=NULL), fill='grey95' )
-	
-	peakfind <- function(x) 
+
+	peakfind <- function(x)
 	{
 	  d <- density(x$position, adjust = 1, kernel = "gaussian")
 	  peaks <- which(diff(sign(diff(d$y)))==-2)
 	  data.frame(x=d$x[peaks],y=d$y[peaks])
 	}
-	
+
 	#debug_file <- file("/Users/ethering/Desktop/r_output/debug.txt", "w")
 	chrs <- unique(unlist(x$chromosome, use.names = TRUE))
 	num_chrs <- length(chrs)
 	#x_file <- file("/Users/ethering/Desktop/r_output/x_table.txt", "w")
 	#write.table(x, file=x_file, sep = "\t", col.names = NA)
-	
+
 	dat <- subset(x, type=='Non-Synonymous in Coding Region C-T or G-A' | type=='Non-Synonymous in Coding Region', select=c(position,chromosome, type))
-	#dat_file <- file("/Users/ethering/Desktop/r_output/dat_table.txt", "w") 
+	#dat_file <- file("/Users/ethering/Desktop/r_output/dat_table.txt", "w")
 	#write.table(dat, file=dat_file, sep = "\t", col.names = NA)
 	plot_types <- list()
 	index <- 0
@@ -123,10 +124,10 @@ sub R{
 	  #all the non-syn coding snps for the current chromosome
 	  #sub <- subset(dat, chromosome == chrs[i])
 	  sub <- subset(x, chromosome == chrs[i])
-	  
+
 	  if (nrow(snpsub) > 2)
 	  {
-		index <- index + 1 
+		index <- index + 1
 		#draw the scatter plot and then add it to the layout
 		scatter <- ggplot(snpsub, aes(position, chromosome) ) + colours  + theme_few() + points + facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
 		#scatter <- ggplot(snpsub, aes(position, chromosome) )  + points + colours #+ #scale_x_discrete(drop=FALSE)#+ facets + opts + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis
@@ -137,7 +138,7 @@ sub R{
 	  if (nrow(sub) > 2)
 	  {
 		#move to the next row
-		index <- index + 1 
+		index <- index + 1
 		#find the peaks to plot
 		mypeaks <- ddply(sub,.(chromosome),peakfind)
 		#write(nrow(sub), file=debug_file)
@@ -170,25 +171,25 @@ sub R{
 		#}
 	  }
 	}
-	
+
 	#p = ggplot(x, aes(position,chromosome) )  + colours + points + scale_x_continuous(breaks=marks,labels=labels, limits=c(1, max_l)) + x_axis + y_axis + facets + opts + rect
 	return_list <- list("plotlist" = plotlist, "plot_types" = plot_types)
 	return(return_list)
 	}
-	
+
 	get_colours = function(palette){
 		colour_list = structure(palette, .Names = c("Non-Synonymous in Coding Region C-T or G-A", "Non-Synonymous in Coding Region", "Synonymous in Coding Region", "Non Coding Region"))
 		scale_colour_manual(name = "SNP Type",values = colour_list)
 	}
-	
+
 	get_height = function(list){
 		return(length(levels(list)) * 1.2 )
 	}
-		
+
 	save_picture = function(p,fname, h){
 		ggsave(filename=fname,plot=p, height=h, width=16)
 	}
-	
+
 	# Multiple plot function
 	#
 	# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
@@ -204,13 +205,13 @@ sub R{
 		svg(filename = file,height=length(plotlist)*3, width=15)
 		# Make a list from the ... arguments and plotlist
 		plots <- c(list(...), plotlist)
-		
+
 		numPlots = length(plots)
-	    
+
 		scatters <- length(grep("scatter", plot_types))
 		dens <- length(grep("denplot", plot_types))
 		numRows = (scatters*2) + dens
-		
+
 
 		# If layout is NULL, then use 'cols' to determine layout
 		if (is.null(layout)) {
@@ -220,10 +221,10 @@ sub R{
 		  layout <- matrix(seq(1, cols * ceiling(numRows/cols)),
                      ncol = cols, nrow = ceiling(numRows/cols))
 		}
-		
+
 		if (numPlots==1) {
 		  print(plots[[1]])
-		  
+
 		} else {
 		  # Set up the page
 		  grid.newpage()
@@ -233,7 +234,7 @@ sub R{
 		  for (i in 1:numPlots) {
 			# Get the i,j matrix positions of the regions that contain this subplot
 			matchidx <- as.data.frame(which(layout == rowIndex, arr.ind = TRUE))
-			
+
 			if (plot_types[i] == "scatter")
 			{
 			  to <- matchidx$row +1
@@ -289,7 +290,7 @@ sub plot_data{
 	#warn Dumper @types;
 	my @conts;
 	my @lengths;
-	
+
 	foreach my $chr (keys %{$data}){
 		push @conts, $chr;
 		#warn Dumper $$genome_lengths{$chr};
@@ -297,9 +298,9 @@ sub plot_data{
 	}
 	$R->set('conts', \@conts);
 	$R->set('lengths', \@lengths);
-	
+
 	#$palette is an arrayref with color names/codes from get_palette()
-	print STDERR "\n\n%%%%%%%%%% new Pallet is, ", join(" ", @{$palette}), "\n\n" if $logging;
+	#print STDERR "\n\n%%%%%%%%%% new Pallet is, ", join(" ", @{$palette}), "\n\n" if $logging;
 	$R->set('palette', $palette);
 	my $cmd = <<'EOF';
 
@@ -316,7 +317,7 @@ sub plot_data{
 	plot_types <- return_plots$plot_types
 	#save_picture(plot,filename,(height*2))
 	multiplot(plotlist=plot, plot_types=plot_types, cols=1, file=filename)
-	
+
 EOF
 	$R->run($cmd);
 	return $tmpfile;
@@ -385,7 +386,7 @@ sub get_filetag{
 	return md5_hex(%{$_[0]});
 }
 
-##gets the ruby Bio::Synreport annotations for the positions provided 
+##gets the ruby Bio::Synreport annotations for the positions provided
 ##forks a child process and runs SNPeff, parses the result data back into the $data hash
 sub annotate_positions{
 	my $data = shift;
@@ -399,7 +400,7 @@ sub annotate_positions{
 	my($chld_out, $chld_in);
 	my $pid = open2($chld_out, $chld_in, "java -jar -Xmx2g $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $opts{-genome} $tmpfile");
 	while (my $line = <$chld_out>){
-		
+
 		next if $line =~ m/^#/;
 		next if $line =~ m/^\n$/;
 		chomp $line;
@@ -408,19 +409,19 @@ sub annotate_positions{
 	}
 	#unlink $tmpfile;
 	return $data;
-	
+
 }
 
 sub _parse_snpEff{
 	my ($data,$line) = @_;
 	my @data = split(/\t/, $line);
-	
-	
+
+
 	my ($chr,$pos,$ref,$alt,$gene,$effect,$nucs ) = ($data[0],$data[1],$data[2], $data[3], $data[10],$data[15],$data[16]);
 	#warn Dumper join(",",$chr,$pos,$ref,$alt,$gene,$effect,$nucs);
 	#warn Dumper $effect;
 	#$chr = 'Chr' . $chr if (grep /Chr$chr/, keys %{$data});
-	
+
 	my $syn = "TRUE";
 	if ($effect eq "NON_SYNONYMOUS_CODING"){
 		$syn = "FALSE";
@@ -455,7 +456,7 @@ sub data_hash_to_file{
 	print $OUT _header() unless defined $opts{-format} and $opts{-format} eq 'short';
 	foreach my $chr (natsort keys %data ){
 		foreach my $pos (natsort keys %{$data{$chr}}){
-			my @line = ($chr, $pos, $data{$chr}{$pos}{_ref},$data{$chr}{$pos}{_alt} ); 
+			my @line = ($chr, $pos, $data{$chr}{$pos}{_ref},$data{$chr}{$pos}{_alt} );
 			if (defined $opts{-format} and $opts{-format} eq 'short') {
 				print $OUT join("\t", @line), "\n";
 				#warn Dumper @line;
@@ -473,20 +474,94 @@ sub data_hash_to_file{
 				{
 					$data{$chr}{$pos}{_effect}= "NA";
 				}
-								
+
 				push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga},$data{$chr}{$pos}{_nucs},$data{$chr}{$pos}{_gene},$data{$chr}{$pos}{_effect});
 				#warn Dumper @line;
 				print $OUT join(",", @line), "\n";
-				
+
 			}
 		}
 	}
 	close $OUT;
 }
 
+
+
+
+
+sub data_hash_to_html{
+	my $d = shift;
+	my $file_name = shift;
+	my %data = %{$d};
+	my %opts = @_;
+	$file_name = public_folder() . "/" . $file_name . '.html';
+	open my $OUT, ">", $file_name;
+	print $OUT _html_header();
+
+	foreach my $chr (natsort keys %data ){
+		foreach my $pos (natsort keys %{$data{$chr}}){
+
+
+				if (not defined ($data{$chr}{$pos}{_gene}) )
+				{
+					$data{$chr}{$pos}{_gene}= "NA";
+				}
+				if (not defined ($data{$chr}{$pos}{_nucs}) )
+				{
+					$data{$chr}{$pos}{_nucs}= "NA";
+				}
+				if (not defined ($data{$chr}{$pos}{_effect}) )
+				{
+					$data{$chr}{$pos}{_effect}= "NA";
+				}
+
+	my $row = "<tr><td>"
+	. $chr . "</td><td>" . $pos . "</td><td>" .  $data{$chr}{$pos}{_ref} . "</td><td>" . $data{$chr}{$pos}{_alt} .  "</td><td>" .  $data{$chr}{$pos}{_allele_freq} . "</td><td>" . $data{$chr}{$pos}{_in_cds} . "</td><td>" . $data{$chr}{$pos}{_syn} . "</td><td>" . $data{$chr}{$pos}{_ctga} .  "</td><td>" . $data{$chr}{$pos}{_nucs} . "</td><td>" . $data{$chr}{$pos}{_gene} . "</td><td>".  $data{$chr}{$pos}{_effect} . "</td></tr>";
+
+	#			push @line, ($data{$chr}{$pos}{_allele_freq}, $data{$chr}{$pos}{_in_cds}, $data{$chr}{$pos}{_syn}, $data{$chr}{$pos}{_ctga},$data{$chr}{$pos}{_nucs},$data{$chr}{$pos}{_gene},$data{$chr}{$pos}{_effect});
+				#warn Dumper @line;
+				print $OUT $row;
+
+		}
+	}
+	print $OUT _html_footer();
+	close $OUT;
+}
+
+sub _html_header{
+	return '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>untitled</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Dan MacLean (TSL)">
+	<!-- Date: 2014-11-18 -->
+
+	<link rel="stylesheet" type="text/css" href="../libs/fineuploader-3.8.2/fineuploader.css" >
+	<link rel="stylesheet" type="text/css" href="../libs/fineuploader-3.8.2/fineuploader-custom.css" >
+	<link rel="stylesheet" type="text/css" href="../libs/flatui/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../libs/flatui/bootstrap/css/bootstrap-custom.css">
+	<link rel="stylesheet" type="text/css" href="../libs/flatui/css/flat-ui.css">
+	<link rel="stylesheet" type="text/css" href="../libs/flatui/css/flatui-custom.css">
+
+</head>
+<body>
+	<table border="1"><tr><th>Chromosome</th><th>Position</th><th>Reference</th><th>Alt</th><th>Allele Frequency</th><th>In CDS</th><th>Synonymous</th><th>CT-GA</th><th>AA change</th><th>In Locus</th><th>Effect</th></tr>';
+}
+
+sub _html_footer{
+	return "</table>
+</body>
+</html>";
+}
+
+
 sub _base_folder{
 	my $dirname = dirname(__FILE__);
-	$dirname =~ s/\/src\/lib//; 
+	$dirname =~ s/\/src\/lib//;
 	return $dirname;
 }
 
@@ -514,7 +589,7 @@ sub _is_ctga{
 sub get_positions_from_file{
 
 	my %opts = @_;
-	my $fh = _open_file($opts{-file}); 
+	my $fh = _open_file($opts{-file});
 	croak "bad file headers" unless _header_ok($fh);
 	my %genome = %{genome_lengths($opts{-genome})};
 	my %centromeres;
@@ -522,9 +597,9 @@ sub get_positions_from_file{
 	my $windowSize = 500000;#the number of nucleotides up and down stream of the centromere to ignore
 	if ($filter eq "yes" ) {
 		%centromeres = %{centromere_positions()};
-		print STDERR Dumper %centromeres;
+	#	print STDERR Dumper %centromeres;
 	}
-	
+
 	my $data = {};
 	while (my $l = <$fh>){
 		next unless defined $genome{$l->{'chr'}}; #skip any positions on chromosomes not in our genome definition...
@@ -583,12 +658,12 @@ sub _is_snp{
 ##returns csv file object
 sub _open_file{
 	my $file = shift;
-	my $fh = Tie::Handle::CSV->new($file, 
-		header => 1, 
-		key_case => 'any', 
+	my $fh = Tie::Handle::CSV->new($file,
+		header => 1,
+		key_case => 'any',
 		open_mode => '<'
 		) || croak "couldn't open file $file\n\n";
-	return $fh;	
+	return $fh;
 }
 
 ##checks the header
@@ -603,7 +678,7 @@ sub _header_ok{
 }
 
 #these are the centromere centres, from which full centromere may be found +/- 500nt up/down stream
-#this is only for Arabidopsis. Not known for other species... 
+#this is only for Arabidopsis. Not known for other species...
 sub centromere_positions{
 	my $centromere_centres = {
 			"1" => 15086545,
@@ -626,7 +701,7 @@ sub genome_lengths{
 			"4" => 20862711,
 			"5" => 31270811
 		},
-		
+
 		'athalianaTair9' => {
 			"1" => 30427671,
 			"5" => 26975502,
@@ -634,7 +709,7 @@ sub genome_lengths{
 			"2" => 19698289,
 			"4" => 18585056
 		},
-		
+
 		'rice7' => {
 			"1" => 43270923,
 			"2" => 35937250,
@@ -649,7 +724,7 @@ sub genome_lengths{
 			"11" => 29021106,
 			"12" => 27531856
 		},
-		
+
 		'SL2.40' =>  {
 			"SL2.40ch01" => 90304244,
 			"SL2.40ch09" => 67662091,
@@ -665,7 +740,7 @@ sub genome_lengths{
 			"SL2.40ch06" => 46041636,
 			"SL2.40ch00" => 21805821
 		},
-		
+
 		'gmax1.09v8' => {
 			"Gm18" => 62308140,
 			"Gm01" => 55915595,
@@ -688,7 +763,7 @@ sub genome_lengths{
 			"Gm11" => 39172790,
 			"Gm16" => 37397385
 		},
-		
+
 		'grape' => {
 			"Un" => 43154196,
 			"14" => 30274277,
@@ -711,7 +786,7 @@ sub genome_lengths{
 			"10" => 18140952,
 			"17" => 17126926
 		},
-		
+
 		'maizeZmB73' => {
 			"1" => 301354135,
 			"4" => 241473504,
