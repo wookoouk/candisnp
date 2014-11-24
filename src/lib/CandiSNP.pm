@@ -178,7 +178,7 @@ sub R{
 	}
 
 	get_colours = function(palette){
-		colour_list = structure(palette, .Names = c("Non-Synonymous in Coding Region C-T or G-A", "Non-Synonymous in Coding Region", "Synonymous in Coding Region", "Non Coding Region"))
+		colour_list = structure(palette, .Names = c("Non-Synonymous in Coding Region C-T or G-A", "Non-Synonymous in Coding Region", "Annotated region", "Non-annotated regions"))
 		scale_colour_manual(name = "SNP Type",values = colour_list)
 	}
 
