@@ -133,7 +133,7 @@
 
 $('#OutputHelp').click(function(event) {
     event.preventDefault();
-    window.open("img/photo.png", "popupWindow", "width=600,height=600,scrollbars=yes");
+    window.open("img/help.png", "popupWindow", "width=600,height=600,scrollbars=yes");
 });
 
 </script>
@@ -153,7 +153,6 @@ $('#OutputHelp').click(function(event) {
 <li>The simplest way is with the spreadsheet or VCF file that is provided by your sequence service, if you employed one to do SNP calls for you. These files can be edited in Excel or another spreadsheet program to include the columns with headers 'Chr', 'Pos', 'Ref', 'Alt' and 'Allele_Freq', as appropriate. They can be in any order, any other columns present are just ignored by <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span>.
 Chromosome names are important. Read the 'Help' section at the bottom of the page for exact details of the format you must use. Save the file as a 'comma-separated values file' for direct use in <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span></li>
 <li>If you have an alignment file, such as a BAM or SAM file and you need to determine the SNPs from this yourself, you can use many published workflows such as those at <a href="http://usegalaxy.org">Galaxy</a>. We used the following command-line script in our work <a href="https://github.com/danmaclean/candisnp/blob/master/pileup_to_snps.rb">linked here</a>. </li>
-<li>If you have just sequence reads and you need to do all processing yourself, <a href="http://usegalaxy.org">Galaxy</a> is a great tool for each step of the pipeline, you can see the workflow we recommend and use here <a href=""> NOT YET UPLOADED</a>.
 </ul>
 </div>
 <hr>
@@ -196,7 +195,7 @@ Chromosome names are important. Read the 'Help' section at the bottom of the pag
 	The palettes you can choose are<p>
 
 	<table border="1" cellpadding="5">
-	<tr ><th>Palette name</th><th>Non-Synonymous<br>in Coding Region C-T or G-A</th><th>Non-Synonymous<br>in Coding Region</th><th>Synonymous<br>in Coding Region</th><th>Non Coding Region</th></tr>
+	<tr ><th>Palette name</th><th>Non-Synonymous<br>in Coding Region C-T or G-A</th><th>Non-Synonymous<br>in Coding Region</th><th>Annotated region</th><th>Non annotated region</th></tr>
 	<tr><td height="15">CandiSNP</td><td bgcolor="#FF0000"></td><td bgcolor="#FF0000"></td><td bgcolor="#808080"></td><td bgcolor="#808080"></td></tr>
 	<tr><td height="15">gradient</td><td bgcolor="#225EA8"></td><td bgcolor="#41B6C4"></td><td bgcolor="#A1DAB4"></td><td bgcolor="#FFFFCC"></td></tr>
 	<tr><td height="15">contrast</td><td bgcolor="#D7191C"></td><td bgcolor="#FDAE61"></td><td bgcolor="#2C7BB6"></td><td bgcolor="#ABD9E9"></td></tr>
