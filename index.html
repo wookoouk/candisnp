@@ -345,6 +345,8 @@ var enteredAlleleFreq = 0.7;
 							console.log("base file name: "+baseFileName);
 							$('#saveData'+id).empty().append('<a href="public/'+data.file+'.csv" download="'+baseFileName+'.csv" class="btn btn-small btn-info" title="Save your data to file">Save Annotated Data</a>');
 							$('#saveData'+id).append('<a href="public/'+data.file+'.svg" download="'+baseFileName+'.svg" margin="10px" class="btn btn-small btn-info" title="Save the plot to file">Save image</a>');
+							$('#saveData'+id).append('<a href="public/'+baseFileName+'.html" class="btn btn-small btn-info" target="popup" onclick="window.open(\'public/'+baseFileName+'.html\', \'popup\', \'width=600,height=500,scrollbars=yes\'); return false">See annotated data in pop-up window</a>');
+
 
 						}
 					});
@@ -378,7 +380,7 @@ var enteredAlleleFreq = 0.7;
 
 	//			$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.csv" margin="10px" class="btn btn-small btn-info" title="See annotated data in pop-up window" target="_blank" >See annotated data in pop-up window</a>');
 
-$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.html" class="btn btn-small btn-info" target="popup" onclick="window.open(\'public/'+responseJSON.file+'.html\', \'popup\', \'width=600,height=500\'); return false">See annotated data in pop-up window</a>');
+$('#saveData'+id).append('<a href="public/'+responseJSON.file+'.html" class="btn btn-small btn-info" target="popup" onclick="window.open(\'public/'+responseJSON.file+'.html\', \'popup\', \'width=600,height=500,scrollbars=yes\'); return false">See annotated data in pop-up window</a>');
 
 
 				//append the image to the div
