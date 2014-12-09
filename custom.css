@@ -1,0 +1,84 @@
+h1 {
+  font-size: 32px;
+  color: #34BEDA;
+  font-weight: 900;
+  width: 700px;
+  float: left;
+}
+
+#header{
+  max-width: 1000px;
+}
+
+#intro {
+  width: 700px;
+  float: left;
+}
+
+#version_text {
+  float: right;
+  color:#8E8F98;
+  padding-bottom: 50px;
+}
+
+#logo_pic {
+  height: 200px;
+  width: auto;
+  box-shadow: 10px 10px 5px #888888;
+  border-radius: 20px;
+  float: right;
+
+}
+
+.input_h2{
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  margin-top: 2px;
+}
+
+.blue_box, .grey_box{
+  border: 1px;
+  max-width: 960px;
+  min-height: 120px;
+  margin: 10px;
+  padding: 10px;
+  background-color: #E4F3F7;
+  border-radius: 10px;
+}
+
+
+.grey_box{
+  height: 220px;
+  background-color: #eee;
+
+}
+
+svg {
+  width: 1000px;
+}
+
+#input {
+  margin-top: 60px;
+}
+
+#spot_colours{
+  float: left;
+  width: 330px;
+}
+
+#slider_readout{
+  float: left;
+  width: 250px;
+  margin-right: 50px;
+  margin-left: 30px;
+}
+#amount {
+  float:left;
+  width:100px;
+}
+
+#download_buttons{
+  width: 250px;
+  float: left;
+}
