@@ -368,8 +368,10 @@ function headers_checker(file_contents, done){
 }
 
 function filename_checker(file,done){
-	var new_file = file;
-	var new_file.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+		console.log(file);
+	var new_file = file.name;
+	console.log(file);
+	new_file.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 	if (new_file == file){
 		return done();
 	}
