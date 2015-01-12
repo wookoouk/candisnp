@@ -5,28 +5,17 @@ use JSON;
 
 my $q = CGI->new;
 my $json = JSON->new->allow_nonref;
-#my $data = data_test();
+my $data = data_test();
 my $file = $q->param('file');
 
 my @values = $q->param;
 
 
-#my $data = file_slurp($file);
 
 print $q->header('text/json');
 print $file;
 #print $json->encode($data);
 print $json->encode(@values);
-
-#sub file_slurp{
-
-#  my $file = shift;
-  #open FILE, "<$file";
-#  my @lines = <FILE>;
-#  close FILE;
-#  return join(" ", @lines);
-#}
-
 
 
 sub data_test{
