@@ -1,0 +1,11 @@
+#!/usr/bin/perl
+
+use CGI;
+
+my $c = CGI->new;
+my $file => $c->param("file");
+print $c->header(
+  -type => "text/json"
+);
+
+print STDERR $file;

@@ -102,11 +102,11 @@ function draw_single(species, chr, data){
 
   //add class to circles
   d3.selectAll("circle")
-   .attr("class", function(d){ return get_snp_type(d) } )
-   .style("fill", function(d){
-     var snp_type = get_snp_type(d);
-     return default_colour(snp_type);
-   })
+  .attr("class", function(d){ return get_snp_type(d) } )
+  .style("fill", function(d){
+    var snp_type = get_snp_type(d);
+    return default_colour(snp_type);
+  })
 
 
   d3.select('#' + svg_id)
@@ -155,9 +155,9 @@ function draw_single(species, chr, data){
   });
 
   d3.selectAll("circle")
-   .transition()
-   .delay(function(d,i){ return i / data.length * 250; })
-   .attr("r",5);
+  .transition()
+  .delay(function(d,i){ return i / data.length * 250; })
+  .attr("r",5);
 
 
 
@@ -177,13 +177,13 @@ function add_centromere_listener(species,chr){
   // now add the listener for the select box that does the hiding
   $('#hide_centromeres').change( function(){
     if (this.checked){
-        d3.selectAll("circle")
-        .filter(function(d,i){
-          return (d.position >= centromere_range[0] && d.position <= centromere_range[1]);
-        })
-        .transition()
-        .duration(250)
-        .style("opacity",0);
+      d3.selectAll("circle")
+      .filter(function(d,i){
+        return (d.position >= centromere_range[0] && d.position <= centromere_range[1]);
+      })
+      .transition()
+      .duration(250)
+      .style("opacity",0);
 
     }
     else{
@@ -235,89 +235,177 @@ $(function() {
         }
       });
       $( "#amount" ).val(  "0.75 - 1" );
-    });
+});
 
-//decide the snp type
+    //decide the snp type
 function get_snp_type(d){
 
-  if (d.is_synonymous == "FALSE" && d.is_ctga == "TRUE" && d.in_cds == "TRUE"){
-    return "NON_SYNONYMOUS_CODING_CT_GA";
-  }
-  else if(d.is_synonymous == 'FALSE' && d.is_ctga == "FALSE" && d.in_cds == "TRUE" ){
-    return "NON_SYNONYMOUS_CODING";
-  }
-  else if(d.is_synonymous == 'TRUE' && d.is_ctga == "FALSE" && d.in_cds == "TRUE" ){
-    return "ANNOTATED_REGION";
-  }
-  else if( d.in_cds == "FALSE" ){
-    return "NON_ANNOTATED_REGION";
+      if (d.is_synonymous == "FALSE" && d.is_ctga == "TRUE" && d.in_cds == "TRUE"){
+        return "NON_SYNONYMOUS_CODING_CT_GA";
+      }
+      else if(d.is_synonymous == 'FALSE' && d.is_ctga == "FALSE" && d.in_cds == "TRUE" ){
+        return "NON_SYNONYMOUS_CODING";
+      }
+      else if(d.is_synonymous == 'TRUE' && d.is_ctga == "FALSE" && d.in_cds == "TRUE" ){
+        return "ANNOTATED_REGION";
+      }
+      else if( d.in_cds == "FALSE" ){
+        return "NON_ANNOTATED_REGION";
 
-  }
-  else{
-    return "NON_ANNOTATED_REGION";
-  }
-
+      }
+      else{
+        return "NON_ANNOTATED_REGION";
+      }
 }
 
-//format the popout string
+    //format the popout string
 function format_popup(d){
-  // Example object in d  "chromosome":"1","position":825457,"reference_base":"G","alternate_base":"A","allele_freq":0.764705882,"in_cds":"TRUE","is_synonymous":"TRUE","is_ctga":"TRUE","change":"R/R","gene":"AT1G03360","summary":"SYNONYMOUS_CODING"
+      // Example object in d  "chromosome":"1","position":825457,"reference_base":"G","alternate_base":"A","allele_freq":0.764705882,"in_cds":"TRUE","is_synonymous":"TRUE","is_ctga":"TRUE","change":"R/R","gene":"AT1G03360","summary":"SYNONYMOUS_CODING"
 
-  return "Location: " + d.chromosome + ":" + d.position + "Nuc Change: " + d.reference_base + "-" + d.alternate_base + "<br>AA Change: " + d.change + "Locus: " + d.gene ;
+      return "Location: " + d.chromosome + ":" + d.position + "Nuc Change: " + d.reference_base + "-" + d.alternate_base + "<br>AA Change: " + d.change + "Locus: " + d.gene ;
 }
 
 function default_colour(snp_type){
 
-  if(snp_type == "NON_SYNONYMOUS_CODING_CT_GA"){
-    return "#ff0000";
-  }
-  else if (snp_type == "NON_SYNONYMOUS_CODING"){
-    return "#ff0000";
-  }
-  else if (snp_type == "ANNOTATED_REGION"){
-    return "#aaaaaa";
-  }
-  else{
-    return "#aaaaaa";
-  }
+      if(snp_type == "NON_SYNONYMOUS_CODING_CT_GA"){
+        return "#ff0000";
+      }
+      else if (snp_type == "NON_SYNONYMOUS_CODING"){
+        return "#ff0000";
+      }
+      else if (snp_type == "ANNOTATED_REGION"){
+        return "#aaaaaa";
+      }
+      else{
+        return "#aaaaaa";
+      }
 
 }
 
 function set_spot_colour(colour, snp_type){
-  d3.selectAll("." + snp_type)
-  .transition()
-  .duration(200)
-  .style("fill", colour)
+      d3.selectAll("." + snp_type)
+      .transition()
+      .duration(200)
+      .style("fill", colour)
 }
 
 
 function colour_settings(default_colour, snp_type){
-  return {
-    color: default_colour,
-    showAlpha: true,
-    showPalette:true,
-    showPaletteOnly: true,
-    togglePaletteOnly: true,
-    togglePaletteMoreText: 'more',
-    togglePaletteLessText: 'less',
-    clickoutFiresChange: true,
-    allowEmpty:true,
-    change: function(colour) {
-      if (colour == null){
-        set_spot_colour('rgba(0,0,0,0)', snp_type);
+      return {
+        color: default_colour,
+        showAlpha: true,
+        showPalette:true,
+        showPaletteOnly: true,
+        togglePaletteOnly: true,
+        togglePaletteMoreText: 'more',
+        togglePaletteLessText: 'less',
+        clickoutFiresChange: true,
+        allowEmpty:true,
+        change: function(colour) {
+          if (colour == null){
+            set_spot_colour('rgba(0,0,0,0)', snp_type);
+          }
+          else{
+            set_spot_colour(colour.toRgbString(), snp_type);
+          }
+        },
+        palette: [
+        ["#FF0000", "#AAAAAA", "#000000", "#FFFFFF"],
+        ["#225EA8", "#41B6C4", "#A1DAB4", "#FFFFCC"],
+        ["#D7191C", "#FDAE61", "#2C7BB6", "#ABD9E9"],
+        ["#E31A1C", "#FD8D3C", "#FECC5C", "#FFFFB2"],
+        ["#CB181D", "#FB6A4A", "#FCAE91", "#FEE5D9"],
+
+
+        ]
+      };
+}
+
+function all_in_array(needed, to_check){
+
+      var total = 0;
+      for (var i=0; i < needed.length; i++){
+        if(one_in_array(needed[i], to_check) ){
+          total = total + 1;
+        }
+      }
+
+      if (total == needed.length){
+        return true;
+      }
+      return false;
+}
+
+
+function one_in_array(item, list){
+
+      for (var i = 0; i < list.length; i++){
+        if (list[i].toUpperCase() === item.toUpperCase()){
+          return true;
+        }
+      }
+      return false;
+}
+
+function chomp(raw_text){
+      return raw_text.replace(/(\n|\r)+$/, '');
+}
+
+function checker(file_contents, done){
+      // do file munging
+      var lines = file_contents.split("\n");
+      var headers = chomp(lines[0]).split(",");
+      if ( all_in_array(["Chr", "Pos", "Alt", "Ref", "Allele_Freq"], headers) ){
+        // console.log("returning true");
+        return done();
+        // return cb(true);
+        // return true;
       }
       else{
-        set_spot_colour(colour.toRgbString(), snp_type);
+        console.log("returning false");
+        return done("File doesn't have proper headings. Please check the help and try again");
       }
-    },
-    palette: [
-    ["#FF0000", "#AAAAAA", "#000000", "#FFFFFF"],
-    ["#225EA8", "#41B6C4", "#A1DAB4", "#FFFFCC"],
-    ["#D7191C", "#FDAE61", "#2C7BB6", "#ABD9E9"],
-    ["#E31A1C", "#FD8D3C", "#FECC5C", "#FFFFB2"],
-    ["#CB181D", "#FB6A4A", "#FCAE91", "#FEE5D9"],
-
-
-    ]
-  };
 }
+
+
+function header_ok(file, done){
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        //file is a proper html5 File object
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var file_contents = reader.result;
+          checker(file_contents, done);
+        }
+        reader.readAsText(file);
+      } else {
+        done('The File APIs are not fully supported by your browser. Please try a different browser');
+      }
+
+
+}
+
+function add_species_to_form(){
+    this.on("sending", function(file, xhr, formData) { formData.append("species", $('#species_select').val() )
+  })
+}
+
+Dropzone.options.mySecondAwesomeDropzone = {
+      paramName: "file",  // The name that will be used to transfer the file
+      maxFilesize: 200, // MB
+      url: "cgi/snpeff.cgi",
+      addRemoveLinks: true,
+      acceptedFiles: "text/csv",
+      uploadprogress: true,
+      // params: {"organism": $('#species_select').val(), "file": "filename" },
+      init: add_species_to_form,
+      accept: function(file, done) {
+        header_ok(file, done);
+      },
+      success: function(file, user_defined_server_response_object_probably_a_json){
+        console.log(user_defined_server_response_object_probably_a_json);
+        console.log(user_defined_server_response_object_probably_a_json);
+        $("#output").css("display", "block");
+        d3.json("data.json", draw);
+        $("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
+      }
+};

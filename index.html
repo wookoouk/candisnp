@@ -18,17 +18,16 @@
 
   <link rel='stylesheet' href='css/spectrum.css' />
 
+  <script src="js/dropzone.js"></script>
+  <link rel='stylesheet' href='css/dropzone.css' />
+
   <script src="js/genomics_lib.js"></script>
   <script src="js/scatter.js"></script>
   <script src='js/spectrum.js'></script>
 
 
-
   <link rel='stylesheet' href='css/custom.css' />
 
-  <script>
-
-  </script>
 
   <title>CandiSNP</title>
 
@@ -36,7 +35,7 @@
 <body>
 
   <div id="header">
-    <h1>Candi<span style="color:#FFB416">SNP:</span> <br />identifying candidate SNPs in genomes</h1>
+    <h1><span id="c">C</span>andi<span style="color:#FFB416">SNP:</span> <br />identifying candidate SNPs in genomes</h1>
     <a href="http://www.eric-carle.com/home.html"><img id="logo_pic" src="img/logo.png" title="&lsaquo;Myam myam!&rsaquo; dit la chenille qui fait des trous"></img></a>
 
     <div id="intro" class="div-text"><p>CandiSNP classifies, annotates and visualises SNPs on genomes. Provide it with a list of SNP positions and allele frequencies and CandiSNP will return the type of each SNP and an interactive  visualisation that you can explore to identify potential causative mutations. </p></div>
@@ -50,10 +49,7 @@
 
 <div id="input">
   <div class="blue_box">
-    <h2 class="input_h2">1. Drop or select a data file to upload</h2>
-  </div>
-  <div class="blue_box">
-    <h2 class="input_h2">2. Select the organism &amp; genome version</h2>
+    <h2 class="input_h2">1. Select the organism &amp; genome version</h2>
     <p>CandiSNP will classify your SNPs from the genome annotations you choose</p>
 <!-- The species selection -->
     <div class="select2-container select select-primary">
@@ -69,13 +65,16 @@
 
     </div>
   </div>
+
   <div class="blue_box">
-    <h2 class="input_h2">3. Analyse</h2>
-    <p>Your file will be sent to the server and analysed. The results will appear below</p>
-    <div id="upload" class="btn btn-primary" >
-      Upload
+    <h2 class="input_h2">2. Click to select or drop a data file to begin</h2>
+
+    <div class="dropzone" id="my-second-awesome-dropzone">
     </div>
+
   </div>
+
+
 
 </div>
 
@@ -121,15 +120,29 @@ $("#non_annotated_region_picker").spectrum(colour_settings("#aaaaaa","NON_ANNOTA
 
 
 
-  <script>
-  d3.json("data.json", draw);
-  </script>
+<!--  <script>
+  $("#upload").click( function(){
+    $("#output").css("display", "block");
+    d3.json("data.json", draw);
+    $("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
+  })
 
+  </script>
+-->
 
   <script>
   $("#save_as_svg").click(function() { show_svg_code("svg"); });
   </script>
 
+
+<script>
+  var ohcanada = new Audio('easter_eggs/oh_canada.mp3');
+$("#c").mouseover(function() {
+  ohcanada.play();
+}).mouseout(function() {
+  ohcanada.pause();
+})
+</script>
 
 
 

@@ -49,7 +49,7 @@ h1 {
 
 
 .grey_box{
-  height: 220px;
+  height: 250px;
   background-color: #eee;
 
 }
@@ -81,4 +81,8 @@ svg {
 #download_buttons{
   width: 250px;
   float: left;
+}
+
+#output{
+  display: none;
 }
