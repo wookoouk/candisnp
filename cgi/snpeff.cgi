@@ -50,6 +50,7 @@ sub upload_file_to_tmp{
 
 sub run_snpeff{
 	my ($bin, $tmpfile, $species, $data) = @_;
+	my($chld_out, $chld_in);
 	my $pid = open2($chld_out, $chld_in, "java -jar -Xmx2g $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $species $tmpfile");
 	while (my $line = <$chld_out>){
 		next if $line =~ m/^#/;
