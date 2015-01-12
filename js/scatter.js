@@ -367,18 +367,6 @@ function headers_checker(file_contents, done){
       }
 }
 
-function filename_checker(file,done){
-		console.log(file);
-	var new_file = file.name;
-	console.log(file);
-	new_file.replace(/[^a-z0-9\.]/gi, '_').toLowerCase();
-	if (new_file == file.name){
-		return done();
-	}
-	else{
-		return done("Filename has some unusual and unsafe characters, please use letters, numbers, the underscore and dot only.");
-	}
-}
 
 function file_ok(file, done){
       if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -387,7 +375,6 @@ function file_ok(file, done){
         reader.onload = function(e) {
           var file_contents = reader.result;
           headers_checker(file_contents, done);
-		  filename_checker(file, done);
         }
         reader.readAsText(file);
       } else {
