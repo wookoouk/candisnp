@@ -351,7 +351,7 @@ function chomp(raw_text){
       return raw_text.replace(/(\n|\r)+$/, '');
 }
 
-function checker(file_contents, done){
+function headers_checker(file_contents, done){
       // do file munging
       var lines = file_contents.split("\n");
       var headers = chomp(lines[0]).split(",");
@@ -367,14 +367,25 @@ function checker(file_contents, done){
       }
 }
 
+function filename_checker(file,done){
+	var new_file = file;
+	var new_file.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+	if (new_file == file){
+		return done();
+	}
+	else{
+		return done("Filename has some unusual and unsafe characters, please use letters, numbers, the underscore and dot only.");
+	}
+}
 
-function header_ok(file, done){
+function file_ok(file, done){
       if (window.File && window.FileReader && window.FileList && window.Blob) {
         //file is a proper html5 File object
         var reader = new FileReader();
         reader.onload = function(e) {
           var file_contents = reader.result;
-          checker(file_contents, done);
+          headers_checker(file_contents, done);
+		  filename_checker(file, done);
         }
         reader.readAsText(file);
       } else {
@@ -399,7 +410,7 @@ Dropzone.options.mySecondAwesomeDropzone = {
       // params: {"organism": $('#species_select').val(), "file": "filename" },
       init: add_species_to_form,
       accept: function(file, done) {
-        header_ok(file, done);
+        file_ok(file, done);
       },
       success: function(file, user_defined_server_response_object_probably_a_json){
         console.log(user_defined_server_response_object_probably_a_json);
