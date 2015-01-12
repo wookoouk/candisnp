@@ -371,7 +371,7 @@ function filename_checker(file,done){
 		console.log(file);
 	var new_file = file.name;
 	console.log(file);
-	new_file.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+	new_file.replace(/[^a-z0-9\.]/gi, '_').toLowerCase();
 	if (new_file == file){
 		return done();
 	}
