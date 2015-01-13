@@ -262,7 +262,7 @@ function get_snp_type(d){
 function format_popup(d){
       // Example object in d  "chromosome":"1","position":825457,"reference_base":"G","alternate_base":"A","allele_freq":0.764705882,"in_cds":"TRUE","is_synonymous":"TRUE","is_ctga":"TRUE","change":"R/R","gene":"AT1G03360","summary":"SYNONYMOUS_CODING"
 
-      return "Location: " + d.chromosome + ":" + d.position + "Nuc Change: " + d.reference_base + "-" + d.alternate_base + "<br>AA Change: " + d.change + "Locus: " + d.gene ;
+      return  d.gene + " " + d.position + " " + d.reference_base + " -> " + d.alternate_base + " : " + d.change ;
 }
 
 function default_colour(snp_type){
