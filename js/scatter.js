@@ -407,7 +407,7 @@ Dropzone.options.mySecondAwesomeDropzone = {
       },
       success: function(file, response_json){
         //console.log(response_json);
-		spinner.stop();
+		$('#my-second-awesome-dropzone').empty();
         $("#output").css("display", "block");
         //d3.json(response_json, draw);
 		var data = JSON.parse( response_json );
