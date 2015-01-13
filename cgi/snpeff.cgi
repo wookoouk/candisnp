@@ -70,14 +70,15 @@ sub upload_file_to_tmp{
 	
 	open (SNPEFF, ">$snp_eff_input"); 
 	while (my $l = <$fh>){
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = "NA";
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = is_ctga($l->{'ref'}, $l->{'alt'});
-		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "NA";
+		my $pos = int($l->{'pos'});
+		$$data{$l->{'chr'}}{$pos}{_alt} = $l->{'alt'};
+		$$data{$l->{'chr'}}{$pos}{_ref} = $l->{'ref'};
+		$$data{$l->{'chr'}}{$pos}{_allele_freq} = int($l->{'allele_freq'});
+		$$data{$l->{'chr'}}{$pos}{_syn} = "NA";
+		$$data{$l->{'chr'}}{$pos}{_ctga} = is_ctga($l->{'ref'}, $l->{'alt'});
+		$$data{$l->{'chr'}}{$pos}{_in_cds} = "NA";
 		
-		my @fields = ($l->{'chr'}, $l->{'pos'}, $l->{'ref'}, $l->{'alt'});
+		my @fields = ($l->{'chr'}, $pos, $l->{'ref'}, $l->{'alt'});
 		print SNPEFF join("\t", @fields), "\n";
 	}
 	close SNPEFF;
