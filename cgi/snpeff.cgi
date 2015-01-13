@@ -23,10 +23,10 @@ my $species = $q->param('species');
 ## get data uploaded, extraxt info from files and for snpeff
 ##assume filename checked on client side
 my ($snp_eff_input,$data) = upload_file_to_tmp($browser_file_name, $upload_dir);
-print_to_log($data);
+
 ## do SNPeff
 $data = run_snpeff($bin, $snp_eff_input, $species, $data);
-
+print_to_log($data);
 ##send back the response
 print $q->header('text/json');
 my $json = JSON->new->allow_nonref;
