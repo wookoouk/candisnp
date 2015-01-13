@@ -401,7 +401,7 @@ Dropzone.options.mySecondAwesomeDropzone = {
       accept: function(file, done) {
         file_ok(file, done);
 		var opts = spinner_opts();
-		var target = document.getElementById('my_second_awesome_dropzone');
+		var target = document.getElementById('my-second-awesome-dropzone');
 		var spinner = new Spinner(opts).spin(target);
 
       },
