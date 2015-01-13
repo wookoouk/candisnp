@@ -405,7 +405,8 @@ Dropzone.options.mySecondAwesomeDropzone = {
         console.log(response_json);
         $("#output").css("display", "block");
         //d3.json(response_json, draw);
-        draw(response_json);
+		var data = JSON.parse( response_json );
+        draw(data);
 		$("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
       }
 };
