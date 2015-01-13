@@ -416,7 +416,6 @@ Dropzone.options.mySecondAwesomeDropzone = {
       },
 	  canceled: function(file){
 		  $('.spinner').remove();
-		  $("#output").remove();
 	  } 
 };
 
