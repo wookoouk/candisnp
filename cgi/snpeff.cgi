@@ -94,8 +94,9 @@ sub run_snpeff{
 		next if $line =~ m/^\n$/;
 		chomp $line;
 		$data = parse_snpEff($data,$line);
-		print_to_log($data);
+		
 	}
+	print_to_log($data);
 	return data_hash_to_json($data);
 }
 
