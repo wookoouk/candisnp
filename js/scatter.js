@@ -64,7 +64,6 @@ function draw_single(species, chr, data){
   "use strict;"
 
   var svg_id = "chr_" + chr;
-  console.log(species + " is species.." + chr + " is chr");
   var ratio = ratio_current_chromosome_to_longest(species, chr);
   var margin = 50, width = (ratio * 1000), height = 300;
   //var x_extent = d3.extent(data, function(d){return d.position});
@@ -141,7 +140,8 @@ function draw_single(species, chr, data){
     .text(format_popup(d) )
     .attr("x",x_scale(d.position + 10))
     .attr("y",y_scale(d.allele_freq + 0.01))
-    .attr("id", "snp_" + d.chromosome + "_" + d.position);
+    .attr("id", "snp_" + d.chromosome + "_" + d.position)
+	.attr('class', 'snp-info');
   });
 
   d3.selectAll("circle")
