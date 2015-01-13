@@ -96,7 +96,6 @@ sub run_snpeff{
 		$data = parse_snpEff($data,$line);
 		
 	}
-	print_to_log($data);
 	return data_hash_to_json($data);
 }
 
@@ -137,6 +136,7 @@ sub parse_snpEff{
 
 sub data_hash_to_json{
 	my %data = %{$_[0]};
+	print_to_log(\%data);
 	my @records = [];
 	foreach my $chr (natsort keys %data ){
 		foreach my $pos (natsort keys %{$data{$chr}}){
