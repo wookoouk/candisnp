@@ -30,7 +30,7 @@ $data = run_snpeff($bin, $snp_eff_input, $species, $data);
 print $q->header('text/json');
 my $json = JSON->new->allow_nonref;
 print $json->encode($data);
-
+unlink($snp_eff_input); 
 
 sub print_to_log{
 	my $stuff = shift;
@@ -81,6 +81,7 @@ sub upload_file_to_tmp{
 		print SNPEFF join("\t", @fields), "\n";
 	}
 	close SNPEFF;
+	unlink($uploaded_file);
 	return ($snp_eff_input, $data);
 }
 #
@@ -171,7 +172,6 @@ sub data_hash_to_json{
 
 		}
 	}
-		print_to_log(@records);
 	return \@records;
 }
 
