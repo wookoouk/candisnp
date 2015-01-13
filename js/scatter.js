@@ -400,7 +400,6 @@ Dropzone.options.mySecondAwesomeDropzone = {
       init: add_species_to_form,
       accept: function(file, done) {
         file_ok(file, done);
-		$("#output").remove();
 		var opts = spinner_opts();
 		var target = document.getElementById('my-second-awesome-dropzone');
 		var spinner = new Spinner(opts).spin(target);
@@ -414,7 +413,10 @@ Dropzone.options.mySecondAwesomeDropzone = {
 		var data = JSON.parse( response_json );
         draw(data);
 		$("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
-      }
+      },
+	  canceled: function(file){
+		  $("#output").remove();
+	  } 
 };
 
 function spinner_opts(){
