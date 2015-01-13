@@ -36,7 +36,7 @@ print $json->encode($data);
 sub print_to_log{
 	my $stuff = shift;
 	my $dirname = dirname(__FILE__);
-	open DUMP, ">$dirname/../tmp/dumped"
+	open DUMP, ">$dirname/../tmp/dumped";
 	print DUMP Dumper $data;
 	close DUMP;
 	
