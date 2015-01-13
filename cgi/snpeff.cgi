@@ -5,7 +5,7 @@ use JSON;
 use File::Basename;
 use IPC::Open2;
 use Sort::Key::Natural qw(natsort);
-
+use Tie::Handle::CSV;
 
 
 #Basename for this script and therefore path to tmp dir
@@ -19,34 +19,57 @@ my $browser_file_name = $q->param('file');
 my $species = $q->param('species');
 
 ##assume filename checked on client side
-my $tmpfile = upload_file_to_tmp($browser_file_name, $upload_dir);
+my $snp_eff_input,$data = upload_file_to_tmp($browser_file_name, $upload_dir);
 
 ## do SNPeff
 my $snp_eff_result = {};
-$snp_eff_result = run_snpeff($bin, $tmpfile, $species, $snp_eff_result);
+$data = run_snpeff($bin, $tmpfile, $species, $data);
 
 ##send back the response
 print $q->header('text/json');
 my $json = JSON->new->allow_nonref;
-print $json->encode($snp_eff_result);
+print $json->encode($data);
 
 
 #########################################################################################################################
 ##
 sub upload_file_to_tmp{
 	my ($filename,$upload_dir) = @_;
-	my $rand = int(rand(10000000));
-	my $new_file = $rand . ".csv";
-	my $tmpfile = "$upload_dir/$new_file";
+	my $tag = int(rand(10000000));
+	my $uploaded_file = $upload_dir . "/" . $tag . ".csv";
+	my $snp_eff_input = $upload_dir . "/" . $tag . ".tab"; 
 
-	print STDERR "------------------------\n", $tmpfile, "\n"; ##
-	open ( UPLOADFILE, ">$tmpfile" ) or die "$!";
+	print STDERR "------------------------\n", $uploaded_file, "\n"; ##
+	open ( UPLOADFILE, ">$uploaded_file" ) or die "$!";
 	binmode UPLOADFILE;
 	while ( <$filename> ){
 		print UPLOADFILE;
 	}
 	close UPLOADFILE;
-	return $tmpfile;
+	
+	my $fh = Tie::Handle::CSV->new($uploaded_file, 
+		header => 1, 
+		key_case => 'any', 
+		open_mode => '<'
+		) || croak "couldn't open file $uploaded_file\n\n";	
+	
+	
+	my $data = {};
+	
+	
+	open (SNPEFF, ">$snp_eff_input"); 
+	while (my $l = <$fh>){
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_alt} = $l->{'alt'};
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_ref} = $l->{'ref'};
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_allele_freq} = $l->{'allele_freq'};
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_syn} = "NA";
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = is_ctga($l->{'ref'}, $l->{'alt'});
+		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "NA";
+		
+		@fields = ($l->{'chr'}, $l->{'pos'}, $l->{'ref'}, $l->{'alt'});
+		print join("\t", @fields);$l->{'alt'};
+	}
+	return ($snp_eff_input, $data);
 }
 #
 sub run_snpeff{
@@ -137,3 +160,10 @@ sub data_hash_to_json{
 	}
 	
 }
+
+sub is_ctga{
+	my ($ref,$alt) = @_;
+	return "TRUE" if ( ($ref =~ /c/i and $alt =~ /t/i) or ($ref =~ /g/i and $alt =~ /a/i) );
+	return "FALSE";
+}
+
