@@ -400,6 +400,7 @@ Dropzone.options.mySecondAwesomeDropzone = {
       init: add_species_to_form,
       accept: function(file, done) {
         file_ok(file, done);
+		$("#output").remove();
 		var opts = spinner_opts();
 		var target = document.getElementById('my-second-awesome-dropzone');
 		var spinner = new Spinner(opts).spin(target);
