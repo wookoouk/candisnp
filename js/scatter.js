@@ -137,7 +137,7 @@ function draw_single(species, chr, data){
     d3.select("text#" + "snp_" + d.chromosome + "_" + d.position).remove();
     d3.select('#' + "chr_" + d.chromosome)
     .append("svg:text")
-    .html(format_popup(d) )
+    .text(format_popup(d) )
     .attr("x",x_scale(d.position + 10))
     .attr("y",y_scale(d.allele_freq + 0.01))
     .attr("id", "snp_" + d.chromosome + "_" + d.position)
