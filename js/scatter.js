@@ -404,7 +404,7 @@ Dropzone.options.mySecondAwesomeDropzone = {
       success: function(file, response_json){
         console.log(response_json);
         $("#output").css("display", "block");
-        #d3.json(response_json, draw);
+        //d3.json(response_json, draw);
         draw(response_json);
 		$("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
       }
