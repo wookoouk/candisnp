@@ -66,7 +66,7 @@ sub run_snpeff{
 sub parse_snpEff{
 	my ($data,$line) = @_;
 	my @data = split(/\t/, $line);
-	
+	#
 	
 	my ($chr,$pos,$ref,$alt,$gene,$effect,$nucs ) = ($data[0],$data[1],$data[2], $data[3], $data[10],$data[15],$data[16]);
 	#warn Dumper join(",",$chr,$pos,$ref,$alt,$gene,$effect,$nucs);
