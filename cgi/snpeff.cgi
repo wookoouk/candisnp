@@ -67,8 +67,9 @@ sub upload_file_to_tmp{
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "NA";
 		
 		my @fields = ($l->{'chr'}, $l->{'pos'}, $l->{'ref'}, $l->{'alt'});
-		print join("\t", @fields);$l->{'alt'};
+		print SNPEFF join("\t", @fields);$l->{'alt'};
 	}
+	close SNPEFF;
 	return ($snp_eff_input, $data);
 }
 #
