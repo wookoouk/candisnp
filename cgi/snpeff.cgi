@@ -158,7 +158,7 @@ sub data_hash_to_json{
 							
 			push @records, {
 				"chromosome" => $chr,
-				"position" => $pos,
+				"position" => $pos + 0.0,
 				"reference_base" => $data{$chr}{$pos}{_ref},
 				"alternate_base" => $data{$chr}{$pos}{_alt},
 				"allele_freq" => $data{$chr}{$pos}{_allele_freq}, 
