@@ -140,7 +140,7 @@ function draw_single(species, chr, data){
     .append("text")
     .text(format_popup(d) )
     .attr("x",x_scale(d.position + 10))
-    .attr("y",y_scale(d.allele_freq + 0.1))
+    .attr("y",y_scale(d.allele_freq + 0.01))
     .attr("id", "snp_" + d.chromosome + "_" + d.position);
   });
 
