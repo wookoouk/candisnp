@@ -64,7 +64,7 @@ function draw_single(species, chr, data){
   "use strict;"
 
   var svg_id = "chr_" + chr;
-
+  console.log(species + " is species.." + chr + " is chr");
   var ratio = ratio_current_chromosome_to_longest(species, chr);
   var margin = 50, width = (ratio * 1000), height = 300;
   //var x_extent = d3.extent(data, function(d){return d.position});
