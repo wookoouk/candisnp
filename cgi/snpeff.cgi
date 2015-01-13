@@ -23,7 +23,7 @@ my $species = $q->param('species');
 ## get data uploaded, extraxt info from files and for snpeff
 ##assume filename checked on client side
 my ($snp_eff_input,$data) = upload_file_to_tmp($browser_file_name, $upload_dir);
-print STDERR Dumper $data;
+print_to_log($data);
 ## do SNPeff
 $data = run_snpeff($bin, $snp_eff_input, $species, $data);
 
@@ -31,6 +31,16 @@ $data = run_snpeff($bin, $snp_eff_input, $species, $data);
 print $q->header('text/json');
 my $json = JSON->new->allow_nonref;
 print $json->encode($data);
+
+
+sub print_to_log{
+	my $stuff = shift;
+	my $dirname = dirname(__FILE__);
+	open DUMP, ">$dirname/../tmp/dumped"
+	print DUMP Dumper $data;
+	close DUMP;
+	
+}
 
 
 #########################################################################################################################
