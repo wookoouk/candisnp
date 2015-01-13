@@ -400,9 +400,13 @@ Dropzone.options.mySecondAwesomeDropzone = {
       init: add_species_to_form,
       accept: function(file, done) {
         file_ok(file, done);
+		var opts = spinner_opts();
+		var target = document.getElementById('my_second_awesome_dropzone');
+		var spinner = new Spinner(opts).spin(target);
+
       },
       success: function(file, response_json){
-        console.log(response_json);
+        //console.log(response_json);
         $("#output").css("display", "block");
         //d3.json(response_json, draw);
 		var data = JSON.parse( response_json );
@@ -410,3 +414,24 @@ Dropzone.options.mySecondAwesomeDropzone = {
 		$("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
       }
 };
+
+function spinner_opts(){
+	return {
+  lines: 17, // The number of lines to draw
+  length: 40, // The length of each line
+  width: 10, // The line thickness
+  radius: 56, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 42, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#000', // #rgb or #rrggbb or array of colors
+  speed: 1.6, // Rounds per second
+  trail: 100, // Afterglow percentage
+  shadow: false, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: '50%', // Top position relative to parent
+  left: '50%' // Left position relative to parent
+};
+}
