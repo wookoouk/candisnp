@@ -401,10 +401,10 @@ Dropzone.options.mySecondAwesomeDropzone = {
       accept: function(file, done) {
         file_ok(file, done);
       },
-      success: function(file, user_defined_server_response_object_probably_a_json){
-        console.log(user_defined_server_response_object_probably_a_json);
+      success: function(file, response_json){
+        console.log(response_json);
         $("#output").css("display", "block");
-        d3.json("data.json", draw);
+        d3.json(response_json, draw);
         $("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
       }
 };
