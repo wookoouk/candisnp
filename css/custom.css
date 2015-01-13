@@ -88,9 +88,11 @@ svg {
 }
 
 .snp-info{
-	font-size: 8px;
+	font-size: 16px;
     color: black;
     background-color: #E4F3F7;
+    border-style: solid;
+    border-color: #ff0000;
     border-radius: 2px;
 }
 
