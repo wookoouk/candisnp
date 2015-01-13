@@ -70,7 +70,7 @@ sub upload_file_to_tmp{
 	
 	open (SNPEFF, ">$snp_eff_input"); 
 	while (my $l = <$fh>){
-		my $pos = int($l->{'pos'});
+		my $pos = $l->{'pos'} + 0;
 		$$data{$l->{'chr'}}{$pos}{_alt} = $l->{'alt'};
 		$$data{$l->{'chr'}}{$pos}{_ref} = $l->{'ref'};
 		$$data{$l->{'chr'}}{$pos}{_allele_freq} = $l->{'allele_freq'} + 0.0;
@@ -111,7 +111,7 @@ sub parse_snpEff{
 	#warn Dumper join(",",$chr,$pos,$ref,$alt,$gene,$effect,$nucs);
 	#warn Dumper $effect;
 	#$chr = 'Chr' . $chr if (grep /Chr$chr/, keys %{$data});
-	
+	$pos = $pos + 0;
 	my $syn = "TRUE";
 	if ($effect eq "NON_SYNONYMOUS_CODING"){
 		$syn = "FALSE";
