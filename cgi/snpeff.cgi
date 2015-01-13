@@ -6,7 +6,7 @@ use File::Basename;
 use IPC::Open2;
 use Sort::Key::Natural qw(natsort);
 use Tie::Handle::CSV;
-
+use Carp;
 
 #Basename for this script and therefore path to tmp dir
 my $dirname = dirname(__FILE__);
@@ -18,11 +18,11 @@ my $q = CGI->new;
 my $browser_file_name = $q->param('file');
 my $species = $q->param('species');
 
+## get data uploaded, extraxt info from files and for snpeff
 ##assume filename checked on client side
 my $snp_eff_input,$data = upload_file_to_tmp($browser_file_name, $upload_dir);
 
 ## do SNPeff
-my $snp_eff_result = {};
 $data = run_snpeff($bin, $tmpfile, $species, $data);
 
 ##send back the response
