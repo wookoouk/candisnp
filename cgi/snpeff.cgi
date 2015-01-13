@@ -136,7 +136,7 @@ sub parse_snpEff{
 
 sub data_hash_to_json{
 	my %data = %{$_[0]};
-	my @records = [];
+	my @records;
 	foreach my $chr (natsort keys %data ){
 		foreach my $pos (natsort keys %{$data{$chr}}){
 
