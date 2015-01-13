@@ -47,7 +47,7 @@ sub upload_file_to_tmp{
 	close UPLOADFILE;
 	return $tmpfile;
 }
-
+#
 sub run_snpeff{
 	my ($bin, $tmpfile, $species, $data) = @_;
 	my($chld_out, $chld_in);
