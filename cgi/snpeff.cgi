@@ -159,7 +159,7 @@ sub data_hash_to_json{
 
 		}
 	}
-	
+	return @records;
 }
 
 sub is_ctga{
