@@ -20,10 +20,10 @@ my $species = $q->param('species');
 
 ## get data uploaded, extraxt info from files and for snpeff
 ##assume filename checked on client side
-my $snp_eff_input,$data = upload_file_to_tmp($browser_file_name, $upload_dir);
+my ($snp_eff_input,$data) = upload_file_to_tmp($browser_file_name, $upload_dir);
 
 ## do SNPeff
-$data = run_snpeff($bin, $tmpfile, $species, $data);
+$data = run_snpeff($bin, $snp_eff_input, $species, $data);
 
 ##send back the response
 print $q->header('text/json');
@@ -66,7 +66,7 @@ sub upload_file_to_tmp{
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_ctga} = is_ctga($l->{'ref'}, $l->{'alt'});
 		$$data{$l->{'chr'}}{$l->{'pos'}}{_in_cds} = "NA";
 		
-		@fields = ($l->{'chr'}, $l->{'pos'}, $l->{'ref'}, $l->{'alt'});
+		my @fields = ($l->{'chr'}, $l->{'pos'}, $l->{'ref'}, $l->{'alt'});
 		print join("\t", @fields);$l->{'alt'};
 	}
 	return ($snp_eff_input, $data);
