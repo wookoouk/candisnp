@@ -79,12 +79,14 @@ function draw_single(species, chr, data){
   .range([height-margin,margin])
   .domain(y_extent);
 
+
   var x_axis = d3.svg.axis().scale(x_scale);
   var y_axis = d3.svg.axis().scale(y_scale).orient("left");
 
   var svg = d3.select("body")
   .append('svg')
-  
+
+
   svg.attr("id", svg_id)
   .attr('width',width)
   .attr('height',height)
@@ -109,14 +111,12 @@ function draw_single(species, chr, data){
   })
 
 
-  svg.select('#' + svg_id)
-  .append("g")
+  svg.append("g")
   .attr("class","x axis")
   .attr("transform", "translate(0," + (height - margin) + " )")
   .call(x_axis);
 
-  svg.select('#' + svg_id)
-  .append("g")
+  svg.append("g")
   .attr("class","y axis")
   .attr("transform", "translate(" + margin + ",0 )")
   .call(y_axis);
