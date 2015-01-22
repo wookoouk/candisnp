@@ -100,7 +100,7 @@ svg {
   line-height: 1;
   font-weight: lighter;
   padding: 10px;
-  background: rgba(225, 239, 244, 0.5);
+  background: rgba(225, 239, 244, 0.8);
   color: #000;
   border-radius: 2px;
 }
@@ -112,7 +112,7 @@ svg {
   font-size: 10px;
   width: 100%;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(225, 239, 244, 0.8);
   content: "\25BC";
   position: absolute;
   text-align: center;

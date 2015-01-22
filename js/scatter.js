@@ -90,7 +90,7 @@ var tip = d3.tip()
     return "Position: " + d.position + " <br />  \
 	  Allele Frequency: "  + d.allele_freq + "<br /> \
 	  Locus: " + d.gene + " <br /> \
-	  Effect: " + d.effect + "<br /> \
+	  Change: " + d.change + "<br /> \
 	  Reference base: " + d.reference_base + "<br /> \
 	  Alternate base: " + d.alternate_base + "<br />";
   })
