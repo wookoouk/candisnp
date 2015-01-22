@@ -157,7 +157,7 @@ function draw_single(species, chr, data){
 
   svg.selectAll("circle")
   .transition()
-  .delay(function(d,i){ return i / data.length * 1; })
+  .delay(function(d,i){ return i / data.length * 10000; })
   .attr("r",5);
 
 
