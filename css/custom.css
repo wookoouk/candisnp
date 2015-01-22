@@ -99,9 +99,9 @@ svg {
 .d3-tip {
   line-height: 1;
   font-weight: lighter;
-  padding: 12px;
+  padding: 10px;
   background: rgba(225, 239, 244, 0.5);
-  color: #fff;
+  color: #000;
   border-radius: 2px;
 }
 
