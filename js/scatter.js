@@ -146,7 +146,6 @@ function draw_single(species, chr, data){
   .delay(function(d,i){ return i / data.length * 1000; })
   .attr("r",5);
 
-	svg.call(tip);
 
 }
 
