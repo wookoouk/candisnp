@@ -130,17 +130,17 @@ var tip = d3.tip()
   .attr("transform", "translate(" + margin + ",0 )")
   .call(y_axis);
 
-  d3.selectAll("circle")
-  .on("mouseover", function(d){
-    d3.select(this)
-    .transition()
-    .attr("r",9);
-  })
-  .on("mouseout", function(d){
-    d3.select(this)
-    .transition()
-    .attr("r",5);
-  });
+//  d3.selectAll("circle")
+ // .on("mouseover", function(d){
+ //   d3.select(this)
+ //   .transition()
+ //   .attr("r",9);
+ // })
+ // .on("mouseout", function(d){
+ //   d3.select(this)
+ //   .transition()
+ //   .attr("r",5);
+ // });
 
   svg.selectAll("circle")
   .transition()
