@@ -83,6 +83,12 @@ function draw_single(species, chr, data){
   var x_axis = d3.svg.axis().scale(x_scale);
   var y_axis = d3.svg.axis().scale(y_scale).orient("left");
 
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Frequency:</strong> <span style='color:red'>" + d.allele_freq + "</span>";
+  })
 
   var svg = d3.select("body")
   .append('svg')
@@ -139,6 +145,7 @@ function draw_single(species, chr, data){
   .delay(function(d,i){ return i / data.length * 1000; })
   .attr("r",5);
 
+svg.call(tip);
 
 }
 
