@@ -88,7 +88,7 @@ function draw_single(species, chr, data){
   .offset([-10, 0])
   .html(function(d) {
     return "<strong>Name:</strong> <span style='color:red'>" + d.allele_freq + "</span>";
-  })
+  });
 
 
   var svg = d3.select("body")
