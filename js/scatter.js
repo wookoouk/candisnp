@@ -121,7 +121,7 @@ function draw_single(species, chr, data){
   .attr("transform", "translate(" + margin + ",0 )")
   .call(y_axis);
 
-  svg.selectAll("circle")
+  d3.selectAll("circle")
   .on("mouseover", function(d){
     svg.select(this)
     .transition()
@@ -157,7 +157,7 @@ function draw_single(species, chr, data){
 
   svg.selectAll("circle")
   .transition()
-  .delay(function(d,i){ return i / data.length * 250; })
+  .delay(function(d,i){ return i / data.length * 1; })
   .attr("r",5);
 
 
