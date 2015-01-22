@@ -84,7 +84,8 @@ function draw_single(species, chr, data){
 
   var svg = d3.select("body")
   .append('svg')
-  .attr("id", svg_id)
+  
+  svg.attr("id", svg_id)
   .attr('width',width)
   .attr('height',height)
   .selectAll("circle")
