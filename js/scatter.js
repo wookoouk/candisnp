@@ -105,7 +105,7 @@ var tip = d3.tip()
   svg.selectAll("circle")
   .attr("cx", function(d){return x_scale(d.position)})
   .attr("cy", function(d){return y_scale(d.allele_freq)})
-      .on('click', tip.show)
+      .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
   svg.selectAll("circle")
