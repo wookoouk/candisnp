@@ -83,6 +83,14 @@ function draw_single(species, chr, data){
   var x_axis = d3.svg.axis().scale(x_scale);
   var y_axis = d3.svg.axis().scale(y_scale).orient("left");
 
+  var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Name:</strong> <span style='color:red'>" + d.allele_freq + "</span>";
+  })
+
+
   var svg = d3.select("body")
   .append('svg')
 
@@ -134,33 +142,11 @@ function draw_single(species, chr, data){
   });
 
   svg.selectAll("circle")
-  .on("mouseover.tooltip", function(d){
-    //d3.select(this).remove();
-    d3.select(this).enter()
-    .append("svg:title")
-    .text(format_popup(d) )
-    .attr("x",x_scale(d.position + 10))
-    .attr("y",y_scale(d.allele_freq + 0.01))
-    .attr("id", "snp_" + d.chromosome + "_" + d.position)
-	.attr('class', 'snp-info');
-  });
-
-  svg.selectAll("circle")
-  .on("mouseout.tooltip", function(d){
-    svg.select(this)
-    .transition()
-    .duration(500)
-    .style("opacity",0)
-    .attr("transform","translate(10,-10)")
-    .remove();
-  });
-
-  svg.selectAll("circle")
   .transition()
   .delay(function(d,i){ return i / data.length * 1000; })
   .attr("r",5);
 
-
+	svg.call(tip);
 
 }
 
