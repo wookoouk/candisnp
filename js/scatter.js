@@ -135,7 +135,7 @@ function draw_single(species, chr, data){
 
   svg.selectAll("circle")
   .on("mouseover.tooltip", function(d){
-    d3.select(this).remove();
+    //d3.select(this).remove();
     d3.select(this).enter()
     .append("svg:title")
     .text(format_popup(d) )
