@@ -135,9 +135,9 @@ function draw_single(species, chr, data){
 
   svg.selectAll("circle")
   .on("mouseover.tooltip", function(d){
-    svg.select(this).remove();
-    svg.select(this)
-    .append("svg:text")
+    d3.select(this).remove();
+    d3.select(this).enter()
+    .append("svg:title")
     .text(format_popup(d) )
     .attr("x",x_scale(d.position + 10))
     .attr("y",y_scale(d.allele_freq + 0.01))
