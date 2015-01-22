@@ -82,7 +82,7 @@ function draw_single(species, chr, data){
   var x_axis = d3.svg.axis().scale(x_scale);
   var y_axis = d3.svg.axis().scale(y_scale).orient("left");
 
-  d3.select("body")
+  var svg = d3.select("body")
   .append('svg')
   .attr("id", svg_id)
   .attr('width',width)
@@ -92,15 +92,15 @@ function draw_single(species, chr, data){
   .enter()
   .append("circle");
 
-  d3.selectAll("circle")
+  svg.selectAll("circle")
   .attr("cx", function(d){return x_scale(d.position)})
   .attr("cy", function(d){return y_scale(d.allele_freq)});
 
-  d3.selectAll("circle")
+  svg.selectAll("circle")
   .attr("r", 0);
 
   //add class to circles
-  d3.selectAll("circle")
+  svg.selectAll("circle")
   .attr("class", function(d){ return get_snp_type(d) } )
   .style("fill", function(d){
     var snp_type = get_snp_type(d);
@@ -108,34 +108,34 @@ function draw_single(species, chr, data){
   })
 
 
-  d3.select('#' + svg_id)
+  svg.select('#' + svg_id)
   .append("g")
   .attr("class","x axis")
   .attr("transform", "translate(0," + (height - margin) + " )")
   .call(x_axis);
 
-  d3.select('#' + svg_id)
+  svg.select('#' + svg_id)
   .append("g")
   .attr("class","y axis")
   .attr("transform", "translate(" + margin + ",0 )")
   .call(y_axis);
 
-  d3.selectAll("circle")
+  svg.selectAll("circle")
   .on("mouseover", function(d){
-    d3.select(this)
+    svg.select(this)
     .transition()
     .attr("r",9);
   })
   .on("mouseout", function(d){
-    d3.select(this)
+    svg.select(this)
     .transition()
     .attr("r",5);
   });
 
-  d3.selectAll("circle")
+  svg.selectAll("circle")
   .on("mouseover.tooltip", function(d){
-    d3.select("text#" + "snp_" + d.chromosome + "_" + d.position).remove();
-    d3.select('#' + "chr_" + d.chromosome)
+    svg.select("text#" + "snp_" + d.chromosome + "_" + d.position).remove();
+    svg.select('#' + "chr_" + d.chromosome)
     .append("svg:text")
     .text(format_popup(d) )
     .attr("x",x_scale(d.position + 10))
@@ -144,9 +144,9 @@ function draw_single(species, chr, data){
 	.attr('class', 'snp-info');
   });
 
-  d3.selectAll("circle")
+  svg.selectAll("circle")
   .on("mouseout.tooltip", function(d){
-    d3.select("text#snp_" + d.chromosome + "_" + d.position)
+    svg.select("text#snp_" + d.chromosome + "_" + d.position)
     .transition()
     .duration(500)
     .style("opacity",0)
@@ -154,7 +154,7 @@ function draw_single(species, chr, data){
     .remove();
   });
 
-  d3.selectAll("circle")
+  svg.selectAll("circle")
   .transition()
   .delay(function(d,i){ return i / data.length * 250; })
   .attr("r",5);
