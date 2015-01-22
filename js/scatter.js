@@ -87,13 +87,12 @@ var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return "Position: " + d.position + " <br />  
-	  Allele Frequency: "  + d.allele_freq + "<br />
-	  Locus: " + d.gene + " <br />
-	  Effect: " + d.effect + "<br />
-	  Reference base: " + d.reference_base + "<br />
-	  Alternate base: " + d.alternate_base + "<br />
-	  ";
+    return "Position: " + d.position + " <br />  \\
+	  Allele Frequency: "  + d.allele_freq + "<br /> \\
+	  Locus: " + d.gene + " <br /> \\
+	  Effect: " + d.effect + "<br /> \\
+	  Reference base: " + d.reference_base + "<br /> \\
+	  Alternate base: " + d.alternate_base + "<br />";
   })
 
   var svg = d3.select("body")
