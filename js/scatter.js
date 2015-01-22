@@ -79,11 +79,13 @@ function draw_single(species, chr, data){
   .range([height-margin,margin])
   .domain(y_extent);
 
-  var x_axis = d3.svg.axis().scale(x_scale);
-  var y_axis = d3.svg.axis().scale(y_scale).orient("left");
-
   var svg = d3.select("body")
   .append('svg')
+
+  var x_axis = svg.svg.axis().scale(x_scale);
+  var y_axis = svg.svg.axis().scale(y_scale).orient("left");
+
+
   
   svg.attr("id", svg_id)
   .attr('width',width)
