@@ -1,4 +1,5 @@
 function has_centromere_positions(species, chr){
+	console.log(species + " - " + chr);
   var centromere_centres = {
 
     'athalianaTair10' :{
