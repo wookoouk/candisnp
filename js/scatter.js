@@ -21,7 +21,7 @@ function select_for(chr,data){
 
 //reformat big numbers to SI units
 function bases_to_unit_bases(bases) {
-    var units = ['kbp','Mbp','Gbp'] ;
+    var units = ['Kbp','Mbp','Gbp'] ;
     var u = -1;
     do {
         bases /= 1000;
@@ -197,6 +197,7 @@ function add_centromere_listener(species,chr){
 
   // now add the listener for the select box that does the hiding
   $('#hide_centromeres').change( function(){
+	  console.log("pressed!");
     if (this.checked){
       d3.selectAll("circle")
       .filter(function(d,i){
