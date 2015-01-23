@@ -132,8 +132,8 @@ var tip = d3.tip()
   
 svg.append("text")
     .attr("class", "x label")
-    .attr("text-anchor", "end")
-    .attr("x", width)
+   // .attr("text-anchor", "end")
+    .attr("x", width / 2)
     .attr("y", height - 6)
     .text("Chromosome/contig: " + chr);
 
@@ -146,7 +146,7 @@ svg.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "end")
     .attr("y", 6)
-    .attr("dy", "-10pt")
+    .attr("dy", ".75em")
     .attr("transform", "rotate(-90)")
     .text("Allele Frequency");
   
