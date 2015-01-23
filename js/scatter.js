@@ -133,7 +133,7 @@ var tip = d3.tip()
 svg.append("text")
     .attr("class", "x label")
    // .attr("text-anchor", "end")
-    .attr("x", width / 2)
+    .attr("x", x_extent / 2)
     .attr("y", height - 6)
     .text("Chromosome/contig: " + chr);
 
