@@ -91,7 +91,7 @@ function draw_single(species, chr, data){
   .domain(y_extent);
 
 
-  var x_axis = d3.svg.axis().scale(x_scale).tickFormat( function(d){ return bases_to_unit_bases(d)};
+  var x_axis = d3.svg.axis().scale(x_scale).tickFormat( function(d){ return bases_to_unit_bases(d)} );
   var y_axis = d3.svg.axis().scale(y_scale).orient("left").ticks(5);
 
 var tip = d3.tip()
