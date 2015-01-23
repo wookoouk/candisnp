@@ -17,7 +17,7 @@ function has_centromere_positions(species, chr){
   }
   };
   if (species in centromere_centres){
-    return [centromere_centres[species][chr] - 500000,centromere_centres[species][chr] + 500000];
+    return [centromere_centres[species][chr] - 10000000,centromere_centres[species][chr] + 10000000];
   }
   else{
     return false;
