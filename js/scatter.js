@@ -135,12 +135,22 @@ svg.append("text")
     .attr("text-anchor", "end")
     .attr("x", width)
     .attr("y", height - 6)
-    .text("income per capita, inflation-adjusted (dollars)");
+    .text("Chromosome/contig: " + chr);
 
   svg.append("g")
   .attr("class","y axis")
   .attr("transform", "translate(" + margin + ",0 )")
   .call(y_axis);
+
+svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", 6)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Allele Frequency");
+  
+  
 
 //  d3.selectAll("circle")
  // .on("mouseover", function(d){
