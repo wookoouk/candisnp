@@ -198,6 +198,7 @@ function add_centromere_listener(species,chr){
   // now add the listener for the select box that does the hiding
   $('#hide_centromeres').change( function(){
 	  console.log("pressed!");
+	  console.log(centromere_range[0] + " - " + centromere_range[1]);
     if (this.checked){
       d3.selectAll("circle")
     //  .filter(function(d,i){
