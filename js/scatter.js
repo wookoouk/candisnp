@@ -129,6 +129,13 @@ var tip = d3.tip()
   .attr("class","x axis")
   .attr("transform", "translate(0," + (height - margin) + " )")
   .call(x_axis);
+  
+svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", height - 6)
+    .text("income per capita, inflation-adjusted (dollars)");
 
   svg.append("g")
   .attr("class","y axis")
