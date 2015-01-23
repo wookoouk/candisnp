@@ -147,7 +147,7 @@ svg.append("text")
     .attr("text-anchor", "end")
     .attr("y", 6)
     .attr("dy", ".75em")
-    .attr("transform", "rotate(-90)")
+    //.attr("transform", "rotate(-90)")
     .text("Allele Frequency");
   
   
