@@ -210,9 +210,9 @@ function add_centromere_listener(species,chr){
     }
     else{
       d3.selectAll("circle")
-      .filter(function(d,i){
-        return (d.position >= centromere_range[0] && d.position <= centromere_range[1]);
-      })
+      //.filter(function(d,i){
+      //  return (d.position >= centromere_range[0] && d.position <= centromere_range[1]);
+      //})
       .transition()
       .duration(250)
       .style("opacity",1);
