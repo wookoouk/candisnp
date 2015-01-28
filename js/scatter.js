@@ -57,8 +57,8 @@ function draw(data){
   var species = $('#species_select').val();
 
 
-  if (has_centromere_positions(species,chr)){
-    add_centromere_select(species,chr);
+  if (has_centromere_positions(species)){
+    add_centromere_select(species);
   }
 
 
@@ -185,14 +185,14 @@ svg.call(tip);
 }
 
 //add the centromere select button
-function add_centromere_select(species,chr){
+function add_centromere_select(species){
   $('#hide_centromeres_container').append( '<form>Hide Centromere Region SNPs <input type="checkbox" id="hide_centromeres" name="hide_centromeres" value="true"></form>');
-  add_centromere_listener(species,chr);
+  add_centromere_listener(species);
 }
 
 //function that creates button to obscure centromeres when the genome selected allows it
-function add_centromere_listener(species,chr){
-  var centromere_range = has_centromere_positions(species,chr);
+function add_centromere_listener(species){
+  var centromere_range = has_centromere_positions(species);
 
 
   // now add the listener for the select box that does the hiding
