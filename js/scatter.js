@@ -64,14 +64,15 @@ function draw(data){
 
   for (i in chromosomes){
     var chr = chromosomes[i];
+	var centromere_positions, centromere_end = has_centromere_centres(species, chr);
     var single_chr_data = select_for(chr,data);
-    draw_single(species, chr,single_chr_data);
+    draw_single(species, chr, centromere_positions, single_chr_data);
   }
 
 }
 
 // actually draws the panels in the plots
-function draw_single(species, chr, data){
+function draw_single(species, chr, centromere_positions, data){
   "use strict;"
 
   var svg_id = "chr_" + chr;
@@ -134,6 +135,14 @@ var tip = d3.tip()
     var snp_type = get_snp_type(d);
     return default_colour(snp_type);
   })
+  
+  //add within centromere information
+  if (centromere_pos){
+  	svg.selectAll("circle")
+	  .attr("class", function(d){ 
+		  return in_centromere(d, centromere_pos)
+	  })
+  }
 
 
   svg.append("g")
@@ -201,9 +210,9 @@ function add_centromere_listener(species){
 	  console.log(centromere_range[0] + " - " + centromere_range[1]);
     if (this.checked){
       d3.selectAll("circle")
-    //  .filter(function(d,i){
-    //    return (d.position >= centromere_range[0] && d.position <= centromere_range[1]);
-    //  })
+     .filter(
+		 d.class = 
+     })
       .transition()
       .duration(250)
       .style("opacity",0);
@@ -461,4 +470,11 @@ function spinner_opts(){
 		top: '50%', // Top position relative to parent
 		left: '50%' // Left position relative to parent
 	};
+}
+
+function in_centromere(d, centromere_range){
+	if( d.position >= centromere_range[0] && d.position <= centromere_range[1]){
+		return "in_centromere";
+	}
+	return "not_in_centromere";
 }
