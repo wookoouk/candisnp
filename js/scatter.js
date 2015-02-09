@@ -64,7 +64,7 @@ function draw(data){
 
   for (i in chromosomes){
     var chr = chromosomes[i];
-	var centromere_positions, centromere_end = has_centromere_centres(species, chr);
+	var centromere_positions = get_centromere_positions(species, chr);
     var single_chr_data = select_for(chr,data);
     draw_single(species, chr, centromere_positions, single_chr_data);
   }
@@ -136,11 +136,12 @@ var tip = d3.tip()
     return default_colour(snp_type);
   })
   
+  console.log(centromere_positions);
   //add within centromere information
-  if (centromere_pos){
+  if (centromere_positions){
   	svg.selectAll("circle")
 	  .attr("class", function(d){ 
-		  return in_centromere(d, centromere_pos)
+		  return in_centromere(d, centromere_positions)
 	  })
   }
 
@@ -201,18 +202,13 @@ function add_centromere_select(species){
 
 //function that creates button to obscure centromeres when the genome selected allows it
 function add_centromere_listener(species){
-  var centromere_range = has_centromere_positions(species);
 
 
   // now add the listener for the select box that does the hiding
   $('#hide_centromeres').change( function(){
 	  console.log("pressed!");
-	  console.log(centromere_range[0] + " - " + centromere_range[1]);
     if (this.checked){
-      d3.selectAll("circle")
-     .filter(
-		 d.class = 
-     })
+      d3.selectAll(".in_centromere")  
       .transition()
       .duration(250)
       .style("opacity",0);

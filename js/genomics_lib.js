@@ -1,5 +1,4 @@
-function has_centromere_positions(species, chr){
-	console.log(species + " - " + chr);
+function get_centromere_positions(species, chr){
   var centromere_centres = {
 
     'athalianaTair10' :{
@@ -18,14 +17,22 @@ function has_centromere_positions(species, chr){
   }
   };
   if (species in centromere_centres){
-    return [centromere_centres[species][chr] - 10000000,centromere_centres[species][chr] + 10000000];
+    return [centromere_centres[species][chr] - 500000,centromere_centres[species][chr] + 500000];
   }
   else{
     return false;
   }
 }
 
-
+function has_centromere_positions(species){
+	
+	var species_with_centromeres = ['athalianaTair10', 'athalianaTair9']; 
+	
+	if (species_with_centromeres.indexOf(species) >= 0 ){
+		return true;
+	}
+	return false;
+}
 
 
 
