@@ -34,12 +34,24 @@ function bases_to_unit_bases(bases) {
 //send the svg to a string
 function show_svg_code(){
   // Get the d3js SVG element
+
+
   var body = document.body;
-  var svg = body.getElementsByTagName("svg")[0];
+  var plots = body.getElementsByClassName("plot_element");
+  console.log(plots);
+  var xml = '<svg xmlns="http://www.w3.org/2000/svg" id="candisnp_output" width="1000" height="' + (plots.length * 300) + '" >'; //+ get_styles();
+  for (i = 0; i < plots.length; i++){
+	  console.log(i);
+	  xml = xml + (new XMLSerializer).serializeToString(plots[i]);
+  }
+  xml = xml + '</svg>';
+  var blob = new Blob([xml], {type: "image/svg+xml"});
+  saveAs(blob, "CandiSNP_Output.svg");
   // Extract the data as SVG text string
-  console.log((new XMLSerializer).serializeToString(svg));
-  return (new XMLSerializer).serializeToString(svg);
+  //console.log((new XMLSerializer).serializeToString(svgs[i]));
+  return true;
 }
+
 
 function ratio_current_chromosome_to_longest(species,chr){
   var lengths = genome_lengths(species);
@@ -55,27 +67,32 @@ function ratio_current_chromosome_to_longest(species,chr){
 function draw(data){
   var chromosomes = get_chromosomes(data);
   var species = $('#species_select').val();
-
-
+  
   if (has_centromere_positions(species)){
     add_centromere_select(species);
   }
 
+  var svg = d3.select("body")
+  .append('svg')
+  .attr('width', 1000)
+  .attr('height', (300 * chromosomes.length) );
 
+  var count = 0;
   for (i in chromosomes){
     var chr = chromosomes[i];
 	var centromere_positions = get_centromere_positions(species, chr);
     var single_chr_data = select_for(chr,data);
-    draw_single(species, chr, centromere_positions, single_chr_data);
+    draw_single(species, chr, centromere_positions, single_chr_data, svg, count);
+	count = count + 1;
   }
 
 }
 
 // actually draws the panels in the plots
-function draw_single(species, chr, centromere_positions, data){
+function draw_single(species, chr, centromere_positions, data, svg, count){
   "use strict;"
 
-  var svg_id = "chr_" + chr;
+  var plot_id = "chr_" + chr;
   var ratio = ratio_current_chromosome_to_longest(species, chr);
   var margin = 50, width = (ratio * 1000), height = 300;
   //var x_extent = d3.extent(data, function(d){return d.position});
@@ -107,11 +124,13 @@ var tip = d3.tip()
 	  Alternate base: " + d.alternate_base + "<br />";
   })
 
-  var svg = d3.select("body")
-  .append('svg')
 
-
-  svg.attr("id", svg_id)
+  var g = svg.append("g");
+  
+  g.attr('class', 'plot_element');
+  g.attr("transform", "translate(0," + ( count * 300) +  ")");
+  
+  g.attr("id", plot_id)
   .attr('width',width)
   .attr('height',height)
   .selectAll("circle")
@@ -119,17 +138,17 @@ var tip = d3.tip()
   .enter()
   .append("circle");
 
-  svg.selectAll("circle")
+  g.selectAll("circle")
   .attr("cx", function(d){return x_scale(d.position)})
   .attr("cy", function(d){return y_scale(d.allele_freq)})
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
-  svg.selectAll("circle")
+  g.selectAll("circle")
   .attr("r", 0);
 
   //add class to circles
-  svg.selectAll("circle")
+  g.selectAll("circle")
   .attr("class", function(d){ return get_snp_type(d) } )
   .style("fill", function(d){
     var snp_type = get_snp_type(d);
@@ -139,31 +158,31 @@ var tip = d3.tip()
   console.log(centromere_positions);
   //add within centromere information
   if (centromere_positions){
-  	svg.selectAll("circle")
+  	g.selectAll("circle")
 	  .attr("class", function(d){ 
 		  return in_centromere(d, centromere_positions)
 	  })
   }
 
 
-  svg.append("g")
+  g.append("g")
   .attr("class","x axis")
   .attr("transform", "translate(0," + (height - margin) + " )")
   .call(x_axis);
   
-svg.append("text")
+ g.append("text")
     .attr("class", "x label")
    // .attr("text-anchor", "end")
     .attr("x", 50)
     .attr("y", height - 6)
     .text("Chromosome/contig: " + chr);
 
-  svg.append("g")
+  g.append("g")
   .attr("class","y axis")
   .attr("transform", "translate(" + margin + ",0 )")
   .call(y_axis);
 
-svg.append("text")
+ g.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "end")
     .attr("y", 35)
@@ -185,12 +204,12 @@ svg.append("text")
  //   .attr("r",5);
  // });
 
-  svg.selectAll("circle")
+  g.selectAll("circle")
   .transition()
   .delay(function(d,i){ return i / data.length * 1000; })
   .attr("r",5);
 
-svg.call(tip);
+ g.call(tip);
 
 }
 
