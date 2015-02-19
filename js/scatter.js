@@ -249,8 +249,8 @@ var tip = d3.tip()
 
 //add the centromere select button
 function add_centromere_select(species){
-  $('#hide_centromeres_container').append( '<form>Hide Centromere Region SNPs <input type="checkbox" id="hide_centromeres" name="hide_centromeres" value="true"></form>');
-  add_centromere_listener(species);
+  	  $('#hide_centromeres_container').append( '<form>Hide Centromere Region SNPs <input type="checkbox" id="hide_centromeres" name="hide_centromeres" value="true"></form>');
+  	add_centromere_listener(species);
 }
 
 //function that creates button to obscure centromeres when the genome selected allows it
@@ -437,13 +437,9 @@ function headers_checker(file_contents, done){
       var lines = file_contents.split("\n");
       var headers = chomp(lines[0]).split(",");
       if ( all_in_array(["Chr", "Pos", "Alt", "Ref", "Allele_Freq"], headers) ){
-        // console.log("returning true");
         return done();
-        // return cb(true);
-        // return true;
       }
       else{
-        console.log("returning false");
         return done("File doesn't have proper headings. Please check the help and try again");
       }
 }
@@ -479,6 +475,7 @@ Dropzone.options.mySecondAwesomeDropzone = {
       addRemoveLinks: true,
       acceptedFiles: "text/csv",
       uploadprogress: true,
+	  maxFiles: 1,
       // params: {"organism": $('#species_select').val(), "file": "filename" },
       init: add_species_to_form,
       accept: function(file, done) {
@@ -500,6 +497,10 @@ Dropzone.options.mySecondAwesomeDropzone = {
       },
 	  canceled: function(file){
 		  $('.spinner').remove();
+	  },
+	  reset: function(file){    
+		  $("svg").remove();
+		  $("#output").css("display", "none");
 	  } 
 };
 
