@@ -30,26 +30,59 @@ function bases_to_unit_bases(bases) {
     return bases.toFixed(1)+' '+units[u];
 };
 
+//get the svg as a string
 
-//send the svg to a string
-function show_svg_code(){
+function get_svg_string(plots){
+    // Get the d3js SVG element
+  	var xml = '<svg xmlns="http://www.w3.org/2000/svg" id="candisnp_output" width="1000" height="' + (plots.length * 300) + '" >'; //+ 
+    for (i = 0; i < plots.length; i++){
+  	  xml = xml + (new XMLSerializer).serializeToString(plots[i]);
+    }
+    xml = xml + '</svg>';
+	return xml;
+}
+
+//send the svg to a file
+function save_svg(){
   // Get the d3js SVG element
-
-
   var body = document.body;
   var plots = body.getElementsByClassName("plot_element");
-  console.log(plots);
-  var xml = '<svg xmlns="http://www.w3.org/2000/svg" id="candisnp_output" width="1000" height="' + (plots.length * 300) + '" >'; //+ get_styles();
-  for (i = 0; i < plots.length; i++){
-	  console.log(i);
-	  xml = xml + (new XMLSerializer).serializeToString(plots[i]);
-  }
-  xml = xml + '</svg>';
+  var xml = get_svg_string(plots);
   var blob = new Blob([xml], {type: "image/svg+xml"});
   saveAs(blob, "CandiSNP_Output.svg");
-  // Extract the data as SVG text string
-  //console.log((new XMLSerializer).serializeToString(svgs[i]));
   return true;
+}
+
+//send the svg to the external CGI script and convert to PNG
+function save_png(){
+    var body = document.body;
+    var plots = body.getElementsByClassName("plot_element");
+	var form = document.getElementById("svgform");
+	form['output_format'].value = 'png';
+	form['data'].value = get_svg_string(plots);
+	form.submit();
+}
+
+
+
+//save the json data as a csv file
+function save_table(){
+	console.log(pageData[0]);
+	var string =  ' "Chr", "Pos", "Alt", "Ref", "Allele_Freq", "Is_CTGA", "Is_Synonymous", "In_CDS", "Change", "Effect"\n';
+	//console.log(string);
+	for (i in pageData){
+		var snp = pageData[i];
+		string = string + snp_to_string(snp);
+	}
+    var blob = new Blob([string], {type: "text/csv"});
+    saveAs(blob, "CandiSNP_Output.csv");
+    return true;
+}
+
+function snp_to_string(snp){
+	var string = "";
+	string = string + [snp.chromosome, snp.position, snp.alternate_base, snp.reference_base, snp.allele_freq, snp.is_ctga, snp.is_synonymous, snp.in_cds, snp.change, snp.effect].join(",") + "\n";
+	return string;
 }
 
 
@@ -155,13 +188,14 @@ var tip = d3.tip()
     return default_colour(snp_type);
   })
   
-  console.log(centromere_positions);
+  //console.log(centromere_positions);
   //add within centromere information
   if (centromere_positions){
   	g.selectAll("circle")
-	  .attr("class", function(d){ 
-		  return in_centromere(d, centromere_positions)
-	  })
+	  //.attr("class", function(d){ 
+	//	  return in_centromere(d, centromere_positions)
+	 // })
+		  .classed('in_centromere', function(d) {return in_centromere(d, centromere_positions);} )
   }
 
 
@@ -436,6 +470,8 @@ function add_species_to_form(){
   })
 }
 
+var pageData = null;
+
 Dropzone.options.mySecondAwesomeDropzone = {
       paramName: "file",  // The name that will be used to transfer the file
       maxFilesize: 200, // MB
@@ -458,6 +494,7 @@ Dropzone.options.mySecondAwesomeDropzone = {
         $("#output").css("display", "block");
         //d3.json(response_json, draw);
 		var data = JSON.parse( response_json );
+		pageData = data;
         draw(data);
 		$("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
       },
@@ -489,7 +526,7 @@ function spinner_opts(){
 
 function in_centromere(d, centromere_range){
 	if( d.position >= centromere_range[0] && d.position <= centromere_range[1]){
-		return "in_centromere";
+		return true;
 	}
-	return "not_in_centromere";
+	return false;
 }

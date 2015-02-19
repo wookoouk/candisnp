@@ -105,7 +105,7 @@
   <div id="download_buttons">
   <div class="btn btn-block btn-lg btn-primary" id="save_as_svg">Download SVG</div>
     <div class="btn btn-block btn-lg btn-primary" id="save_as_png">Download PNG</div>
-    <div class="btn btn-block btn-lg btn-primary" id="save_text">Download Annotated SNPs</div>
+    <div class="btn btn-block btn-lg btn-primary" id="save_as_table">Download Annotated SNPs</div>
   </div>
 </div>
 </div>
@@ -122,21 +122,27 @@ $("#non_annotated_region_picker").spectrum(colour_settings("#aaaaaa","NON_ANNOTA
 </script>
 
 
+<!-- Hidden <FORM> to submit the SVG data to the server, which will convert it to SVG/PDF/PNG downloadable file.
+     The form is populated and submitted by the save_png() JavaScript below. -->
+<form id="svgform" method="post" action="cgi/download.cgi">
+ <input type="hidden" id="output_format" name="output_format" value="">
+ <input type="hidden" id="data" name="data" value="">
+</form>
 
-<!--  <script>
-  $("#upload").click( function(){
-    $("#output").css("display", "block");
-    d3.json("data.json", draw);
-    $("html, body").delay(100).animate({scrollTop: $('#output').offset().top }, 2000);
-  })
-
-  </script>
--->
 
   <script>
-  $("#save_as_svg").click(function() { show_svg_code("svg"); });
+  $("#save_as_svg").click(function() { save_svg(); });
   </script>
 
+  <script>
+   $('#save_as_png').click( function(){ save_png(); });
+  </script>
+   
+   <script>
+    $('#save_as_table').click( function(){ save_table(); });
+   </script>
+  
+   
 
 <script>
   var ohcanada = new Audio('easter_eggs/oh_canada.mp3');
