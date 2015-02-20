@@ -106,7 +106,7 @@ function draw(data){
     add_centromere_select(species);
   }
 
-  var svg = d3.select("body")
+  var svg = d3.select("#results")
   .append('svg')
   .attr('width', 1000)
   .attr('height', (300 * chromosomes.length) );

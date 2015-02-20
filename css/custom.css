@@ -1,3 +1,7 @@
+#wrapper{
+	margin: 20px;
+}
+
 h1 {
   font-size: 32px;
   color: #34BEDA;
@@ -5,6 +9,20 @@ h1 {
   width: 700px;
   float: left;
 }
+
+h3 {
+	font-size: 20px;
+}
+
+h4 {
+	font-size: 16px;
+}
+
+p, ul{
+	font-size: 14px;
+	line-height: 1.2;
+}
+
 
 #header{
   max-width: 1000px;
@@ -19,6 +37,10 @@ h1 {
   float: right;
   color:#8E8F98;
   padding-bottom: 50px;
+}
+
+#help {
+	width: 900px;
 }
 
 #logo_pic {
@@ -52,6 +74,12 @@ h1 {
   height: 250px;
   background-color: #eee;
 
+}
+
+
+#cite_us{
+	font-size: 16px;
+	line-height: 1.2;
 }
 
 svg {
