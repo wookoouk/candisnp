@@ -42,6 +42,7 @@ function get_svg_string(plots){
 	return xml;
 }
 
+
 //send the svg to a file
 function save_svg(){
   // Get the d3js SVG element
@@ -188,14 +189,10 @@ var tip = d3.tip()
     return default_colour(snp_type);
   })
   
-  //console.log(centromere_positions);
   //add within centromere information
   if (centromere_positions){
   	g.selectAll("circle")
-	  //.attr("class", function(d){ 
-	//	  return in_centromere(d, centromere_positions)
-	 // })
-		  .classed('in_centromere', function(d) {return in_centromere(d, centromere_positions);} )
+    .classed('in_centromere', function(d) {return in_centromere(d, centromere_positions);} )
   }
 
 
@@ -206,7 +203,6 @@ var tip = d3.tip()
   
  g.append("text")
     .attr("class", "x label")
-   // .attr("text-anchor", "end")
     .attr("x", 50)
     .attr("y", height - 6)
     .text("Chromosome/contig: " + chr);
@@ -222,21 +218,18 @@ var tip = d3.tip()
     .attr("y", 35)
     .attr("x", "110")
     //.attr("transform", "rotate(-90)")
-    .text("Allele Frequency");
+  .text("Allele Frequency");
   
+  d3.selectAll('.axis path')
+  .style("fill","none")
+  .style("stroke", "#000")
+  .style("shape-rendering", "crispEdges");
   
+  d3.selectAll('.axis line')
+  .style("fill","none")
+  .style("stroke", "#000")
+  .style("shape-rendering", "crispEdges");
 
-//  d3.selectAll("circle")
- // .on("mouseover", function(d){
- //   d3.select(this)
- //   .transition()
- //   .attr("r",9);
- // })
- // .on("mouseout", function(d){
- //   d3.select(this)
- //   .transition()
- //   .attr("r",5);
- // });
 
   g.selectAll("circle")
   .transition()
@@ -249,8 +242,10 @@ var tip = d3.tip()
 
 //add the centromere select button
 function add_centromere_select(species){
-  	  $('#hide_centromeres_container').append( '<form>Hide Centromere Region SNPs <input type="checkbox" id="hide_centromeres" name="hide_centromeres" value="true"></form>');
-  	add_centromere_listener(species);
+	if($('#hide_centromeres').length == 0){
+  	  	$('#hide_centromeres_container').append( '<form>Hide Centromere Region SNPs <input type="checkbox" id="hide_centromeres" name="hide_centromeres" value="true"></form>');
+  		add_centromere_listener(species);
+	}
 }
 
 //function that creates button to obscure centromeres when the genome selected allows it
@@ -259,7 +254,6 @@ function add_centromere_listener(species){
 
   // now add the listener for the select box that does the hiding
   $('#hide_centromeres').change( function(){
-	  console.log("pressed!");
     if (this.checked){
       d3.selectAll(".in_centromere")  
       .transition()
