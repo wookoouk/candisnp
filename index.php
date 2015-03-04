@@ -67,7 +67,13 @@
     <?php if (isset($_POST['galaxyData'])) : ?>
 
         <script>
+            var outputDiv = $("#output");
+            outputDiv.css("display", "block");
+            var data = JSON.parse(response_json);
+            pageData = data;
             draw(<?php echo $_POST['galaxyData']; ?>);
+            $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
+
         </script>
 
     <?php else : ?>

@@ -503,9 +503,6 @@ Dropzone.options.mySecondAwesomeDropzone = {
         draw(data);
         $("html, body").delay(100).animate({scrollTop: $('#output').offset().top}, 2000);
     },
-    error: function (file) {
-        $('.spinner').remove();
-    },
     canceled: function (file) {
         $('.spinner').remove();
     },
