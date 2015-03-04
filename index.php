@@ -64,16 +64,18 @@
     </div>
 
 
-    <?php if (isset($_POST['galaxyData'])) : ?>
+    <?php if (isset($_GET['session'])) : ?>
 
         <script>
-            var outputDiv = $("#output");
-            outputDiv.css("display", "block");
-            var data = JSON.parse(<?php echo $_POST['galaxyData']; ?>);
-            pageData = data;
-            draw(data);
-            $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
-
+            var sessionID = "<?php echo $_GET['session']; ?>";
+            $.get('http://candisnp.tsl.ac.uk:8080/sessionID', function (data) {
+                var outputDiv = $("#output");
+                outputDiv.css("display", "block");
+                var data = JSON.parse(data);
+                pageData = data;
+                draw(data);
+                $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
+            });
         </script>
 
     <?php else : ?>
