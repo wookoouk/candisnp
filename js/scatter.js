@@ -102,12 +102,15 @@ function ratio_current_chromosome_to_longest(species, chr) {
 
 //splits data objext into single sets per chromosome
 //adds species specific buttons
-function draw(data) {
+function draw(data, species) {
 
     console.log('going to try and draw', data);
 
     var chromosomes = get_chromosomes(data);
-    var species = $('#species_select').val();
+
+    if (!species) {
+        species = $('#species_select').val();
+    }
 
     if (has_centromere_positions(species)) {
         add_centromere_select(species);

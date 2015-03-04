@@ -64,16 +64,17 @@
     </div>
 
 
-    <?php if (isset($_GET['session'])) : ?>
+    <?php if (isset($_GET['session']) && isset($_GET['species'])) : ?>
 
         <script>
             var sessionID = "<?php echo $_GET['session']; ?>";
+            var species = "<?php echo $_GET['species']; ?>";
             $.get('http://candisnp.tsl.ac.uk:8080/'+sessionID, function (returnData) {
                 var outputDiv = $("#output");
                 outputDiv.css("display", "block");
                 var data = JSON.parse(returnData);
                 pageData = data;
-                draw(data);
+                draw(data, species);
                 $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
             });
         </script>
