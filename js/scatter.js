@@ -9,8 +9,8 @@ function get_chromosomes(data) {
 
 //get the data for a given chromosome
 function select_for(chr, data) {
-    var result = []
-    for (i in data) {
+    var result = [];
+    for (var i in data) {
         if (data[i].chromosome == chr) {
             result.push(data[i]);
         }
@@ -27,14 +27,14 @@ function bases_to_unit_bases(bases) {
         ++u;
     } while (bases >= 1000);
     return bases.toFixed(1) + ' ' + units[u];
-};
+}
 
 //get the svg as a string
 
 function get_svg_string(plots) {
     // Get the d3js SVG element
     var xml = '<svg xmlns="http://www.w3.org/2000/svg" id="candisnp_output" width="1000" height="' + (plots.length * 300) + '" >'; //+
-    for (i = 0; i < plots.length; i++) {
+    for (var i = 0; i < plots.length; i++) {
         xml = xml + (new XMLSerializer).serializeToString(plots[i]);
     }
     xml = xml + '</svg>';
@@ -131,7 +131,6 @@ function draw(data) {
 
 // actually draws the panels in the plots
 function draw_single(species, chr, centromere_positions, data, svg, count) {
-    "use strict;"
 
     var plot_id = "chr_" + chr;
     var ratio = ratio_current_chromosome_to_longest(species, chr);
@@ -204,7 +203,7 @@ function draw_single(species, chr, centromere_positions, data, svg, count) {
         .style("fill", function (d) {
             var snp_type = get_snp_type(d);
             return default_colour(snp_type);
-        })
+        });
 
     //add within centromere information
     if (centromere_positions) {
@@ -425,10 +424,8 @@ function all_in_array(needed, to_check) {
         }
     }
 
-    if (total == needed.length) {
-        return true;
-    }
-    return false;
+    return total == needed.length;
+
 }
 
 
@@ -466,7 +463,7 @@ function file_ok(file, done) {
         reader.onload = function (e) {
             var file_contents = reader.result;
             headers_checker(file_contents, done);
-        }
+        };
         reader.readAsText(file);
     } else {
         done('The File APIs are not fully supported by your browser. Please try a different browser');
@@ -501,19 +498,20 @@ Dropzone.options.mySecondAwesomeDropzone = {
 
     },
     success: function (file, response_json) {
+        var out = $("#output");
         //console.log(response_json);
         $('.spinner').remove();
-        $("#output").css("display", "block");
+        out.css("display", "block");
         //d3.json(response_json, draw);
         var data = JSON.parse(response_json);
         pageData = data;
         draw(data);
-        $("html, body").delay(100).animate({scrollTop: $('#output').offset().top}, 2000);
+        $("html, body").delay(100).animate({scrollTop: out.offset().top}, 2000);
     },
-    canceled: function (file) {
+    canceled: function () {
         $('.spinner').remove();
     },
-    reset: function (file) {
+    reset: function () {
         $("svg").remove();
         $("#output").css("display", "none");
     }
@@ -541,8 +539,6 @@ function spinner_opts() {
 }
 
 function in_centromere(d, centromere_range) {
-    if (d.position >= centromere_range[0] && d.position <= centromere_range[1]) {
-        return true;
-    }
-    return false;
+    return !!(d.position >= centromere_range[0] && d.position <= centromere_range[1]);
+
 }
