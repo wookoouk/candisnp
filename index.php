@@ -72,7 +72,6 @@
                 var outputDiv = $("#output");
                 outputDiv.css("display", "block");
                 var data = JSON.parse(dataBack);
-                console.log(data);
                 pageData = data;
                 draw(data);
                 $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
