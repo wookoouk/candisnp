@@ -68,10 +68,10 @@
 
         <script>
             var sessionID = "<?php echo $_GET['session']; ?>";
-            $.get('http://candisnp.tsl.ac.uk:8080/' + sessionID, function (dataBack) {
+            $.get('http://candisnp.tsl.ac.uk:8080/'+sessionID, function (returnData) {
                 var outputDiv = $("#output");
                 outputDiv.css("display", "block");
-                var data = JSON.parse(dataBack);
+                var data = JSON.parse(returnData);
                 pageData = data;
                 draw(data);
                 $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
