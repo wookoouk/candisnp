@@ -67,7 +67,9 @@
     <?php if (isset($_POST['galaxyData'])) : ?>
 
         <form>
-            <input type="text" value="<?php echo $_POST['galaxyData']; ?>"
+            <label>
+                <input type="text" value="<?php echo $_POST['galaxyData']; ?>"
+            </label>
         </form>
 
         <script>
