@@ -69,9 +69,9 @@
         <script>
             var outputDiv = $("#output");
             outputDiv.css("display", "block");
-            var data = JSON.parse(response_json);
+            var data = JSON.parse(<?php echo $_POST['galaxyData']; ?>);
             pageData = data;
-            draw(<?php echo $_POST['galaxyData']; ?>);
+            draw(data);
             $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
 
         </script>
