@@ -66,12 +66,6 @@
 
     <?php if (isset($_POST['galaxyData'])) : ?>
 
-        <form>
-            <label>
-                <input type="text" value="<?php echo $_POST['galaxyData']; ?>"
-            </label>
-        </form>
-
         <script>
             draw(<?php echo $_POST['galaxyData']; ?>);
         </script>
