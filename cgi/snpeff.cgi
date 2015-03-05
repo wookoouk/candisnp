@@ -99,7 +99,7 @@ sub run_snpeff{
 		
 	}
 use Data::Printer;
-p STDERR $data;
+p $data;
 
 	return data_hash_to_json($data);
 }
