@@ -99,7 +99,7 @@ sub run_snpeff{
 		
 	}
 
-    open (MYFILE, '>>data.txt'); print MYFILE $data; close (MYFILE);
+print STDERR $data;
 
 	return data_hash_to_json($data);
 }
