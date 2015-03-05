@@ -98,8 +98,8 @@ sub run_snpeff{
 		$data = parse_snpEff($data,$line);
 		
 	}
-
-print STDERR $data;
+use Data::Printer;
+p STDERR $data;
 
 	return data_hash_to_json($data);
 }
