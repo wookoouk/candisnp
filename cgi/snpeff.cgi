@@ -92,14 +92,18 @@ sub run_snpeff{
 	print STDERR "************ Starting SNPeff ***************\n\n";
 	my $pid = open2($chld_out, $chld_in, "java -jar -Xmx2g $bin/snpEff.jar -c $bin/snpEff.config -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr $species $tmpfile");
 	while (my $line = <$chld_out>){
-		#next if $line =~ m/^#/;
-		#next if $line =~ m/^\n$/;
+		next if $line =~ m/^#/;
+		next if $line =~ m/^\n$/;
 		chomp $line;
 		$data = parse_snpEff($data,$line);
+
+
+		open (MYFILE, '>>tmp/data.txt');
+		print MYFILE $line;
+		close (MYFILE);
 		
 	}
-use Data::Printer;
-p $data;
+
 
 	return data_hash_to_json($data);
 }
