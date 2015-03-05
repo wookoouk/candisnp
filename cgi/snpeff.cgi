@@ -98,6 +98,9 @@ sub run_snpeff{
 		$data = parse_snpEff($data,$line);
 		
 	}
+	open(my $fh, '>', 'report.txt');
+    print $fh $data;
+    close $fh;
 	return data_hash_to_json($data);
 }
 

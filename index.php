@@ -39,8 +39,9 @@
     <div id="header">
         <h1><span id="c">C</span>andi<span style="color:#FFB416">SNP:</span> <br/>identifying candidate SNPs in genomes
         </h1>
-        <a href="http://www.eric-carle.com/home.html"><img id="logo_pic" src="img/logo.png"
-                                                           title="&lsaquo;Miam miam!&rsaquo; dit la chenille qui fait des trous"></img></a>
+        <a href="http://www.eric-carle.com/home.html">
+            <img id="logo_pic" src="img/logo.png" title="&lsaquo;Miam miam!&rsaquo; dit la chenille qui fait des trous"/>
+        </a>
 
         <div id="intro" class="div-text"><p><span style="color:#34BEDA">Candi</span><span
                     style="color:#FFB416">SNP</span> classifies, annotates and visualises SNPs on genomes. Provide it
