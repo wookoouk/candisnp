@@ -98,7 +98,7 @@ sub run_snpeff{
 		$data = parse_snpEff($data,$line);
 
 
-		open (MYFILE, '>>tmp/data.txt');
+		open (MYFILE, ">>$dirname/../tmp/data.txt");
 		print MYFILE $line;
 		close (MYFILE);
 		
