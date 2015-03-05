@@ -97,14 +97,7 @@ sub run_snpeff{
 		chomp $line;
 		$data = parse_snpEff($data,$line);
 
-
-		open (MYFILE, ">>$dirname/../tmp/data.txt");
-		print MYFILE $line;
-		close (MYFILE);
-		
 	}
-
-
 	return data_hash_to_json($data);
 }
 
