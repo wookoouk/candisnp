@@ -73,8 +73,7 @@
             $.getJSON('http://candisnp.tsl.ac.uk:8080/' + sessionID, function (json) {
                 var outputDiv = $("#output");
                 outputDiv.css("display", "block");
-                pageData = json;
-//                pageData = JSON.parse(json);
+                pageData = JSON.parse(json);
                 draw(pageData, species);
                 $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
             });
