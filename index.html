@@ -64,22 +64,6 @@
 
     </div>
 
-
-    <?php if (isset($_GET['session']) && isset($_GET['species'])) : ?>
-
-        <script>
-            var sessionID = "<?php echo $_GET['session']; ?>";
-            var species = "<?php echo $_GET['species']; ?>";
-            $.getJSON('http://candisnp.tsl.ac.uk:8080/' + sessionID, function (json) {
-                var outputDiv = $("#output");
-                outputDiv.css("display", "block");
-                pageData = JSON.parse(json);
-                draw(pageData, species);
-                $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
-            });
-        </script>
-
-    <?php else : ?>
         <div id="input">
             <div class="blue_box">
                 <h2 class="input_h2">1. Select the organism &amp; genome version</h2>
@@ -111,7 +95,6 @@
             </div>
         </div>
         <!--input-->
-    <?php endif; ?>
 
 
     <div id="output">
@@ -318,6 +301,34 @@
             ohcanada.pause();
         })
     </script>
+    
+     <script>
+        
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+             return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        
+        var sessionID = getParameterByName('session');
+        var species = getParameterByName('species');
+        
+        if(sessionID && species && sessionID > 0 && species > 0){
+            
+            $('#input').hide();
+            
+            $.getJSON('http://candisnp.tsl.ac.uk:8080/' + sessionID, function (json) {
+                var outputDiv = $("#output");
+                outputDiv.css("display", "block");
+                pageData = JSON.parse(json);
+                draw(pageData, species);
+                $("html, body").delay(100).animate({scrollTop: outputDiv.offset().top}, 2000);
+            });
+        }
+        
+        
+        </script>
 
 
 </div>
