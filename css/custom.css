@@ -1,6 +1,3 @@
-#wrapper{
-	margin: 20px;
-}
 
 h1 {
   font-size: 32px;
@@ -23,24 +20,10 @@ p, ul{
 	line-height: 1.2;
 }
 
-
-#header{
-  max-width: 1000px;
-}
-
-#intro {
-  width: 700px;
-  float: left;
-}
-
 #version_text {
   float: right;
   color:#8E8F98;
   padding-bottom: 50px;
-}
-
-#help {
-	width: 900px;
 }
 
 #logo_pic {
@@ -80,10 +63,6 @@ p, ul{
 #cite_us{
 	font-size: 16px;
 	line-height: 1.2;
-}
-
-svg {
-  width: 1000px;
 }
 
 #input {
