@@ -16,32 +16,46 @@
 </head>
 <body>
 <div class="container">
-    <div id="header">
-        <h1><span id="c">C</span>andi<span style="color:#FFB416">SNP:</span> <br/>identifying candidate SNPs in genomes
-        </h1>
-        <a href="http://www.eric-carle.com/home.html">
-            <img id="logo_pic" src="img/logo.png"
-                 title="&lsaquo;Miam miam!&rsaquo; dit la chenille qui fait des trous"/>
-        </a>
+    <div class="row">
+        <div class="col-sm-10">
+            <div id="header">
+                <h1>
+                    <span id="c">C</span>andi<span style="color:#FFB416">SNP:</span> <br/>identifying candidate SNPs in
+                    genomes
+                </h1>
 
-        <div id="intro" class="div-text"><p><span style="color:#34BEDA">Candi</span><span
-                style="color:#FFB416">SNP</span> classifies, annotates and visualises SNPs on genomes. Provide it
-            with a list of SNP positions and allele frequencies and <span style="color:#34BEDA">Candi</span><span
-                    style="color:#FFB416">SNP</span> will return the type of each SNP and an interactive visualisation
-            that you can explore to identify potential causative mutations. </p>
+                <div id="intro" class="div-text"><p><span style="color:#34BEDA">Candi</span><span
+                        style="color:#FFB416">SNP</span> classifies, annotates and visualises SNPs on genomes. Provide
+                    it
+                    with a list of SNP positions and allele frequencies and <span
+                            style="color:#34BEDA">Candi</span><span
+                            style="color:#FFB416">SNP</span> will return the type of each SNP and an interactive
+                    visualisation
+                    that you can explore to identify potential causative mutations. </p>
 
-            <p id="cite_us">
-                If you use <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> please cite:
-                Etherington, Monaghan <em>et al</em> "Mapping mutations in plant genomes with the user-friendly web
-                application CandiSNP." <a href="http://www.plantmethods.com/content/10/1/306/abstract">Plant Methods
-                2014, 10:306. doi:10.1186/s13007-014-0041-7</a>.
-            </p>
+                    <p id="cite_us">
+                        If you use <span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> please
+                        cite:
+                        Etherington, Monaghan <em>et al</em> "Mapping mutations in plant genomes with the user-friendly
+                        web
+                        application CandiSNP." <a href="http://www.plantmethods.com/content/10/1/306/abstract">Plant
+                        Methods
+                        2014, 10:306. doi:10.1186/s13007-014-0041-7</a>.
+                    </p>
 
+                </div>
+
+                <hr>
+
+                <div id="version_text">version 0.3.0 - "la chenille charmant"</div>
+            </div>
         </div>
-
-        <hr>
-
-        <div id="version_text">version 0.3.0 - "la chenille charmant"</div>
+        <div class="col-sm-2">
+            <a href="http://www.eric-carle.com/home.html">
+                <img id="logo_pic" src="img/logo.png"
+                     title="&lsaquo;Miam miam!&rsaquo; dit la chenille qui fait des trous"/>
+            </a>
+        </div>
 
     </div>
 
@@ -121,7 +135,7 @@
 
         <p><span style="color:#34BEDA">Candi</span><span style="color:#FFB416">SNP</span> works on pre-processed,
             filtered, high-confidence SNPs that you provide, there are lots of ways of preparing SNP data. Here are some
-            hints on how to go about this:
+            hints on how to go about this:</p>
         <ul>
             <li>The simplest way is with the spreadsheet or VCF file that is provided by your sequence service, if you
                 employed one to do SNP calls for you. These files can be edited in Excel or another spreadsheet program
@@ -136,7 +150,7 @@
                         href="https://github.com/danmaclean/candisnp/blob/master/pileup_to_snps.rb">linked here</a>.
             </li>
         </ul>
-        </p>
+
 
         <h4>2. Selecting a genome</h4>
 
