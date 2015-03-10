@@ -115,7 +115,7 @@ function draw(data, species) {
             .append('svg')
             .attr('width', '100%')
             .attr('height', 'auto')
-            .attr('viewBox', '0 0 1000 300')
+            .attr('viewBox', '0 0 1000 ' + (300 * chromosomes.length))
     //.attr('width', 1000)
     //.attr('height', (300 * chromosomes.length))
         ;
