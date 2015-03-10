@@ -274,7 +274,10 @@
         var sessionID = getParameterByName('session');
         var species = getParameterByName('species');
 
-        if (sessionID && species && sessionID > 0 && species > 0) {
+        console.log('session', sessionID);
+        console.log('species', species);
+
+        if (sessionID && species && sessionID.length > 0 && species.length > 0) {
 
             $('#input').hide();
 
