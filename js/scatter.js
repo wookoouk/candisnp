@@ -117,9 +117,10 @@ function draw(data, species) {
     }
 
     var svg = d3.select("#results")
-        .append('svg')
-        .attr('width', 1000)
-        .attr('height', (300 * chromosomes.length));
+            .append('svg')
+    //.attr('width', 1000)
+    //.attr('height', (300 * chromosomes.length))
+        ;
 
     var count = 0;
     for (i in chromosomes) {
@@ -486,7 +487,7 @@ var pageData = null;
 Dropzone.options.mySecondAwesomeDropzone = {
     paramName: "file",  // The name that will be used to transfer the file
     maxFilesize: 200, // MB
-    url: "cgi/snpeff.cgi",
+    url: "resultsi",
     addRemoveLinks: true,
     acceptedFiles: "text/csv",
     uploadprogress: true,

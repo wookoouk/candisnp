@@ -19,6 +19,16 @@ p, ul {
     line-height: 1.2;
 }
 
+#results {
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+}
+
+svg {
+    max-height: 100%; /* chrome needs it  */
+}
+
 #version_text {
     float: right;
     color: #8E8F98;
