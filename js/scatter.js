@@ -118,8 +118,8 @@ function draw(data, species) {
 
     var svg = d3.select("#results")
             .append('svg')
-    //.attr('width', 1000)
-    //.attr('height', (300 * chromosomes.length))
+            //.attr('width', 1000)
+            .attr('height', (300 * chromosomes.length))
         ;
 
     var count = 0;
