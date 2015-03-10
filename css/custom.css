@@ -1,99 +1,94 @@
 
 h1 {
-  font-size: 32px;
-  color: #34BEDA;
-  font-weight: 900;
-  float: left;
+    font-size: 32px;
+    color: #34BEDA;
+    font-weight: 900;
+    float: left;
 }
 
 h3 {
-	font-size: 20px;
+    font-size: 20px;
 }
 
 h4 {
-	font-size: 16px;
+    font-size: 16px;
 }
 
-p, ul{
-	font-size: 14px;
-	line-height: 1.2;
+p, ul {
+    font-size: 14px;
+    line-height: 1.2;
 }
 
 #version_text {
-  float: right;
-  color:#8E8F98;
-  padding-bottom: 50px;
+    float: right;
+    color: #8E8F98;
 }
 
 #logo_pic {
-  height: 200px;
-  width: auto;
-  box-shadow: 10px 10px 5px #888888;
-  border-radius: 20px;
-  float: right;
+    height: 200px;
+    width: auto;
+    box-shadow: 10px 10px 5px #888888;
+    border-radius: 20px;
+    float: right;
 
 }
 
-.input_h2{
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  margin-top: 2px;
+.input_h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    margin-top: 2px;
 }
 
-.blue_box, .grey_box{
-  border: 1px;
-  /*max-width: 960px;*/
-  /*min-height: 120px;*/
-  margin: 10px;
-  padding: 10px;
-  background-color: #E4F3F7;
-  border-radius: 10px;
+.blue_box, .grey_box {
+    border: 1px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #E4F3F7;
+    border-radius: 10px;
 }
 
-
-.grey_box{
-  height: 250px;
-  background-color: #eee;
+.grey_box {
+    background-color: #eee;
 }
 
-
-#cite_us{
-	font-size: 16px;
-	line-height: 1.2;
+#cite_us {
+    font-size: 16px;
+    line-height: 1.2;
 }
 
 #input {
-  margin-top: 60px;
+    margin-top: 60px;
 }
 
-#spot_colours{
-  float: left;
-  width: 330px;
+#spot_colours {
+    float: left;
+    width: 330px;
 }
 
-#slider_readout{
-  float: left;
-  width: 250px;
-  margin-right: 50px;
-  margin-left: 30px;
+#slider_readout {
+    float: left;
+    width: 250px;
+    margin-right: 50px;
+    margin-left: 30px;
 }
+
 #amount {
-  float:left;
-  width:100px;
+    float: left;
+    width: 100px;
 }
 
-#download_buttons{
-  width: 250px;
-  float: left;
+#download_buttons {
+    width: 250px;
+    float: left;
 }
 
-#output{
-  display: none;
+#output {
+    display: none;
 }
 
-.snp-info{
-	font-size: 16px;
+.snp-info {
+    font-size: 16px;
     color: black;
     background-color: #E4F3F7;
     border-style: solid;
@@ -102,30 +97,30 @@ p, ul{
 }
 
 .d3-tip {
-  line-height: 1;
-  padding: 10px;
-  background: rgba(225, 239, 244, 0.8);
-  color: #000;
-  border-radius: 2px;
+    line-height: 1;
+    padding: 10px;
+    background: rgba(225, 239, 244, 0.8);
+    color: #000;
+    border-radius: 2px;
 }
 
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(225, 239, 244, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(225, 239, 244, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
 }
 
 /* Style northward tooltips differently */
 .d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
 }
 
