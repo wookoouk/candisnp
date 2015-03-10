@@ -72,7 +72,8 @@ svg {
 
 #amount {
     float: left;
-    width: 100px;
+    width: 100%;
+    text-align: center;
 }
 
 #output {
