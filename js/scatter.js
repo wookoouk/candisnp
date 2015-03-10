@@ -87,9 +87,6 @@ function snp_to_string(snp) {
 
 function ratio_current_chromosome_to_longest(species, chr) {
 
-    console.log('here', species, chr);
-
-
     var lengths = genome_lengths(species);
     var current = lengths[chr];
     var keys = Object.keys(lengths);
@@ -103,8 +100,6 @@ function ratio_current_chromosome_to_longest(species, chr) {
 //splits data objext into single sets per chromosome
 //adds species specific buttons
 function draw(data, species) {
-
-    console.log('going to try and draw', data);
 
     var chromosomes = get_chromosomes(data);
 
