@@ -106,29 +106,40 @@
         <div class="grey_box">
             <h2 class="input_h2">Control Panel</h2>
 
-            <div id="spot_colours">
-                Choose spot colours
-                <ul>
-                    <!-- The colour pickers -->
-                    <li><input type='text' id="non_synonymous_in_coding_CT_GA_picker"> Non-synonymous coding CT/GA</li>
-                    <li><input type='text' id="non_synonymous_coding_region_picker"/> Non-synonymous coding</li>
-                    <li><input type='text' id="annotated_region_picker"/> Annotated region</li>
-                    <li><input type='text' id="non_annotated_region_picker"/> Non-annotated region</li>
-                </ul>
-            </div>
-            <div id="slider_readout">
-                <p>Set allele frequency range</p>
+            <div class="row">
 
-                <div id="slider-range"></div>
-                <input type="text" id="amount" readonly>
+                <div class="col-sm-4">
+                    <div id="spot_colours">
+                        Choose spot colours
+                        <ul>
+                            <!-- The colour pickers -->
+                            <li><input type='text' id="non_synonymous_in_coding_CT_GA_picker"> Non-synonymous coding
+                                CT/GA
+                            </li>
+                            <li><input type='text' id="non_synonymous_coding_region_picker"/> Non-synonymous coding</li>
+                            <li><input type='text' id="annotated_region_picker"/> Annotated region</li>
+                            <li><input type='text' id="non_annotated_region_picker"/> Non-annotated region</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div id="slider_readout">
+                        <p>Set allele frequency range</p>
 
-            </div>
+                        <div id="slider-range"></div>
+                        <input type="text" id="amount" readonly>
 
-            <div id="hide_centromeres_container"></div>
-            <div id="download_buttons">
-                <div class="btn btn-block btn-lg btn-primary" id="save_as_svg">Download SVG</div>
-                <div class="btn btn-block btn-lg btn-primary" id="save_as_png">Download PNG</div>
-                <div class="btn btn-block btn-lg btn-primary" id="save_as_table">Download Annotated SNPs</div>
+                    </div>
+
+                    <div id="hide_centromeres_container"></div>
+                </div>
+                <div class="col-sm-4">
+                    <div id="download_buttons">
+                        <div class="btn btn-block btn-lg btn-primary" id="save_as_svg">Download SVG</div>
+                        <div class="btn btn-block btn-lg btn-primary" id="save_as_png">Download PNG</div>
+                        <div class="btn btn-block btn-lg btn-primary" id="save_as_table">Download Annotated SNPs</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
