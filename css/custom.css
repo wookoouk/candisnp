@@ -71,27 +71,27 @@ svg {
     margin-top: 60px;
 }
 
-#spot_colours {
-    float: left;
-    width: 330px;
-}
+/*#spot_colours {*/
+    /*float: left;*/
+    /*width: 330px;*/
+/*}*/
 
-#slider_readout {
-    float: left;
-    width: 250px;
-    margin-right: 50px;
-    margin-left: 30px;
-}
+/*#slider_readout {*/
+    /*float: left;*/
+    /*width: 250px;*/
+    /*margin-right: 50px;*/
+    /*margin-left: 30px;*/
+/*}*/
 
-#amount {
-    float: left;
-    width: 100px;
-}
+/*#amount {*/
+    /*float: left;*/
+    /*width: 100px;*/
+/*}*/
 
-#download_buttons {
-    width: 250px;
-    float: left;
-}
+/*#download_buttons {*/
+/*width: 250px;*/
+/*float: left;*/
+/*}*/
 
 #output {
     display: none;
