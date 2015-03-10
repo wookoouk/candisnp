@@ -44,8 +44,8 @@ p, ul{
 
 .blue_box, .grey_box{
   border: 1px;
-  max-width: 960px;
-  min-height: 120px;
+  /*max-width: 960px;*/
+  /*min-height: 120px;*/
   margin: 10px;
   padding: 10px;
   background-color: #E4F3F7;
@@ -56,7 +56,6 @@ p, ul{
 .grey_box{
   height: 250px;
   background-color: #eee;
-
 }
 
 
