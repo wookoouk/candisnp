@@ -19,12 +19,6 @@ p, ul {
     line-height: 1.2;
 }
 
-#results {
-    width: 80%;
-    height: auto;
-    margin: 0 auto;
-}
-
 svg {
     max-height: 100%; /* chrome needs it  */
 }
@@ -72,21 +66,21 @@ svg {
 }
 
 /*#spot_colours {*/
-    /*float: left;*/
-    /*width: 330px;*/
+/*float: left;*/
+/*width: 330px;*/
 /*}*/
 
 /*#slider_readout {*/
-    /*float: left;*/
-    /*width: 250px;*/
-    /*margin-right: 50px;*/
-    /*margin-left: 30px;*/
+/*float: left;*/
+/*width: 250px;*/
+/*margin-right: 50px;*/
+/*margin-left: 30px;*/
 /*}*/
 
-/*#amount {*/
-    /*float: left;*/
-    /*width: 100px;*/
-/*}*/
+#amount {
+    float: left;
+    width: 100px;
+}
 
 /*#download_buttons {*/
 /*width: 250px;*/
