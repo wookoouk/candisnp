@@ -71,9 +71,10 @@ do_snp_eff <- function(file, genome) {
 
 
   message(glue::glue("Running SNPEff."))
-  cmd <- glue::glue("java -jar -Xmx4g {snp_eff} -c {conf} -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr {genome} {tmpfile}")
-
-  d <- system(cmd, ignore.stderr = TRUE, intern = TRUE)
+  #cmd <- glue::glue("java -jar -Xmx4g {snp_eff} -c {conf} -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr {genome} {tmpfile}")
+  args <- c("-jar", "-Xmx4g", snp_eff, "-c", conf, "-i", "txt", "-o", "txt", "-noLog", "-noStats", "-canon", "-snp", "-no-downstream", "-no-upstream", "-no-utr", genome, tmpfile)
+  #d <- system(cmd, ignore.stderr = TRUE, intern = TRUE)
+  d <- system2("java", args, stdout=TRUE, stderr=FALSE)
   message(d[1])
   readr::read_delim(I(d), comment = "#", col_names = FALSE,show_col_types = FALSE) |>
     dplyr::select(.data$X1, .data$X2, .data$X3, .data$X4, .data$X11, .data$X16, .data$X17) |>

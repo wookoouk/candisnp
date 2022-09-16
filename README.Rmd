@@ -52,7 +52,7 @@ library("candiSNP")
 install_default_genomes()
 ```
 
-This operation can take a few minutes, depending on your internet speed. You should only need to do it once, though.
+This operation can take a few minutes, depending on your internet speed. You should only need to do it once per `candiSNP` install, though.
 
 
 ## Starting the app
@@ -64,7 +64,7 @@ Once the genomes are installed, you can proceed to start `candiSNP` as follows.
 app()
 ```
 
-Note that the app starts in a browser window. The `R` console remains busy while the app is running. Use `Ctrl-C` to quit the process and get your console back.
+Note that the app starts in a browser window. The `R` console remains busy while the app is running. Use `Ctrl-C` or `esc` to quit the process and get your console back.
 
 
 
