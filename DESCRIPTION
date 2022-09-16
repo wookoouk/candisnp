@@ -1,0 +1,21 @@
+Package: candiSNP
+Type: Package
+Title: Shiny app for finding regions enriched with candidate SNPs graphically
+Version: 0.0.0.9000
+Authors@R: c(person("Dan", "MacLean", role = c("aut","cre"), email = "dan.maclean@tsl.ac.uk") )
+Description: Generates density plots from user-provided SNP data obtained from HTS. 
+    Candidate causative mutations, defined as SNPs causing non-synonymous changes in annotated coding regions are highlighted on the plots.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    colourpicker,
+    dplyr,
+    ggplot2,
+    glue,
+    plotly,
+    readr,
+    rlang,
+    shiny
+Depends: R (>= 4.1.0)
+RoxygenNote: 7.2.0
