@@ -35,7 +35,7 @@ install_default_genomes <- function() {
 download_annotation <- function(genomes = NULL) {
 
 
-  snp_eff <- system.file(file.path("bin", "snpEff", "snpEff.jar"), package="candiSNP")
+  snp_eff <- system.file(file.path("inst", "snpEff", "snpEff.jar"), package="candiSNP")
 
   for (g in genomes){
     # States ERROR if no connection is made at first attempt, retries and is ok if no FATAL ERROR
@@ -58,8 +58,8 @@ download_annotation <- function(genomes = NULL) {
 #' @returns dataframe
 do_snp_eff <- function(file, genome) {
 
-  snp_eff <- system.file(file.path("bin", "snpEff", "snpEff.jar"), package="candiSNP")
-  conf <- system.file(file.path("bin", "snpEff", "snpEff.config"), package="candiSNP")
+  snp_eff <- system.file(file.path("inst", "snpEff", "snpEff.jar"), package="candiSNP")
+  conf <- system.file(file.path("inst", "snpEff", "snpEff.config"), package="candiSNP")
   tmpfile <- tempfile()
 
   raw <- readr::read_csv(file, show_col_types = FALSE)
