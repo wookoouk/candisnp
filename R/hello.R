@@ -137,7 +137,7 @@ get_snp_type <- function(df){
 #' @returns character vector of genomes available
 get_installed_genomes <- function() {
   #c("athal10", "athal9")
-  g <- list.dirs(system.file(file.path("bin", "snpEff", "data"), package="candiSNP"), full.names = FALSE )
+  g <- list.dirs(system.file(file.path("snpEff", "data"), package="candiSNP"), full.names = FALSE )
   g <- g[g != ""]
   if (length(g) == 0){
     return(c("no genomes installed! Please see documentation before proceeding"))
