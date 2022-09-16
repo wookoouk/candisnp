@@ -20,6 +20,10 @@ knitr::opts_chunk$set(
 
 candiSNP is now an `R` package that you can run on your own computer. You will need to install `R` and some packages to make it work. You will also need a Java installation but that _should_ already be present on your machine.
 
+## Prerequisites
+
+The `SNPEff` part of the process requires 2 Gb free memory in your machine. You will therefore need a machine with greater than that to run `candiSNP`. The process will not take more than 2 Gb, so at this time the larger (e.g Human) databases will not run.
+
 ## Installation
 
 ### Install R

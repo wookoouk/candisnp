@@ -72,7 +72,7 @@ do_snp_eff <- function(file, genome) {
 
   message(glue::glue("Running SNPEff."))
   #cmd <- glue::glue("java -jar -Xmx4g {snp_eff} -c {conf} -i txt -o txt -noLog  -noStats -canon -snp -no-downstream -no-upstream -no-utr {genome} {tmpfile}")
-  args <- c("-jar", "-Xmx1g", snp_eff, "-c", conf, "-i", "txt", "-o", "txt", "-noLog", "-noStats", "-canon", "-snp", "-no-downstream", "-no-upstream", "-no-utr", genome, tmpfile)
+  args <- c("-jar", "-Xmx2g", snp_eff, "-c", conf, "-i", "txt", "-o", "txt", "-noLog", "-noStats", "-canon", "-snp", "-no-downstream", "-no-upstream", "-no-utr", genome, tmpfile)
   #d <- system(cmd, ignore.stderr = TRUE, intern = TRUE)
   d <- system2("java", args, stdout=TRUE, stderr=FALSE)
   message(d[1])

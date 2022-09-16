@@ -11,6 +11,13 @@ You will need to install `R` and some packages to make it work. You will
 also need a Java installation but that *should* already be present on
 your machine.
 
+## Prerequisites
+
+The `SNPEff` part of the process requires 2 Gb free memory in your
+machine. You will therefore need a machine with greater than that to run
+`candiSNP`. The process will not take more than 2 Gb, so at this time
+the larger (e.g Human) databases will not run.
+
 ## Installation
 
 ### Install R
@@ -49,7 +56,7 @@ install_default_genomes()
 ```
 
 This operation can take a few minutes, depending on your internet speed.
-You should only need to do it once, though.
+You should only need to do it once per `candiSNP` install, though.
 
 ## Starting the app
 
@@ -61,5 +68,5 @@ app()
 ```
 
 Note that the app starts in a browser window. The `R` console remains
-busy while the app is running. Use `Ctrl-C` to quit the process and get
-your console back.
+busy while the app is running. Use `Ctrl-C` or `esc` to quit the process
+and get your console back.
