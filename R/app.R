@@ -11,7 +11,7 @@ app <- function(){
   ui <- shiny::fluidPage(
 
     # Application title
-    shiny::titlePanel("CandiSNP"),
+    intro_text(),
 
     # Sidebar with a slider input for number of bins
     shiny::sidebarLayout(
@@ -39,7 +39,10 @@ app <- function(){
 
       # Show a plot of the generated distribution
       shiny::mainPanel(
-        plotly::plotlyOutput("candiplot",width = "800px", height = "1500px")
+        shiny::tabsetPanel(
+          shiny::tabPanel("Main", plotly::plotlyOutput("candiplot",width = "800px", height = "1500px")),
+          shiny::tabPanel("Help", help_text())
+        )
       )
     )
   )

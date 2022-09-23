@@ -22,5 +22,7 @@ installs the following genome annotations from SNPEff:
 these being the ones originally available in candiSNP
 }
 \examples{
+\dontrun{ #installs 300Mb database
  install_default_genomes()
+ }
 }

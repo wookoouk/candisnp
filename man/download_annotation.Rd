@@ -2,7 +2,7 @@
 % Please edit documentation in R/hello.R
 \name{download_annotation}
 \alias{download_annotation}
-\title{download annoations from SNPEff}
+\title{download annotations from SNPEff}
 \usage{
 download_annotation(genomes = NULL)
 }
@@ -13,5 +13,10 @@ download_annotation(genomes = NULL)
 no value
 }
 \description{
-download annoations from SNPEff
+download annotations from SNPEff
+}
+\examples{
+\dontrun{ ##installs very large database
+download_annotation('GRCh37.75')
+}
 }

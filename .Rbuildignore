@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+snpEFF/
+README.Rmd
+LICENSE.md
+renv*
