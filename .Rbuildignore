@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-snpEFF/
+#snpEFF/
 README.Rmd
 LICENSE.md
 renv*
